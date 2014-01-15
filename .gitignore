@@ -1,0 +1,13 @@
+.DS_Store
+text1.aux
+text1.bbl
+text1.blg
+text1.out
+text1.fdb_latexmk
+text1.log
+text1.pdf
+text1.synctex.gz
+text1.fls
+text1.tex~
+*.DS_Store
+*.swp
