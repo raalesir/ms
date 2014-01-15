@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{graphics}
+\usepackage{nopageno}
+\usepackage{txfonts}
+\usepackage[usenames]{color}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage{amsmath}
+
+\begin{document}
+\begin{center}
+\input{fig.tex}
+\end{center}
+Ratios of the mapping time~$T_{mapping}$ to the communication costs~$T_{comm}$ for HPC2 and Hadoop clusters for Dataset IV as a function of reciprocal cluster size $1/N$. Two HPC scenarios are shown as ``HPC SLURM'' and ``HPC random'', which correspond to standard SLURM behaviour and a modified one, where nodes are being allocated from random racks.
+%One  can see the differences in the Hadoop and HPC communication patterns: for Hadoop the ratio is almost constant, while for HPC cluster there are two defined regions.
+%The first one resembles to that of Hadoop, and corresponds to the case then the communication in the cluster is not a bottleneck. 
+%The second one shows the regime corresponding to the case of saturation of the network, resulting in traffic jams: data distibution time~$T_{comm}$ stops to scale 
+%linearly to the reciprocal cluster size, and becomes more of less a constant, while the mapping time continues to satisfy~$T_{mapping}\propto 1/N$.
+Linear fit  done with the least-squares method.
+\end{document}

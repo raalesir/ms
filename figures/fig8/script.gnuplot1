@@ -1,0 +1,36 @@
+
+# plotting data for grand canonical ensemble
+# the datafile is GC.data
+set terminal epslatex size 15cm,10cm
+set output 'fig.eps'
+#set ytics nomirror
+#set y2tics
+#set x2tics
+set xtics 1,2
+set grid x y 
+set key  Left left width -5
+set title "Data distribution, HPC cluster. 224 GB of pair-ended FASTQ files"
+set xlabel 'number of nodes'
+#set x2label 'полная конфигурационная энергия, $U_{tot}$ для $J=1$'
+set ylabel 'transfer rate in GB per second'
+#set y2label '$p_{J}(U_{tot})$ для первого подансамбля $J=1$'
+set  style  line 1  lt 1   lw 2   pt 6 ps 3#pi -5
+set  style  line 2  lt 2   lw 2  pt 6 ps 2#pi -5
+set  style  line 3  lt 1  lw 2  pt 4  ps 3#pi -5
+set  style  line 4  lt 2   lw 2  pt 4 ps 2 #pi -5
+set  style  line 5  lt 3   lw 2  pt 1 ps 2
+
+#set xrange [8:20]
+#set logscale y
+
+plot 'nostripe'  using ($1):($2) w lp  ls 1 axes x1y1  title 'without striping' ,\
+'striped1'  using ($1):($2) w lp  ls 2 axes x1y1 title 'striped1' ,\
+'striped2'  using ($1):($2) w lp  ls 3 axes x1y1  title 'striped2' ,\
+'striped3'  using ($1):($2) w lp  ls 4 axes x1y1 title 'striped3', \
+'striped4'  using ($1):($2) w lp  ls 5 axes x1y1  title 'striped4'\
+
+#'pE_20'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
+#'pE_30'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
+#'pE_40'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
+#'pE_50'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
+#'pE_1'  using ($1):($2) w l  ls 2 axes x2y2  title '' \

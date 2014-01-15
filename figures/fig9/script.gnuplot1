@@ -1,0 +1,56 @@
+# plotting data for grand canonical ensemble
+# the datafile is GC.data
+set terminal epslatex size 15cm,10cm
+set output 'fig3.eps'
+#set ytics nomirror
+#set y2tics
+#set x2tics
+unset autoscale
+set autoscale x
+set yrange [0:4]
+set nogrid #x y 
+set ytics 0,.5,4
+set key  Right right bottom  width -20
+set title "Ratios of the  short reads mapping time per node to the communication  time"
+set xlabel 'reciprocal number of nodes, $1/N$'
+#set x2label 'полная конфигурационная энергия, $U_{tot}$ для $J=1$'
+set ylabel '$T_{mapping}/T_{comm}$'
+#set y2label '$p_{J}(U_{tot})$ для первого подансамбля $J=1$'
+set  style  line 1  lt 2   lw 2   pt 6 ps 3#pi -5
+set  style  line 2  lt 2   lw 2  pt 7 ps 2#pi -5
+set  style  line 3  lt 1  lw 4  pt 4  ps 2#pi -5
+set  style  line 4  lt 1   lw 2  pt 4 ps 2 #pi -5
+set  style  line 5  lt 3   lw 4  pt 1 ps 2
+
+##set xrange [8:20]
+#set logscale y
+
+# line to fit
+f2(x) = a2*x+b2
+fit f2(x) 'hadoopRatio' using 1:2 via a2, b2
+f1(x)=a1*x+b1
+fit f1(x) 'HPCratio' every ::0::2  using 1:2 via a1,b1
+f3(x)=a3*x+b3
+fit f3(x) 'HPCratio' every ::3  using 1:2 via a3,b3
+f4(x)=a4*x+b4
+fit f4(x) 'HPCratioRandom' every ::0::5  using 1:2 via a4,b4
+f5(x)=a5*x+b5
+fit f5(x) 'HPCratioRandom' every ::6  using 1:2 via a5,b5
+#f6(x) = 0<=x && 1>=x? f5(x) :1/0
+
+#'HPCratioRandom'  using ($1):($2) w p  ls 3 axes x1y1 title 'HPC random', \
+
+plot 'HPCratio'  using ($1):($2) w p  ls 1 axes x1y1  title 'HPC SLURM' , \
+'hadoopRatio'  using ($1):($2) w p  ls 2 axes x1y1 title 'Hadoop', \
+'HPCratioRandom'  using ($1):($2) w p  ls 3 axes x1y1 title 'HPC random', \
+f2(x)  w l  ls 3 title 'fit for Hadoop  $ax+b$ with $(a,b)\approx(0.95,2.07)$', \
+f1(x)  w l  ls 1 title 'fit for HPC SLURM  $ax+b$: $(a,b)\approx (0.96, 3.49)$ and $\approx (32.99, 0.60)$', \
+f3(x)  w l  ls 2 notitle,\
+f4(x)  w l  ls 4 title 'fit for HPC random  $ax+b$: $(a,b)\approx (0.88, 3.72)$ and $\approx (98.24, 0.53)$',\
+f5(x) w l  ls 4 notitle
+# 'fit for HPC  $ax+b$ with $(a,b)\approx(32.99, 0.60)$'  
+#'pE_20'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
+#'pE_30'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
+#'pE_40'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
+#'pE_50'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
+#'pE_1'  using ($1):($2) w l  ls 2 axes x2y2  title '' \

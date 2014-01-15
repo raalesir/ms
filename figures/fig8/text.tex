@@ -1,0 +1,18 @@
+\documentclass{article}
+\usepackage{graphics}
+\usepackage{nopageno}
+\usepackage{txfonts}
+\usepackage[usenames]{color}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage{amsmath}
+
+\begin{document}
+\begin{center}
+\input{fig.tex}
+\end{center}
+The effeciency ratios\ref{eq:efficiency} $E_{p}/E_{56}$ for different  Hadoop on the Cloud cluster sizes~112  and~224 cores.
+The data for Shared~TM and SSH~TM deployment scenarios are shown.
+The efficinency ratios are shown for different pipeline stages: reads preprocessing~(1-3), alingment~(4), and SNP calling~(5).
+The values above~1 shows that the cluster of current size is more efficient than the $p=56$ cores cluster, and vice versa. 
+\end{document}
