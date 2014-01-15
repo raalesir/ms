@@ -14,7 +14,7 @@
 \usepackage{subcaption}
 \usepackage{caption}
 
-\title{Hadoop Or Not Hadoop}
+\title{A quantitative assessment of the Hadoop framework for analysing massively parallel DNA sequencing data (Hadoop Or Not Hadoop)}
 \author{Alexey Siretskiy,  Luca Pireddu, Ola Spjuth}
 %\date{}							% Activate to display a given date or no date
 
@@ -24,9 +24,7 @@
 \maketitle
 
 \abstract{New high-throughput technologies such as massively parallel sequencing has transformed the life sciences into a data-intensive field. With increasing data volumes comes the necessity to analyse data in parallel using high-performance computing resources, but doing this effectively can be laborious and challenging. 
-Hadoop, emerged in the last decade, is a framework that automatically distributes data and computation and has been shown to scale to thousands of nodes. We here propose and report the quantitative comparison of Hadoop with regular high-performance computing resources for aligning short reads and calling variants for five datasets of different sizes up to 250\,Gigabases. We modified and wrote new pieces of code in order to substantially increase the performance of existing software. Observing the scaling relations we are able to draw conclusions about the perspectives of the approaches.
-Our results show that as data set sizes reach 100 Gigabases, the Hadoop-based pipelines  become performance-competitive with a canonical high-performance cluster solutions. 
-
+Hadoop, emerged in the last decade, is a framework that automatically distributes data and computation and has been shown to scale to thousands of nodes. We here report a quantitative comparison of Hadoop with regular high-performance computing resources for aligning short reads and calling variants for five datasets of different sizes up to 250\,Gigabases. In order to increase performance of existing software and obtain a better comparison we modified and wrote new analysis scripts. Observing the scaling relations we are able to draw conclusions about the perspectives of the approaches, leading to the conclusion that as data set sizes reach 100 Gigabases, the Hadoop-based pipelines become performance-competitive with a canonical high-performance cluster solution. As data sets in biological sequencing are sure to increase with time, Hadoop and similar frameworks are very interesting technologies that we envision will play a key role in future biological data analysis.
 }
 
 
