@@ -1,6 +1,7 @@
 \documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
 \usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+\geometry{a4paper}                   		% ... or a4paper or a5paper or ... 
 %\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
 \usepackage{graphicx}				% Use pdf, png, jpg, or epsБ•√ with pdflatex; use eps in DVI mode
 								% TeX will automatically convert eps --> pdf in pdflatex		
@@ -13,6 +14,7 @@
 \usepackage{import}
 \usepackage{subcaption}
 \usepackage{caption}
+\usepackage[format=hang,font=small,labelfont=bf]{caption}
 
 \title{A quantitative assessment of the Hadoop framework for analysing massively parallel DNA sequencing data (Hadoop Or Not Hadoop)}
 \author{Alexey Siretskiy,  Luca Pireddu, Ola Spjuth}
@@ -118,11 +120,19 @@ To run the HPC analysis pipeline we used a computational cluster at UPPMAX, havi
 \label{sectionIII}
 
 \subsection{Accuracy of pipelines}
-Since our HPC and Hadoop approaches use different~SNP callers (Samtools and SOAPsnp correspondingly) we should not expect them to deliver perfectly matching SNPs lists, still we expect to capture and correctly identify the mutation. We tested the correctness just for the smallest dataset~I. The mutation $C\rightarrow T$ on chromosome 4 at position $16702262$ was successfully localized\cite{schneeberger}.
+Since our HPC and Hadoop approaches use different~SNP callers (Samtools and SOAPsnp correspondingly) we should not expect them to deliver perfectly matching SNPs lists, but still we expect them to capture and correctly identify the mutation. We tested the correctness just for the smallest dataset~I. The mutation $C\rightarrow T$ on chromosome 4 at position $16702262$ was successfully localized by both applications\cite{schneeberger}. [IS THIS REFERENCE CORRECT AND IN RIGHT PLACE?]
 
 \subsection{Scalability of HPC and Hadoop approaches}
-To demonstrate the scalability of  the HPC approach we collected running time for dataset~I, as a function of a number of cores used, see Table~2.
-\begin{table}[htdp]
+To demonstrate the scalability of  the HPC approach we collected running times for dataset~I as a function of the number of cores used (Table~\ref{table:hpctiming}).
+As one can see the aligning process with the Bowtie scales linearly, but the SNP calling part is a definite bottleneck, showing almost no scaling at all.
+For the given datasets (I--V) the timings for alignment against the corresponding genomes and SNP calling for  the HPC and Hadoop approaches were collected (Table~\ref{table:2}).
+
+One of the attractive sides of using Hadoop is its almost linear scalability,~i.e. calculation time linearly depends on the size of the dataset\cite{crossbow,seal}, regardless the scaling nature of the underlying program (Samtools, Bowtie etc.). 
+Figure~\ref{fig:fig1} shows the calculation time as a function of the dataset size for $p=56$ cores Hadoop cluster. Dataset V was excluded since it is for {\it H.sapiens}, which has more than 20 times larger genome than~{\it A.thaliana}.
+To stress the linear nature of scaling, both sets of points were fit to linear polynomial using the least squares method.
+
+
+\begin{table}[b]
 \small
 \caption{Calculation time for Dataset I executed on different  number of cores on a node of  HPC1 cluster. }
 \begin{center}
@@ -141,9 +151,6 @@ $N$ cores	&\multicolumn{3}{c|}{timing, minutes}\\
 \label{table:hpctiming}
 \normalsize
 \end{table}
-As one can see the aligning process with the Bowtie scales linearly, but the SNP calling part is a definite bottleneck, revealing almost no scaling at all.
-For the given datasets (I--V) the timings for alignment against the corresponding genomes, and SNP calling for  the HPC and Hadoop approaches were collected, Table~3.
-
 
 \begin{table}[htdp]
 \caption{Timings  (in minutes) for HPC and  Hadoop deployments for different dataset sizes.    Dataset is shown in brackets by roman numerals, ``f.r.'' stands for ``forward reads''.}
@@ -179,9 +186,6 @@ HPC1, 8 cores&	41&	96	&157	&307	&596	&1490&--\\
 \end{table}%
 
 
-One of the attractive sides of using Hadoop is its almost linear scalability,~i.e. calculation time linearly depends on the size of the dataset\cite{crossbow,seal}, {\it regardless} the scaling nature of the underlying program (Samtools, Bowtie etc.). 
-Figure~\ref{fig:fig1} shows the calculation time as a function of the dataset size for $p=56$ cores Hadoop cluster. Dataset V was excluded since it is for {\it H.sapiens}, which has more than 20 times larger genome than~{\it A.thaliana}.
-To stress the linear nature of scaling, both sets of points were fit into linear polynomial using least squares method.
 
 
 \begin{figure}
@@ -192,10 +196,10 @@ To stress the linear nature of scaling, both sets of points were fit into linear
 
 
 \subsection{Comparing Hadoop and HPC efficiency for different dataset sizes}
-Hadoop initially was designed to digest huge datasets\cite{hadoop,lin2010}. One can propose then,  that the larger the dataset is, more suitable Hadoop becomes compare to HPC. In order to compare the ``suitability'' for different types of calculation platforms (Hadoop and HPC) each being run on different amount of cores, we constructed the following function:
+Hadoop initially was designed to digest huge datasets\cite{hadoop,lin2010}. One can propose then that the larger the dataset is, the more suitable Hadoop becomes compare to the HPC approach. In order to compare the ''suitability'' for different types of calculation platforms (Hadoop and HPC) each being run on different amount of cores, we constructed the following function:
 $$F=T_{p}\times p,$$ 
-where~$T_{p}$ is a calculation time on~$p$ cores.
-Using the data from Table~\ref{table:2},  we plot the ratio $F_{Hadoop}/F_{HPC1}$, keeping in mind, the closer the ratio to the unity, the closer Hadoop’s efficiency approaches to that of HPC.
+where~$T_{p}$ is the calculation time on~$p$ cores.
+Using the data from Table~\ref{table:2},  we plot the ratio $F_{Hadoop}/F_{HPC}$, keeping in mind that the closer the ratio to the unity, the closer Hadoop's efficiency is to that of the HPC approach.
 
 
 \begin{figure}
@@ -206,7 +210,7 @@ The points are fit in a line using least-squares method, what makes  possible to
 \end{figure}
 
 
-The curve  in~Figure~\ref{fig:fig2} is plotted for~$p=56$ cores Hadoop-in-the-Cloud cluster, and a HPC1 node ($p=8$), and displays the ratio~$F_{Hadoop}/F_{HPC1}$ as a function of the {\it reciprocal} dataset size. The extrapolation to the zero of the~$X$-axis tells the ratio for the hypothetical {\it infinite} dataset. As one can see, the Hadoop approach becomes more  and more effective compared to the HPC scenario as the data becomes larger. With  the linear extrapolation  the ratio reads~$1.13\pm0.01$, meaning that Hadoop running even  in the {\it virtualized} environment is competitive with  the HPC approach, which is being run in ``bare metal'', for the datasets greater than $100$\,Gbases (Dataset IV), which is a usual size for human genome sequencing, giving the average sequencing depth of  about~$30x$.
+The curve  in~Figure~\ref{fig:fig2} is plotted for~$p=56$ cores Hadoop cluster and an HPC node ($p=8$), and displays the ratio~$F_{Hadoop}/F_{HPC}$ as a function of the reciprocal dataset size. The extrapolation to the zero of the~$X$-axis tells the ratio for the hypothetical infinite dataset. As one can see, the Hadoop approach becomes more  and more effective compared to the HPC scenario as the data is larger. With  the linear extrapolation  the ratio reads~$1.13\pm0.01$, meaning that Hadoop running even  in the virtualized environment of a private cloud, is competitive with  the HPC approach which is being run on ''bare metal''  for the datasets greater than $100$\,Gbases (IV), which is a usual size for human genome sequencing giving the average sequencing depth of  about~$30x$.
 
 
 
