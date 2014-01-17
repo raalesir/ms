@@ -64,11 +64,12 @@ The manuscript is structured as follows: In Section~II we briefly introduce the 
 \label{sectionII}
 
 \subsection{Datasets}
-We used publicly available DNA-seq datasets~(I--III) and one synthetic dataset~(IV) for {\it A.thaliana}, the well known model plant, and one, (dataset~V) for two {\it H.sapiens} individuals, Table~1. Data for datasets I-III,V were generated using Illumina/(HiSeq) sequencing platforms. Further information about the datasets is provided in the Supplementary material section.
+We used publicly available DNA-seq datasets~(I--III) and one synthetic dataset~(IV) for {\it A.thaliana}, the well known model plant, and one, (dataset~V) for two {\it H.sapiens} individuals (Table~\ref{table:datasets}). Data for datasets I-III and V were obtained using Illumina/(HiSeq) sequencing platforms. Further information about the datasets is provided in the Supplementary material section.
 
 
 \begin{table}[htdp]
 \small
+\footnotesize
 \caption{Datasets used}
 \begin{center}
 \begin{tabular}{|l|l|l|}
@@ -87,29 +88,27 @@ dataset &	organism &	size in Gbases\\
 \end{table}%
 
 
-
-\subsection{Computational resources}
-To run the HPC analysis pipeline nodes of  the computational clusters at UPPMAX, equipped with dual 4-core~(HPC1) and 8-core processors~(HPC2) were used. Data and reference genomes were read and written to a parallel shared storage system. The main Hadoop test platform (Hadoop-in-the-Cloud) was deployed on a private cloud at UPPMAX using the OpenNebula~\cite{opennebula} as a cloud manager. Each node in this deployment was equipped with dual 4-core CPUs. The cluster was set up with Cloudera Hadoop distribution version~2.0.0-cdh4.4.0~\cite{cloudera}. For details on computational resources, see Supplementary material.
-
-
 \subsection{Analysis pipelines}
-We constructed two pipelines for identifying SNPs from short read data, one based on Hadoop and one on HPC. Our experiments then consisted of running the pipelines for the selected input dataset and measuring the wall-clock run time for each pipeline stage. All experiments were repeated several times and the results averaged to obtain a data point for the particular combination of data size and computational platform. Acknowledging that there are different approaches and software for conducting bioinformatic analysis for HPC (i.e. GATK~\cite{gatk}), we decided to create the  analysis pipeline as simple as possible to be able to pass the same stages on Hadoop and HPC:
+We constructed two pipelines for identifying SNPs from short read data, one based on Hadoop and one on regular HPC with a batch system (hereafter referred to as HPC). Our experiments then consisted of running the pipelines for the selected input dataset and measuring the wall-clock run time for each pipeline stage. All experiments were repeated several times and the results averaged to obtain a data point for the particular combination of data size and computational platform. Acknowledging that there are different approaches and software for conducting bioinformatic analysis for HPC (i.e. GATK~\cite{gatk}), we decided to create the  analysis pipeline as simple as possible to be able to pass the same stages on Hadoop and HPC:
 
 
 \begin{enumerate}
 \item HPC approach
-\subitem short read alignment: Bowtie~ver.~0.12.8
+\subitem Short read alignment: Bowtie~ver.~0.12.8
 \subitem SNP calling: Samtool~ver.~0.1.19
 \item Hadoop approach: Crossbow~\cite{crossbow}
-\subitem short read alignment: Bowtie~ver.~0.12.8
+\subitem Short read alignment: Bowtie~ver.~0.12.8
 \subitem SNP calling: SOAPsnp~1.02~\cite{soapsnp}
 \end{enumerate}
 
 
-In the HPC pipeline, reads were aligned with Bowtie, followed by sorting the mapped reads and~SNP calling with Samtools. The Bowtie aligner natively implements~OMP meaning that with~8 cores on the same computer the result can be theoretically obtained in~8 times faster than on a single core. Likewise, Samtools (as of version~0.1.19) also offers shared memory parallelism for several of its functions. Where available these features were used to improve the analysis speed. For the exact workflow used one can refer to the code repository created for this work~\cite{code_repo}.
+In the HPC pipeline, reads were aligned with Bowtie, followed by sorting the mapped reads and~SNP calling with Samtools. The Bowtie aligner natively implements~OMP meaning that with~8 cores on the same computer the result can be theoretically obtained 8 times faster than on a single core. Likewise, Samtools (as of version~0.1.19) also offers shared memory parallelism for several of its functions. Where available these features were used to improve the analysis speed. For the exact workflow used one can refer to the code repository created for this work~\cite{code_repo}.
 
-The equivalent Hadoop-based pipeline was implemented with the Crossbow.  The input data and the indexed genome reference were copied to Hadoop’s storage system~(HDFS) before starting the experiments.  Crossbow implements a short pipeline that pre-processes the input data, transforming it into a format suitable for the alignment stage, and then continues to use Bowtie for alignment and SoapSNP to call SNPs.  Unfortunately Crossbow's preprocessor is not written  in the MR manner, and thus cannot be run in a massively parallel way. Due to this limitation, this basic step threatened to be the most time-consuming procedure in our test pipeline and bias our experiments. To overcome this bottleneck we substituted the Crossbow's preprocessor with our own, written in the MR-style, though sacrificing some generality\footnote{we assume that the FASTQ data are BZIP archived, and delivered to the storage accessible by the Hadoop.}. To illustrate the benefits of this modification: For our 30-Gbase test dataset (approximately 45 GB of uncompressed FASTQ data) the preprocessing stage time shrunk from 3.3 hours to just under 2 minutes when run on 112 cores Hadoop cluster. The scripts for preprocessing stage are publicly available~\cite{code_repo}.
+The equivalent Hadoop-based pipeline was implemented with Crossbow. The input data and the indexed genome reference were copied to Hadoop's storage system~(HDFS) before starting the experiments. Crossbow implements a short pipeline that pre-processes the input data, transforming it into a format suitable for the alignment stage, and then continues to use Bowtie for alignment and SoapSNP to call SNPs.  Unfortunately Crossbow's preprocessor is not written in MR manner, and thus cannot be run in a massively parallel way. Due to this limitation, this basic step threatened to be the most time-consuming procedure in our test pipeline and bias our experiments. To overcome this bottleneck we substituted Crossbow's preprocessor with our own MR implementation, though sacrificing some generality\footnote{we assume that the FASTQ data are BZIP archived, and delivered to the storage accessible by Hadoop.}. To illustrate the benefits of this modification: For our 30-Gbase test dataset (approximately 45 GB of uncompressed FASTQ data) the preprocessing time shrunk from 3.3 hours to just under 2 minutes when run on 112 cores Hadoop cluster. The scripts for the preprocessing stage are publicly available~\cite{code_repo}.
 
+
+\subsection{Computational resources}
+To run the HPC analysis pipeline we used a computational cluster at UPPMAX, having nodes equipped with 4 dual-core CPUs. Data and reference genomes were stored on a parallel shared storage system. The Hadoop test platform was deployed on a private cloud at UPPMAX using the OpenNebula~\cite{opennebula} cloud manager. The cluster was set up with Cloudera Hadoop distribution version~2.0.0-cdh4.4.0~\cite{cloudera}. For details on computational resources, see Supplementary material.
 
 
 
