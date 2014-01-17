@@ -195,7 +195,7 @@ HPC1, 8 cores&	41&	96	&157	&307	&596	&1490&--\\
 \end{figure}
 
 
-\subsection{Comparing Hadoop and HPC efficiency for different dataset sizes}
+\subsection{Comparing Hadoop and HPC runtime efficiency for different dataset sizes}
 Hadoop initially was designed to digest huge datasets\cite{hadoop,lin2010}. One can propose then that the larger the dataset is, the more suitable Hadoop becomes compare to the HPC approach. In order to compare the ''suitability'' for different types of calculation platforms (Hadoop and HPC) each being run on different amount of cores, we constructed the following function:
 $$F=T_{p}\times p,$$ 
 where~$T_{p}$ is the calculation time on~$p$ cores.
@@ -214,37 +214,35 @@ The curve  in~Figure~\ref{fig:fig2} is plotted for~$p=56$ cores Hadoop cluster a
 
 
 
- \subsection{Comparing the network communication efficiency for Hadoop and HPC approaches }
-Network communication model for Hadoop has a major difference from the usual HPC cluster network architecture ($n$-tier tree) with the NAS or NFS attached storages. Namely, the effective bandwidth of the Hadoop network increases with the cluster size to increase~\cite{Sammer:2012}, opposite to that of the HPC network, where the cluster grows results in network saturation and performance depletion.
-We provide a comparison how HPC and Hadoop  network communication costs depend on the number of nodes involved, for a fixed dataset size, dataset~IV.
+ \subsection{Comparing the network communication efficiency for the Hadoop and HPC approaches }
+Network communication model for Hadoop has a major difference from the usual HPC cluster network architecture ($n$-tier tree) with NAS or NFS attached storages. The effective bandwidth of the Hadoop network increases with the cluster size~\cite{Sammer:2012}, opposite to that of the HPC network where cluster growth results in network saturation and performance depletion.
+We provide a comparison on how HPC and Hadoop network communication costs depend on the number of nodes involved, for a fixed dataset size (dataset~IV).
  
-Due to the fact of trivial parallelisation of the alignment process~-- the read-pairs are independent of each other, and can be aligned independently~-- one could try to involve more computation resources, i.e. split the initial data into chunks to proceed them independently.
-Reducing the size of each data chunk reduces the aligner  job,~$T_{mapping}$, but at the same time, the more chunks almost {\it simultaneously} have to travel through the network, potentially causing traffic jams, therefore increasing the communication costs,~$T_{comm}$.
+Due to the trivially parallelisation nature of the alignment process~-- the read-pairs are independent of each other, and can be aligned independently~-- one could try to involve more computational resources, i.e. split the initial data into chunks to process them independently.
+Reducing the size of each data chunk reduces the aligner  job,~$T_{mapping}$, but at the same time, the more chunks almost simultaneously have to be sent over the network and thereby increasing the communication costs,~$T_{comm}$.
 
-There are several program packages for short reads alignment designed with the MPI support~\cite{pmap, gnumap}. Authors report almost linear scaling up to 32 nodes for pair-ended reads\footnote{\url{http://bmi.osu.edu/hpc/slides/Bozdag10-HiCOMB.pdf}, \url{http://dna.cs.byu.edu/gnumap/HICOMB_Presentation.pdf}}. However,  i.e. Pmap package had been proved to function poorly on UPPMAX cluster for  datasets larger than 20 Gbases, raising  memory exceptions.
-We wrote custom state-of-art bash script involving existing Unix utilities~\cite{repo} to use the  HPC2 cluster network as efficiently as possible,  and compared the network performance with the {\it standard} Hadoop HDFS approach.
+There are several program packages for short read alignment designed with MPI support~\cite{pmap, gnumap}. Authors report almost linear scaling up to 32 nodes for pair-ended reads\footnote{\url{http://bmi.osu.edu/hpc/slides/Bozdag10-HiCOMB.pdf}, \url{http://dna.cs.byu.edu/gnumap/HICOMB_Presentation.pdf}}. However,  i.e. Pmap package functions poorly on UPPMAX cluster for  datasets larger than 20 Gbases, raising memory exceptions.
+We implemented a highly optimized bash script making use of standard Unix utilities to use the  HPC cluster network as efficiently as possible~\cite{repo},  and compared the network performance with the standard Hadoop HDFS approach. We separated the mapping time~$T_{mapping}$ and the  communication time~ $T_{comm}$, and plot their ratio~$T_{mapping}/T_{comm}$ as a function of a reciprocal number of nodes~$1/N$ (Figure~\ref{fig:fig3}). 
+Such kind of measure is applicable to both HPC and Hadoop, however, the~$T_{comm}$ carries a different sense in both cases. For Hadoop the short reads in FASTQ format have to be preprocessed (involving nodes communication~$T_{comm}$) to be able to run in MR-fashion, while the data locality will be automatically achieved during the data  ingestion into the HDFS. 
+We rewrote the code for the preprocessing stage for Crossbow to make it suitable for MR-style parallelisation.
+For the HPC approach, the~$T_{comm}$ involves the chunks that are sent from the sequence delivery location to the local node scratch disks where the actual mapping happens, and the sending of the aligned SAM files back to the delivery location over the network.
 
-We separated the mapping time~$T_{mapping}$ and the  communication time~ $T_{comm}$, and plot their ratio~$T_{mapping}/T_{comm}$ as a function of a reciprocal number of nodes~$1/N$. 
-Such kind of measure is applicable to both HPC and Hadoop, however, the~$T_{comm}$ carries a different sense in both cases. For Hadoop the short reads in FASTQ format have to be preprocessed (involving nodes communication~$T_{comm}$) to  able to be run in the MR-fashion, while the data locality will be automatically achieved during the data  ingestion into the HDFS. 
-We rewrote the code for the preprocessing stage for the Crossbow to make it suitable for MR-style parallelisation.
-For the HPC approach, the~$T_{comm}$ involves the chunks travel from the sequencer delivery location to the local node scratches, where the actual mapping happens, and the travel of the aligned SAM files back to the delivery location over the network. 
+Figure~\ref{fig:fig3} shows the~$T_{mapping}/T_{comm}$ ratio as a function of the reciprocal number of nodes~$1/N$ for Hadoop and HPC approaches. The HPC approach is presented in two versions that are based on a bit different strategies of the resource allocation.  
 
-Figure~\ref{fig:fig3} shows the~$T_{mapping}/T_{comm}$ ratio as a function of the reciprocal number of nodes~$1/N$ for Hadoop and HPC approaches. In its turn, the HPC approach is presented in two versions, which are based on a bit different strategies of the resource allocation.  
+\textit{Hadoop results (filled circles)}: One can see that the ratio~$T_{mapping}/T_{comm}$ reveals very weak dependency in a wide range of number of nodes~$N$: from 4 up to 40. It is known that the Bowtie provides a linear scaling between the mapping time and the dataset chunk size~$D$:~$T_{mapping}\propto  D\propto 1/N$, see~\cite{bowtie}, and Figure~\ref{fig:fig1}. Since the ratio~$T_{mapping}/T_{comm}\approx const$, one can conclude that the~$T_{comm}\propto 1/N$, meaning that the more nodes are involved, the faster the communication is in the preprocessing stage.
 
-Lets start from description of the Hadoop results, filled circles. One can see that the ratio~$T_{mapping}/T_{comm}$ reveals very weak dependency in a wide range of number of nodes~$N$: from 4 up to 40. It is known  that the Bowtie, used for mapping, provides a linear scaling between the mapping time and the dataset chunk size~$D$:~$T_{mapping}\propto  D\propto 1/N$, see~\cite{bowtie}, and Figure 1. Since the ratio~$T_{mapping}/T_{comm}\approx const$, one can conclude that the~$T_{comm}\propto 1/N$, meaning that the more nodes are involved, the faster the communication in the preprocessing stage is. 
+\textit{HPC results}: The strategy named HPC SLURM\footnote{Simple Linux Utility for Resource Management} is as follows: the data from the delivery location is being split into chunks in parallel, which are simultaneously being pushed to the local scratches of the nodes, allocated by SLURM  (open circles). One can see two distinct linear stretches, each with a different slope. One stretch is for the range from 4 to about 12 nodes, and the another is from 12 up to 60. The former (horizontal stretch) is explained as for Hadoop~-- the more nodes being involved the faster the chunks are being distributed. The latter stretch with the positive slope could be explained as follows: In the region of about 12 nodes the network becomes saturated\footnote{The used storage at UPPMAX is a set of RAIDs (Redundant Array of Inexpensive Disks) with data striping, providing up to $80$Gbit/sec of outcoming traffic} and unable to pass more data in a time unit, while the mapping time is still proportional to the chunk size:~$T_{comm}\approx const, T_{mapping}\propto D\propto 1/N \rightarrow T_{mapping}/T_{comm}\propto 1/N$, i.e. a linear dependency, which one can observe in the plot. 
+The transition area between the two modes~-- saturated and unsaturated~-- has the next origin: each hard disk drive on the local node can write the data at a speed about 100MB/sec\,$\approx$\,1Gbit/sec, i.e.~10 nodes will consume the data with the rate of~10Gbit/sec, which is the limiting speed for the standard 10Gbit Ethernet cable connecting the cluster's rack with the switch. The nodes are being allocated  on the same rack, which is the default SLURM behaviour. 
 
-Lets now consider the curves for HPC2. The strategy named HPC SLURM\footnote{Simple Linux Utility for Resource Management} is as follows: the data from the delivery location is being split into chunks in {\it parallel}, which are  {\it simultaneously} being pushed  to the local scratches of the nodes, allocated by SLURM  (open circles). One can see two distinct linear stretches, each with different tangent. One stretch is for the range from 4 to about 12 nodes the, and the another is from 12 up to 60. The former, horizontal stretch, is explained as for Hadoop~-- the more nodes is being involved the faster the chunks are being distributed. The latter stretch with the positive slope could be explained as follows: in the region of about 12 nodes the network becomes saturated\footnote{The used storage at UPPMAX   is a set of RAIDs (Redundant Array of Inexpensive Disks) with data {\it striping}, providing up to $80$Gbit/sec of outcoming traffic} and unable to pass more data in a time unit, while the mapping time is still proportional to the chunk size:~$T_{comm}\approx const, T_{mapping}\propto D\propto 1/N \rightarrow T_{mapping}/T_{comm}\propto 1/N$, i.e. a linear dependency, which one can observe on the plot. 
-The transition area between two modes~-- saturated and unsaturated~-- has the next origin: each HDD on the local node can write the data at a speed about 100MB/sec\,$\approx$\,1Gbit/sec, i.e.~10 nodes will consume the data with the rate of~10Gbit/sec, what is the limiting speed for the standard 10Gbit Ethernet cable connecting the cluster's rack with the switch. The nodes are being allocated  on the same rack, what is the default SLURM behaviour, therefore the caption reads~``HPC SLURM''. 
-
-The scalability can be improved by overriding the default behaviour of the SLURM and allocating the nodes not from the same rack, but randomly from all available racks, ``HPC random'', (open squares in Figure~\ref{fig:fig3}). Allocating the nodes on random racks allows one to engage more nodes without network saturation. For our cluster we could go up to 30-35 nodes with perfect linear scaling. For the most resources been used (58 nodes) the deviation from a linear speed-up is~$\approx 7\%$ i.e. $5.50$ minutes against the ideal $5.14$, see Table~\ref{table:4}  for the data.
-
+The scalability can be improved by overriding the default behaviour of SLURM and allocating the nodes not from the same rack, but randomly from all available racks (''HPC random'', open squares in Figure~\ref{fig:fig3}). Allocating the nodes on random racks allows one to engage more nodes without network saturation. For our cluster we could go up to 30-35 nodes with perfect linear scaling. For the most resources used (58 nodes) the deviation from a linear speedup is~$\approx 7\%$ i.e. $5.50$ minutes against the ideal $5.14$, see Table~\ref{table:4}  for the data. The threshold number of nodes in this strategy~($\approx35$) is because of the uplink cable with the throughput of~50Gbit/sec being saturated. 
+The proposed HPC strategies aimed at getting the maximum performance from the storage resources show that while even properly adjusted and tuned, the HPC approach suffer from the network saturation at higher number of nodes.
 
 
 \begin{figure}
 	\small
 	\input{./figures/fig9/fig3.tex}
 	\normalsize
-	\caption{Ratios of the mapping time~$T_{mapping}$ to the communication costs~$T_{comm}$ for HPC2 and Hadoop clusters for Dataset IV as a function of reciprocal cluster size $1/N$. Two HPC scenarios are shown as ``HPC SLURM'' and ``HPC random'', which correspond to standard SLURM behaviour and a modified one, where nodes are being allocated from random racks.
+	\caption{Ratios of the mapping time~$T_{mapping}$ to the communication costs~$T_{comm}$ for HPC2 and Hadoop clusters for Dataset IV as a function of reciprocal cluster size $1/N$. Two HPC scenarios are shown as ``HPC SLURM'' and ``HPC random'', which correspond to standard SLURM behaviour and a modified one where nodes are being allocated from random racks.
 %One  can see the differences in the Hadoop and HPC communication patterns: for Hadoop the ratio is almost constant, while for HPC cluster there are two defined regions.
 %The first one resembles to that of Hadoop, and corresponds to the case then the communication in the cluster is not a bottleneck. 
 %The second one shows the regime corresponding to the case of saturation of the network, resulting in traffic jams: data distibution time~$T_{comm}$ stops to scale 
@@ -253,13 +251,11 @@ Linear fit  done with the least-squares method.}
 	\label{fig:fig3}
 \end{figure}
 
-The threshold number of nodes in this strategy~($\approx35$) is driven by the saturating the uplink cable with the  throughput of~50Gbit/sec. 
-The proposed strategies aimed to gain the maximum from the existing resources show, that even properly adjusted and tuned, HPC approach sooner of later starts to suffer from the network saturation.  
 
 
 \begin{table}[htdp]
-\caption{Timings  for mapping, and the ratio~$T_{mapping}/T_{comm}$  for HPC2 and  Hadoop clusters for Dataset IV.
-For ``HPC random'' approach data chunks have to be copied to the local scratches first, and  the alignments (SAM files) copied back, while Hadoop keeps all the data inside HDFS. Hadoop needs to preprocess reads before the actual alignment stage, in order  to be able to operate in a MR manner, also resulting in  ``communication costs''. Note that each HPC node has 16 cores, while each Hadoop node has 7 (one core is dedicated to run the virtual machine).}
+\caption{Timings  for mapping, and the ratio~$T_{mapping}/T_{comm}$  for HPC and  Hadoop clusters for Dataset IV.
+For ``HPC random'' approach data chunks have to be copied to the local scratch disks first, and the alignments (SAM files) copied back, while Hadoop keeps all the data inside HDFS and hence do not need data staging. Hadoop however needs to preprocess reads before the actual alignment stage, in order  to be able to operate in MR manner, also resulting in what we term ''communication costs''. Note that each HPC node has 16 cores, while each Hadoop node has 7 (one core is dedicated to run the virtual machine).}
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|}
  \multicolumn{3}{|c|}{Hadoop} & \multicolumn{3}{c|}{ HPC random} \\
@@ -295,7 +291,7 @@ Our Hadoop-in-the-Cloud cluster has no more~($\approx 40$) free nodes to continu
 \subsection{Usability aspects}
 \label{subsectionIV_2}
 
-At the present moment a popular way to steer the bioinformatic pipelines on the HPC resources  is to use Galaxy\cite{galaxy}, which provides a Web-based graphical user interface~(GUI) to the bioinformatic programs, simplifying an experience for the end user. 
+At the present moment a popular way to construct and execute bioinformatic pipelines on HPC resources  is to install and use the Galaxy\cite{galaxy} software, which provides a Web-based graphical user interface~(GUI) to the bioinformatic programs, simplifying an experience for the end user. 
 One of the alternatives for Hadoop could be the publically available Cloudgene\cite{cloudgene}, which seems to be a very light-weight, and flexible Web-based solution for serve~GUI for both public and private cloud, which we involved in our work.
 For the particular task in DNA-seq experiment, Cloudgene provides the intuitive interface making one easy to follow, Figure~\ref{fig:fig4}. The most of data managing job is done automatically, and the results can be downloaded to the client machine. Modular structure allows one easy to modify the source code to integrate to the existing computing center’s architecture, Figure~\ref{fig:fig4}(a). For example the UPPMAX users can import their data from the sequencing platform directly to the Hadoop cluster by pressing a button and entering the credentials, being at the same time sure that their sensitive data will stay locally, reducing amount of unnecessary risks.
 
