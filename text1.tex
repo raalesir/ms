@@ -291,24 +291,25 @@ Our Hadoop-in-the-Cloud cluster has no more~($\approx 40$) free nodes to continu
 \subsection{Usability aspects}
 \label{subsectionIV_2}
 
-At the present moment a popular way to construct and execute bioinformatic pipelines on HPC resources  is to install and use the Galaxy\cite{galaxy} software, which provides a Web-based graphical user interface~(GUI) to the bioinformatic programs, simplifying an experience for the end user. 
-One of the alternatives for Hadoop could be the publically available Cloudgene\cite{cloudgene}, which seems to be a very light-weight, and flexible Web-based solution for serve~GUI for both public and private cloud, which we involved in our work.
-For the particular task in DNA-seq experiment, Cloudgene provides the intuitive interface making one easy to follow, Figure~\ref{fig:fig4}. The most of data managing job is done automatically, and the results can be downloaded to the client machine. Modular structure allows one easy to modify the source code to integrate to the existing computing center’s architecture, Figure~\ref{fig:fig4}(a). For example the UPPMAX users can import their data from the sequencing platform directly to the Hadoop cluster by pressing a button and entering the credentials, being at the same time sure that their sensitive data will stay locally, reducing amount of unnecessary risks.
+A popular way to construct and execute bioinformatic pipelines on HPC resources is via the Galaxy\cite{galaxy} platform, which provides a Web-based graphical user interface~(GUI) to bioinformatic programs, simplifying an experience for the end user. 
+One of the alternatives for Hadoop is Cloudgene\cite{cloudgene}, which is a light-weight and flexible Web-based solution for both public and private cloud. We implemented our Hadoop-pipeline in Cloudgene and extended the platform with functions to import data from the central file system at UPPMAX into HDFS on the private cloud (Figure~\ref{fig:fig4}(a)).
+For the particular task in DNA-seq experiment, Cloudgene provides the intuitive interface making one easy to follow, Figure~. The most of data managing job is done automatically, and the results can be downloaded to the client machine. Modular structure allows one easy to modify the source code to integrate to the existing computing center’s architecture, Figure~\ref{fig:fig4}(a). For example the UPPMAX users can import their data from the sequencing platform directly to the Hadoop cluster by pressing a button and entering the credentials, being at the same time sure that their sensitive data will stay locally, reducing amount of unnecessary risks.
 
 \begin{figure}
-	\begin{subfigure}[b]{0.6\textwidth}
-	        	\includegraphics[width=\textwidth]{c.png}
-		\subcaption{UPPMAX-adapted Cloudgene: browsing the users home folder}
-	\end{subfigure}
  	\begin{subfigure}[b]{0.4\textwidth}
         	\includegraphics[width=\textwidth]{a.png}
-		\subcaption{Cloudgene: selecting a job to run}
+		\subcaption{}
 	\end{subfigure}
+	\hspace{0.5cm}
 	\begin{subfigure}[b]{0.6\textwidth}
-		\includegraphics[width=\textwidth]{b.png}
-		\subcaption{Cloudgene: specifying job parameters}
+	        	\includegraphics[width=\textwidth]{c.png}
+		\subcaption{}
 	\end{subfigure}
-	\caption{An example of a job setup with the Cloudgene, a web-based GUI wrapper, providing a smooth user experience even for novice users.}
+%	\begin{subfigure}[b]{0.6\textwidth}
+%		\includegraphics[width=\textwidth]{b.png}
+%		\subcaption{Cloudgene: specifying job parameters}
+%	\end{subfigure}
+	\caption{An example of a job setup with the graphical Hadoop front-end Cloudgene, providing a smooth user experience even for novice users. \textbf{a)} Pipeline selection - in our case containing the Crossbow pipeline. \textbf{b)} The UPPMAX-adapted functionality to browsing and import data from the users home folder in the shared file system.}
 	\label{fig:fig4}
 \end{figure}
 
