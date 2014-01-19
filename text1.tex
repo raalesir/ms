@@ -317,27 +317,24 @@ For the particular task in DNA-seq experiment, Cloudgene provides the intuitive 
 \section{Conclusions}
 \label{sectionV}
 
-In this communication we brought together different approaches to analyze  the DNA-seq data in the bioinformatic study, in order to answer the question: which conditions a task should meet in order to make Hadoop a proper tool to use in favour of using HPC resources. 
+In this report we have described two approaches for high-performance analysis of DNA sequencing data; one based on regular HPC using a batch system and one based on Hadoop. We show that Hadoop installed on a private cloud is an appealing solution both on terms of runtime performance and also in terms of usability. A key result is the data size where Hadoop is favorable to regular HPC batch systems, and we developed highly optimized pipelines for both scenarios. We found that dataset sizes larger than 100\,Gbases is where Hadoop excel over HPC, and also that Hadoop shows almost linear scalability (Figure~\ref{fig:fig1}). Extrapolation to infinite dataset size (Figure~\ref{fig:fig2}) reveals however that HPC provides the results faster, given the same amount of resources as Hadoop on a private cloud.
 
-To increase the performance of the existing Hadoop software, the modification to the preprocessing stage of the Crossbow software were suggested.  A state-of-art bash script was created to engage multiple nodes (up to 928 cores) in the HPC approach to align the Illumina-produced short reads with almost linear speed-ups.
+%To increase the performance of the existing Hadoop software, the modification to the preprocessing stage of the Crossbow software were suggested.  A state-of-art bash script was created to engage multiple nodes (up to 928 cores) in the HPC approach to align the Illumina-produced short reads with almost linear speed-ups.
 
-We concentrated ourselves on the Hadoop  in the private cloud installation, Hadoop-in-the-Cloud, orchestrated by the OpenNebula. 
-Picking the appropriate program settings we found out that DNA-seq dataset size larger than 100\,Gbases is suitable for Hadoop, with competitive  execution time compare to  that of HPC.
-The scaling graphs (Figure~\ref{fig:fig1}) confirms the known fact for almost linear scalability of Hadoop.
-The extrapolation to the infinite dataset size (Figure~\ref{fig:fig2}) revealed, that HPC, however, provides the results faster, given the same amount of resources, than the Hadoop-in-the-Cloud. 
+%We concentrated ourselves on the Hadoop  in the private cloud installation, Hadoop-in-the-Cloud, orchestrated by the OpenNebula. 
+%Picking the appropriate program settings we found out that DNA-seq dataset size larger than 100\,Gbases is suitable for Hadoop, with competitive  execution time compare to  that of HPC.
+%The scaling graphs (Figure~\ref{fig:fig1}) confirms the known fact for almost linear scalability of Hadoop.
+%The extrapolation to the infinite dataset size (Figure~\ref{fig:fig2}) revealed, that HPC, however, provides the results faster, given the same amount of resources, than the Hadoop-in-the-Cloud. 
 
-Exploiting  the embarrassingly parallel nature of the short reads mapping we used custom state-of-art bash script to engage up to 58 nodes (928 cores) of the HPC2 cluster to  see the scaling relations between the ratio of the mapping time to the communication time as a function of a reciprocal number of nodes, Figure~\ref{fig:fig3}. 
+Exploiting the embarrassingly parallel nature of the short reads mapping we used a highly optimized bash script to compare the scaling relations between the ratio of the mapping time to the communication time as a function of the reciprocal number of nodes (Figure~\ref{fig:fig3}). 
 Our results show that Hadoop with HDFS scales better than the network attached parallel storage commonly used in the HPC centers.
-In addition we show  an example, how one can improve the performance of the HPC approach redefining the SLURM's default behaviour.
-
-
-Finally, existing and easily transformed publically available web-based GUI, like Cloudgene~(Figure~\ref{fig:fig4}),  gives an opportunity to perform bioinformatic analysis on Hadoop for those who are not experts in Linux world.  Modular structure of Cloudgene gives cluster staff an easy way to adapt it for the specific needs.
+In addition we show how performance of the HPC approach can be improved redefining the queueing system's default behaviour. Finally, we demonstrate that an existing and extensible publically available web-based GUI (Cloudgene), provides an easy way to execute bioinformatics analysis on Hadoop for those who are less experienced with Linux scripting.
 
 
 
-\section{Acknowledge}
-The computations were performed on resources provided by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (UPPMAX) under Project p2013023.
-We also greatly appreciate   Pontus Freyhult and Peter Ankerst{\aa}l at  UPPMAX for explaining the effective storage usage. Great job was done by Jonas Hagberg at BILS, Stockholm, Sweden, by the adaptation of the Cloudgene to the local UPPMAX needs.
+\section{Acknowledgements}
+The computations were performed on resources provided by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) under project p2013023.
+We thank Pontus Freyhult and Peter Ankerst{\aa}l at UPPMAX for valuable discussions on effective storage usage. We also thank Jonas Hagberg (BILS, Stockholm, Sweden), for implementing the Cloudgene extensions to import data from UPPMAX filesystem.
 
 
 
