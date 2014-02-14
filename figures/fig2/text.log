@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  9 JAN 2014 09:09
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  6 FEB 2014 12:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -431,59 +431,65 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-(./fig.tex
-LaTeX Font Info:    Try loading font information for U+msa on input line 124.
+(./fig2.tex
+LaTeX Font Info:    Try loading font information for U+msa on input line 122.
  (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 124.
+LaTeX Font Info:    Try loading font information for U+msb on input line 122.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-Package epstopdf Info: Source file: <fig.eps>
-(epstopdf)                    date: 2014-01-07 13:22:10
-(epstopdf)                    size: 18254 bytes
-(epstopdf)             Output file: <fig-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-01-07 13:22:11
-(epstopdf)                    size: 3893 bytes
-(epstopdf)             Command: <repstopdf --outfile=fig-eps-converted-to.pdf f
-ig.eps>
-(epstopdf)             \includegraphics on input line 125.
-Package epstopdf Info: Output file is already uptodate.
+Package epstopdf Info: Source file: <fig2.eps>
+(epstopdf)                    date: 2014-02-06 12:47:17
+(epstopdf)                    size: 18112 bytes
+(epstopdf)             Output file: <fig2-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-02-06 12:46:26
+(epstopdf)                    size: 3989 bytes
+(epstopdf)             Command: <repstopdf --outfile=fig2-eps-converted-to.pdf 
+fig2.eps>
+(epstopdf)             \includegraphics on input line 123.
+runsystem(repstopdf --outfile=fig2-eps-converted-to.pdf fig2.eps)...executed sa
+fely (allowed).
 
-<fig-eps-converted-to.pdf, id=1, 426.59375pt x 284.06125pt>
-File: fig-eps-converted-to.pdf Graphic file (type pdf)
+Package epstopdf Info: Result file: <fig2-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-02-06 12:47:18
+(epstopdf)                    size: 3981 bytes.
 
-<use fig-eps-converted-to.pdf>
-Package pdftex.def Info: fig-eps-converted-to.pdf used on input line 125.
+<fig2-eps-converted-to.pdf, id=1, 426.59375pt x 284.06125pt>
+File: fig2-eps-converted-to.pdf Graphic file (type pdf)
+
+<use fig2-eps-converted-to.pdf>
+Package pdftex.def Info: fig2-eps-converted-to.pdf used on input line 123.
 (pdftex.def)             Requested size: 426.5927pt x 284.06053pt.
 )
-Overfull \hbox (81.68271pt too wide) in paragraph at lines 127--13
+Overfull \hbox (81.68271pt too wide) in paragraph at lines 125--13
  [] 
  []
 
 [1
 
-{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./fig-e
-ps-converted-to.pdf>] (./text.aux) ) 
+{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./fig2-
+eps-converted-to.pdf>] (./text.aux) ) 
 Here is how much of TeX's memory you used:
  2555 strings out of 493488
- 33054 string characters out of 3141326
+ 33061 string characters out of 3141326
  89295 words of memory out of 3000000
  5810 multiletter control sequences out of 15000+200000
  5685 words of font info for 23 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
  38i,8n,24p,230b,225s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2012/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2012/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmti10.pfb>
-Output written on text.pdf (1 page, 48898 bytes).
+</usr/local/texlive/2012/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2012/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2012/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmti10.pfb>
+Output written on text.pdf (1 page, 56784 bytes).
 PDF statistics:
- 27 PDF objects out of 1000 (max. 8388607)
- 18 compressed objects within 1 object stream
+ 31 PDF objects out of 1000 (max. 8388607)
+ 21 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

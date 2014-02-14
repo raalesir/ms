@@ -8,7 +8,7 @@ set output 'fig2.eps'
 #set x2tics
 #set xtics 1,1
 set grid x y 
-set key  Left  width -9 
+set key  Left  width -6 left 
 set title "Figure 2"
 set xlabel 'reciprocal dataset size, 1/Gbases'
 #set x2label 'полная конфигурационная энергия, $U_{tot}$ для $J=1$'
@@ -23,10 +23,10 @@ set  style  line 4  lt 2   lw 2  #pt 4 ps 2 #pi -5
 #set logscale y
 
 # line to fit
-f2(x) = a2*x+b2
-fit f2(x) 'ssh' using 1:2 via a2, b2
+f2(x) = b2*x+c2+a2*x*x
+fit f2(x) 'ssh' using 1:2 via a2, b2, c2
 
-plot 'ssh'  using ($1+0.005):($2-0.035):3  w labels notitle,\
-'ssh'  using ($1):($2) w p  ls 2 axes x1y1 notitle,  a2*x+b2 w l ls 3 title 'least-squares fit to $y=aX+b$ for the data with  $b=1.13$'\
+plot 'ssh'  using ($1+0.02):($2-0.09):3  w labels notitle,\
+'ssh'  using ($1):($2) w p  ls 2 axes x1y1 notitle,  a2*x*x+b2*x+c2 w l ls 3 title 'least-squares fit to $y=aX^{2}+bX+c$ with  $c=1.70$'\
 #'shared'  using ($1):($2)  w p  ls 1 axes x1y1  title 'Shared TM', \
 #'shared'  using ($1):($2) smooth bezier  w l  ls 4 axes x1y1  title 'data smoothing for Shared TM' \
