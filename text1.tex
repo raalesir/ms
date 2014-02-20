@@ -29,26 +29,30 @@
 \maketitle
 
 \abstract{New high-throughput technologies such as massively parallel sequencing has transformed the life sciences into a data-intensive field. With increasing data volumes comes the necessity to analyse data in parallel using high-performance computing resources, but doing this effectively can be laborious and challenging. 
-Hadoop, emerging in the last decade, is a framework that automatically distributes data and computation and has been shown to scale to thousands of nodes. Herein we report a quantitative comparison of Hadoop to regular high-performance computing resources for aligning short reads and calling variants for five datasets of different sizes up to 250\,gigabases. In order to increase performance of existing software and obtain a better comparison we modified and wrote new analysis scripts. From the observered scaling relations we are able to draw conclusions about the perspectives of the approaches, leading to the conclusion that as data set sizes reach 100\,gigabases, the Hadoop-based pipelines become performance-competitive with a canonical high-performance cluster solution. As data sets in biological sequencing are sure to increase with time, Hadoop and similar frameworks are very interesting technologies that we envision will play a key role in the future of biological data analysis. \COMMENT{Brit spelling assumed since that's most common in this document}
+Hadoop, emerging in the last decade, is a framework that automatically distributes data and computation and has been shown to scale to thousands of nodes. Herein we report a quantitative comparison of Hadoop to regular high-performance computing resources for aligning short reads and calling variants for five datasets of different sizes up to 250\,gigabases. In order to increase performance of existing software and obtain a better comparison we modified and wrote new analysis scripts. From the observered scaling relations we are able to draw conclusions about the perspectives of the approaches, leading to the conclusion that as data set sizes reach 100\,gigabases, the Hadoop-based pipelines become performance-competitive with a canonical high-performance cluster solution. As data sets in biological sequencing are sure to increase with time, Hadoop and similar frameworks are very interesting technologies that we envision will play a key role in the future of biological data analysis.
 }
 
 
 \section{Introduction}
 \label{sectionI}
 %The problem: dealing with BIG data
-Since its inception, massively parallel DNA sequencing, also referred to as Next Generation Sequencing~(NGS) technology, has been an extremely bountiful source of data giving insight into the workings of biological machinery~\cite{metzker, marx}. Decreasing sequencing costs facilitates and promotes larger and larger studies with increasingly larger data sizes, and extracting useful information from these voluminous amounts of data is transforming biology into a data-intensive discipline.  As an example of the scale of the demands, consider that a single Illumina high-throughput sequencing run produces approximately 3\,TB of raw data in 10 days~\cite{illumina}.  Indeed, the Swedish UPPMAX\footnote{\url{uppmax.uu.se}} \COMMENT{[unusual to use both footnotes and endnotes]} high-performance computing (HPC) center recently disclosed data showing that just in their sequencing context (most sequencing performed in Sweden) \COMMENT{huh?} storage is being occupied at a rate of~1\,TB/day while the analyses are using over~1 million computing core-hours per month~\cite{lampa}. 
+Since its inception, massively parallel DNA sequencing, also referred to as Next Generation Sequencing~(NGS) technology, has been an extremely bountiful source of data giving insight into the workings of biological machinery~\cite{metzker, marx}. Decreasing sequencing costs facilitates and promotes larger and larger studies with increasingly larger data sizes, and extracting useful information from these voluminous amounts of data is transforming biology into a data-intensive discipline.  As an example of the scale of the demands, consider that a single Illumina high-throughput sequencing run produces approximately 3\,TB of raw data in 10 days~\cite{illumina}.
+%Indeed, the Swedish UPPMAX\footnote{\url{uppmax.uu.se}} \COMMENT{[unusual to use both footnotes and endnotes]} high-performance computing (HPC) center recently disclosed data showing that just in their sequencing context (most sequencing performed in Sweden) \COMMENT{huh?} storage is being occupied at a rate of~1\,TB/day while the analyses are using over~1 million computing core-hours per month~\cite{lampa}. 
 
 %Current practices: HPC systems
-A common step of NGS data analysis consists of mapping short reads to a reference sequence and then finding the genetic variations specific to the sample. \sout{Most of the bioinformatic programs are written for the Linux operating system.} /COMMENT{awkward but maybe it's needed} Some of the most widespread tools\footnote{average number of invocations per month during 2013 at UPPMAX: Samtools~-- 30000, BWA~-- 25000, Bowtie~-- 5000; from internal communications} like BWA~\cite{bwa}, Bowtie~\cite{bowtie} and Samtools~\cite{samtools} are ``regular'' computer programs, not made with distributed computing in mind. Many others do not even have the native ability to use multiple cores \sout{on the same computer}\footnote{Samtools acquired this feature in v.0.1.19}.
+A common step of NGS data analysis consists of mapping short reads to a reference sequence and then finding the genetic variations specific to the sample.
+% \sout{Most of the bioinformatic programs are written for the Linux operating system.} /COMMENT{awkward but maybe it's needed} 
+Many of the most widespread tools for this purpuse, like BWA~\cite{bwa}, Bowtie~\cite{bowtie} and Samtools~\cite{samtools}, are not made with distributed computing in mind. Many others do not even have the native ability to use multiple cores. %\sout{on the same computer}\footnote{Samtools acquired this feature in v.0.1.19}.
+%\footnote{average number of invocations per month during 2013 at UPPMAX: Samtools~-- 30000, BWA~-- 25000, Bowtie~-- 5000; from internal communications}
 
 %Current practices: How to parallelize
 
-The most common approach to speed up NGS tools is to parallelise within a compute node using shared memory parallelism~(OMP)~\cite{openmp}, but this approach is naturally limited by the number of cores per node, which does not usually exceed~16.  For the tools which do not support the OMP natively, e.g. Samtools, variant calling can be parallelised by creating a separate process  for  each chromosome, or using GNU Parallel~\cite{gnuparallel} Linux utility.
-Of great importance is that a multi-core approach does not improve the performance of operations that are limited by disk or network throughputs, motivating \COMMENT{huh?} to split the dataset and use multi-node parallelisation. 
+The most common approach to speed up NGS tools is to parallelise within a compute node (multi-core parallelisation) using shared memory parallelism~(OMP)~\cite{openmp}, but this approach is naturally limited by the number of cores per node, which does not usually exceed~16. \COMMENT{confirm this!} For the tools which do not support OMP natively, e.g. Samtools, variant calling can be parallelised by creating a separate process  for  each chromosome, or using GNU Parallel Linux utility~\cite{gnuparallel}.
+Of great importance is that a multi-core approach does not improve the performance of operations that are limited by local disk or network throughputs, whereas splitting the dataset and multi-node parallelisation generally are not bound by these constraints.
 
-Message Passing Interface~(MPI)~\cite{mpi1} is a common way to implement multi-node parallelisation, but writing efficient MPI-programs for hundreds of cores is a non-trivial task since thread synchronisation (or load balancing) has to be woven into the software code \sout{by a programmer} and there are only a few existing solutions available for processing sequencing data~\cite{pmap, erne, gnumap}.
+Message Passing Interface~(MPI)~\cite{mpi1} is a common way to implement multi-node parallelisation, but writing efficient MPI-programs for hundreds of cores is a non-trivial task since thread synchronisation (or load balancing) has to be woven into the software code and there are few existing solutions available for processing sequencing data~\cite{pmap, erne, gnumap}.
 
-Another common way to introduce parallelisation to NGS analysis pipelines in Linux systems is to use Bash scripting. This involves using existing utilities and cluster tools to split the data into chunks, process them on the separate nodes, and merge the results afterwards. This kind of solution benefits from both MPI-like and OMP parallelisation and provides good performance, but the development requires substantial expertise in order to be efficient. Since the process is tightly coupled to the local computational cluster and network architectures, it might not be possible to be re-used in other settings.
+Another common way to introduce parallelisation to NGS analysis pipelines in Linux systems is to use Bash scripting. This involves using existing utilities and cluster tools to split the data into chunks, process them on the separate nodes, and merge the results afterwards. This kind of solution benefits from both MPI-like and OMP parallelisation and provides good performance, but the development requires substantial expertise in order to be efficient. Since the process is tightly coupled to the local computational cluster and network architectures, it might also not be possible to be re-used in other settings.
 
 %Introduce Hadoop, MR, and HDFS
 %Properties of Hadoop and HDFS- data localization and programming model etc
@@ -58,12 +62,12 @@ The Hadoop~MR framework provides automatic distribution of computations over man
 
 %Manuscript focus: When is Hadoop currently an appealing alternative
 %Introduce what we did in the manuscript.
-In this manuscript we focus on the question {\it if} and {\it when} \COMMENT{that's two questions} Hadoop is an appealing alternative to the program tools generally found in~HPC centers for DNA-seq analysis. Since Hadoop is written in Java, which is slower than the standard~HPC programming languages like C or Fortran, we seek to estimate an average data size when it starts to be worthwhile to use Hadoop from a performance perspective. We use five datasets with short reads of different sizes, align them against the appropriate reference genome, and call the variances.
+In this manuscript we focus on the question {\it when} \COMMENT{that's two questions} Hadoop is an appealing alternative to the program tools generally found in~HPC centers for DNA-seq analysis. Since Hadoop is written in Java, which is slower than the standard~HPC programming languages like C or Fortran, we seek to estimate an average data size when it starts to be worthwhile to use Hadoop from a performance perspective. We use five datasets with short reads of different sizes, align them against the appropriate reference genome, and call the variances.
 For the existing Hadoop software we propose modifications, in order to benefit fully from massively parallel nature of MR computations. 
 For the classical HPC DNA-seq analysis programs we developed a set of Bash scripts utilizing multiple nodes for short read alignment and exploiting the network fully, thereby speeding up calculations.
-The execution times for each dataset were collected and scaling relations were analysed to answer the question\COMMENT{s} in focus.
+The execution times for each dataset were collected and scaling relations were analysed to answer the question in focus.
 
-The manuscript is structured as follows: \COMMENT{[odd to do this in a normal publication, but OK]} In Section~II we briefly introduce the datasets, computational facilities, analysis pipelines design,  and the software used. Then, Section~III presents experimental results; first verifying that both HPC and Hadoop approaches extract the same mutation and then investigating the scaling relations in terms of data size and computing resources. The results are discussed in Section~IV, and conclusions in Section~V. Supplementary materials are provided in the corresponding section.
+%The manuscript is structured as follows: \COMMENT{[odd to do this in a normal publication, but OK]} In Section~II we briefly introduce the datasets, computational facilities, analysis pipelines design,  and the software used. Then, Section~III presents experimental results; first verifying that both HPC and Hadoop approaches extract the same mutation and then investigating the scaling relations in terms of data size and computing resources. The results are discussed in Section~IV, and conclusions in Section~V. Supplementary materials are provided in the corresponding section.
 
 
 
@@ -71,13 +75,13 @@ The manuscript is structured as follows: \COMMENT{[odd to do this in a normal pu
 \label{sectionII}
 
 \subsection{Datasets}
-We used publicly available DNA-seq datasets~(I--III), a synthetic dataset~(IV) of {\it A.thaliana}, the well-known model plant, and dataset (V) of two {\it H.sapiens} individuals (Table~\ref{table:datasets}). Data for datasets I-III and V were obtained using Illumina/HiSeq sequencing platforms. Further information about the datasets is provided in the Supplementary material section.
+We used publicly available DNA-seq datasets~(I--III) as well as a synthetic dataset~(IV) of {\it A.thaliana}, the well-known model plant, and a dataset (V) of two {\it H.sapiens} individuals (Table~\ref{table:datasets}). Data for datasets I-III and V were obtained using Illumina/HiSeq sequencing platforms. Further information about the datasets is provided in the Supplementary material section.
 
 
 \begin{table}[htdp]
 \small
 \footnotesize
-\caption{Datasets used}
+\caption{Datasets used in the comparison. }
 \begin{center}
 \begin{tabular}{|l|l|l|}
 dataset &	organism &	size in Gbases\\
@@ -96,28 +100,30 @@ dataset &	organism &	size in Gbases\\
 
 
 \subsection{Analysis pipelines}
-We constructed two pipelines for identifying single-nucleotide polymorphisms (SNPs) from short read data, one based on Hadoop and the other on regular HPC with a batch processing system (hereafter referred to as HPC). Our experiments then consisted of running the pipelines for the selected input dataset and measuring the wall-clock run time for each pipeline stage. All experiments were repeated several times and the results averaged \COMMENT{considering the variations in table 4, why not use medians} to obtain a data point for the particular combination of data size and computational platform. Acknowledging that there are different approaches and software for conducting bioinformatic analysis for HPC (e.g., GATK~\cite{gatk}), we decided to create the  analysis pipeline as simple as possible to be able to pass \COMMENT{huh?} the same stages on Hadoop and HPC:
+We constructed two pipelines for identifying single-nucleotide polymorphisms (SNPs) from short read data, one based on Hadoop and the other on regular HPC with a batch processing system (hereafter referred to as HPC). Our experiments then consisted of running the pipelines for the selected input dataset and measuring the wall-clock run time for each pipeline stage. All experiments were repeated several times and the results averaged \COMMENT{considering the variations in table 4, why not use medians} to obtain a data point for the particular combination of data size and computational platform. Acknowledging that there are different approaches and software for conducting bioinformatic analysis for HPC (e.g., GATK~\cite{gatk}), we decided to create the analysis pipeline as simple as possible to be able to make a better comparison with the one implemented for Hadoop.
+
+%pass \COMMENT{huh?} the same stages on Hadoop and HPC:
 
 
 \begin{enumerate}
 \item HPC approach
 \subitem Short read alignment: Bowtie~ver.~0.12.8
-\subitem SNP calling: Samtool~ver.~0.1.19
+\subitem SNP calling: Samtools~ver.~0.1.19
 \item Hadoop approach: Crossbow~\cite{crossbow}
 \subitem Short read alignment: Bowtie~ver.~0.12.8
 \subitem SNP calling: SOAPsnp~1.02~\cite{soapsnp}
 \end{enumerate}
 
 
-In the HPC pipeline, reads were aligned with Bowtie, followed by sorting the mapped reads and~SNP calling with Samtools. The Bowtie aligner natively implements~OMP, meaning that with~8 cores on the same computer the result can be theoretically obtained 8 times faster than on a single core. Likewise, Samtools (as of version~0.1.19) also offers shared memory parallelism for several of its functions. Where available these features were used to improve the analysis speed. The exact workflow used is available in the code repository created for this work~\cite{code_repo}. \COMMENT{missing ref}
+In the HPC pipeline, reads were aligned with Bowtie, followed by sorting the mapped reads and~SNP calling with Samtools. The Bowtie aligner natively implements~OMP, meaning that with~8 cores on the same computer the result can be theoretically obtained 8 times faster than on a single core. Likewise, Samtools (as of version~0.1.19) also offers shared memory parallelism for several of its functions. Where available these features were used to improve the analysis speed. The exact workflow used is available in \COMMENT{github?} the code repository created for this work~\cite{code_repo}. \COMMENT{missing ref}
 
-The equivalent Hadoop-based pipeline was implemented with Crossbow. The input data and the indexed genome reference were copied to Hadoop's storage system~(HDFS) before starting the experiments. Crossbow implements a short pipeline that pre-processes the input data, transforming it into a format suitable for the alignment stage, and then continues to use Bowtie for alignment and SoapSNP to call SNPs.  Unfortunately, Crossbow's preprocessor is not written in MR manner, and thus cannot be run in a massively parallel way. Due to this limitation, this basic step threatened to be the most time-consuming procedure in our test pipeline and bias our experiments. To overcome this bottleneck we substituted Crossbow's preprocessor with our own MR implementation.
+The equivalent Hadoop-based pipeline was implemented with Crossbow. The input data and the indexed genome reference were copied to Hadoop's storage system~(HDFS) before starting the experiments. Crossbow implements a short pipeline that pre-processes the input data, transforming it into a format suitable for the alignment stage, and then continues to use Bowtie for alignment and SoapSNP to call SNPs.  Unfortunately, Crossbow's preprocessor is not written in MR manner, and thus cannot be run in a massively parallel way. Due to this limitation, this basic step threatened to be the most time-consuming procedure in our test pipeline and bias our experiments. To overcome this bottleneck we substituted Crossbow's preprocessor with our own MR implementation (available in \COMMENT{github?} the code repository~\cite{code_repo}).
 
 
 
 \subsection{Computational resources}
-To run the HPC analysis pipeline we used a computational cluster at UPPMAX on nodes equipped with 8 dual-core CPUs. Data and reference genomes were stored on a parallel, shared-storage system\cite{gulo}. The Hadoop test platform was deployed on a private cloud at UPPMAX using the OpenNebula~\cite{opennebula} cloud manager. The cluster was set up with Cloudera Hadoop distribution version~2.0.0-mr1-cdh4.5.0~\cite{cloudera}. For details on computational resources, see Supplementary material.
-
+To run the HPC analysis pipeline we used a computational cluster at UPPMAX, which is heavily used for analysis of NGS-data~\cite{lampa}, on nodes equipped with 8 dual-core CPUs. Data and reference genomes were stored on a parallel, shared-storage system. The Hadoop test platform was deployed on a private cloud at UPPMAX using the OpenNebula~\cite{opennebula} cloud manager. The cluster was set up with Cloudera Hadoop distribution version~2.0.0-mr1-cdh4.5.0~\cite{cloudera}. For details on computational resources, see Supplementary material.
+%\cite{gulo}
 
 
 
@@ -126,24 +132,30 @@ To run the HPC analysis pipeline we used a computational cluster at UPPMAX on no
 \label{sectionIII}
 
 \subsection{Modified preprocessing stage}
-A native preprocessing stage in Crossbow\footnote{the same holds for Myrna, a cloud-based solution for differential expression analysis} provides great flexibility in delivering the data to the Hadoop cluster. Data can be downloaded from Amazon S3, FTP and HTTP servers over the Internet\cite{crossbow}. The only way to introduce parallelisations in the native preprocessing stage is to split the read files into smaller chunks and to generate a manifest file listing all these chunks. This, however, is lacking the massively parallel way of treating the data.
+A native preprocessing stage in Crossbow provides great flexibility in delivering the data to the Hadoop cluster, where data can be downloaded from Amazon S3, FTP and HTTP servers over the Internet\cite{crossbow}. The only way to introduce parallelisations in the native preprocessing stage is to split the read files into smaller chunks and to generate a manifest file listing all these chunks. This, however, is lacking the massively parallel way of treating the data.
 
-Being pragmatic we assume that sequencing platforms are usually affiliated with computation facilities which provide both storage and computers, therefore we considered that the data already been downloaded to storage Hadoop could access.
-We rewrote the preprocessing stage scripts in a MR-manner, benefiting from its massively parallel nature.
-The requirement is that the FASTQ data are BZIP2 archived and accessible by Hadoop. For our case the storage with the data was mounted with SSHFS to one of the Hadoop nodes, from where the BZIP2'ed data were ingested \COMMENT{special word?} to the HDFS.
-BZIP2 provides very good compression and is splittable, meaning that the archive can be expanded in a parallel manner\footnote{other options like splittable LZO are also possible}. Also, BZIP2 format is natively supported by Hadoop by enabling the respective codec, i.e., \sout{for the developer} there is no difference in dealing with the FASTQ data or with its BZIP2 archive.
+%\footnote{the same holds for Myrna, a cloud-based solution for differential expression analysis} 
 
-The Hadoop streaming library offers a possibility to write Mapper and Reducer for Hadoop jobs in any programming language. Our Python scripts efficiently process short reads, produced by Illumina sequencing platform of different versions, as well as the FASTQ files converted from SRA format (NCBI Sequence Read Archive).\COMMENT{ref?} 
+Assuming that sequencing platforms are usually in close proximity with facilities that provide both storage and computers, we considered that the data already had been downloaded to storage that Hadoop could access.
+We rewrote the Crossbow preprocessing stage scripts in a MR-manner, benefiting from its massively parallel nature.
+The requirement is that the FASTQ data are BZIP2 archived and accessible by Hadoop. For our case the storage with the data was mounted with SSHFS to one of the Hadoop nodes, from where the BZIP2'ed data were transferred to the HDFS storage.
+BZIP2 provides very good compression and is splittable, meaning that the archive can be expanded in a parallel manner. Also, BZIP2 format is natively supported by Hadoop, i.e., there is no difference in dealing with the FASTQ data or with its BZIP2 archive.
+
+%\footnote{other options like splittable LZO are also possible}
+
+The Hadoop streaming library offers a possibility to write Mapper and Reducer \COMMENT{Introduce in introduction} for Hadoop jobs in any programming language. Our Python scripts efficiently process short reads, produced by Illumina sequencing platform of different versions, as well as the FASTQ files converted from SRA format (NCBI Sequence Read Archive).\COMMENT{ref?} 
 The problem of lacking the unique FASTQ header standard was solved by the rewriting the header based on a SHA-1 hash function, and the reads mates were labeled with ``.1" and ``.2" suffixes. 
 To ensure that both the forward and reverse reads of the same pair would end up on the same Reducer, secondary Mapper key-sorting mechanisms were involved.
 
-In order to compare the native preprocessor and the proposed one, the data was put on the HDFS beforehand, to eliminate possible network delays, e.g., while downloading data from some Amazon cloud.
+In order to compare the native preprocessor and the proposed one, the data was put on HDFS beforehand to eliminate possible network delays, e.g., while downloading data from Amazon.
 Table~\ref{table:preprocess} illustrates the benefits of our approach.
-\begin{table}[htdp]
+To complete the comparison the same preprocessing was performed with a BASH script for the same data located on the HPC storage. The script (see Supplementary information) ran on a single HPC node, utilizes multiple cores, with the limiting factor being the hard disk IO performance.%, which effectively leaves with 5-7 cores of 16. \COMMENT{awkward}
+
+\begin{table}[tdp]
 \small
-\caption{Timings (in minutes) with the  Crossbow native read preprocessor and with derived approach for  datasets II, III, IV  on \sout{$p=56$} 56 cores Hadoop cluster, using the Crossbow, and with the BASH script on a single HPC node \sout{, $p=16$} with 16 cores. \COMMENT{A bit odd to use the vertical lines before/after table, but OK.}}
+\caption{Timings (in minutes) with Crossbow's native read preprocessor and with derived approach for  datasets II, III, IV  on a 56 cores Hadoop cluster, using the Crossbow, and with the BASH script on a single HPC node with 16 cores.}
 \begin{center}
-\begin{tabular}{|l|c|c|c|c|}
+\begin{tabular}{l|c|c|c}
 Dataset			&		II (7 Gbases )	& III (30 Gbases)	& IV (100 Gbases)\\
 \hline
 Crossbow native			&		$60.6\pm0.7$	& $299.0\pm2.3$	&	$673\pm1.0$	\\
@@ -154,7 +166,6 @@ BASH, this work			& 		$7.4\pm0.0$	&	$31.1\pm0.1$	&	$114.5\pm0.3$	\\
 \label{table:preprocess}
 \normalsize
 \end{table}%
-To complete the comparison the same preprocessing was performed with the BASH scripting against the data located on the HPC storage. The script\footnote{\texttt {pbzip2 -dc  \${file1} | paste - - - - -d'\textbackslash t' | cut -f1,2,4 | paste - -d' ' <(pbzip2 -dc  \${file2} | paste - - - - -d'\textbackslash t' | cut -f2,4) | pbzip2 -cz > \${fileOut}}} ran on a single HPC node, utilizes multiple cores, with the limiting factor being the HDD IO performance, which effectively leaves with 5-7 cores of 16. \COMMENT{awkward}
 
 
 
@@ -165,23 +176,23 @@ Since our HPC and Hadoop approaches use different~SNP callers (Samtools and SOAP
 
 \subsection{Scalability of HPC and Hadoop approaches}
 To demonstrate the scalability of the HPC approach we collected running times for dataset~I as a function of the number of cores used (Table~\ref{table:3}). \COMMENT{Consider replacing with a graph.}
-\sout{As one can see} the aligning process with the Bowtie scales fairly well, but the SNP calling part is a bottleneck, scaling worse than the Bowtie, and consuming a progressively larger portion of the total calculation time.
+The aligning \COMMENT{mapping written in table, be consistent} process in Bowtie scales fairly well, but the SNP calling part in Samtools is a bottleneck, scaling worse than Bowtie, and consuming a progressively larger portion of the total calculation time even after parallelising analysis by chromosome\footnote{\url{http://www.biostars.org/p/48781}}.
 %\footnote{The amount of available memory, specified with the \texttt{-m} option, is of big importance for the Samtools performance. During its sorting phase the lack of RAM results in spilling to the HDD. For example for an half of  Dataset III, SNP calling takes approximately 40 minutes with 8 GB RAM, and 15 minutes with 48 GB RAM, when  the whole BAM file fits into RAM. For our tasks we used the default Samtool's settings.}.  
 For the given datasets (I--V) the timings for alignment against the corresponding genomes and SNP calling for the HPC and Hadoop approaches were collected (Table~\ref{table:4}).
 
 One of the attractive sides of using Hadoop~MR is its almost linear scalability, i.e., calculation time linearly depends on the size of the dataset\cite{crossbow,seal}, regardless the scaling nature of the underlying program (Samtools, Bowtie, etc.).
-Figure~\ref{fig:fig1} \COMMENT{this figure should be closer, table and figure layout odd in general}, based on Table~\ref{table:4}, shows the calculation time as a function of the dataset size for $p=56$ \COMMENT{is this 'p=' notation necessary} cores Hadoop cluster. Dataset V was excluded since it is for {\it H.sapiens}, which has more than 20 times larger genome than~{\it A.thaliana}. \COMMENT{so what}
-To stress the linear nature of scaling, both sets of points were fit \sout{to linear polynomial} using the least squares method.
+Figure~\ref{fig:fig1}, based on Table~\ref{table:4}, shows the calculation time as a function of the dataset size for the 56 cores Hadoop cluster and datasets I-IV.
+To stress the linear nature of scaling, both sets of points were fit using the least squares method.
 
 
-\begin{table}[htb]
+\begin{table}[tb]
 \small
 \caption{Calculation time for Dataset I executed on different number of cores on a node of HPC cluster. \COMMENT{awkward title, consider replacing with graph (and new title)}}
 \begin{center}
-\begin{tabular}{|c|c|c|c|ccc|}
-$N$ cores	&\multicolumn{3}{c|}{timing, minutes}&\multicolumn{3}{c|}{speed-ups} \\
+\begin{tabular}{c|c|c|c|ccc}
+$N$ cores	&\multicolumn{3}{c|}{timing, minutes}&\multicolumn{3}{c}{speed-ups} \\
 \hline
-	& mapping 	&	SNP calling\tablefootnote{We used special tricks to parallelize the Samtools analysis by chromosome, as exemplified here \url{http://www.biostars.org/p/48781}.}	&	total  &total & map& SNP call\\
+	& mapping 	&	SNP calling	&	total  &total & map& SNP call\\
 \hline
 1	&	22.75	$\pm$1.24&	26.1$\pm$0.7	&	48.9	&	 1.00	&	1.00	&	1.00\\
 2	&	11.00$\pm$0.05	&	16.9$\pm$1.3	&	27.9	&	 0.88	&	1.03	&	0.77\\
@@ -198,12 +209,13 @@ $N$ cores	&\multicolumn{3}{c|}{timing, minutes}&\multicolumn{3}{c|}{speed-ups} \
 \normalsize
 \end{table}
 
-\begin{table}[htdp]
+
+\begin{table}[tdp]
 \small
 
 \caption{Timings  (in minutes) for HPC and  Hadoop deployments for different dataset sizes.    Dataset is shown in brackets by roman numerals, ``f.r.'' stands for ``forward reads''. Big deviation \COMMENT{what aspect of deviation, not fixable?} for the HPC is due to Samtools BAM sorting, which is IO and memory intensive, thus strongly depend on the queuing at the HPC cluster. \COMMENT{No p= used here.} }
 \begin{center}
-\begin{tabular}{|l|c|c|c|c|c|c|c|}
+\begin{tabular}{l|c|c|c|c|c|c|c}
 
 data, Gbases		&	1.4	&	3.5		&	7.0		&	15.0		&	30.0		&	100.0	&	250 	\\
 				&	(I)	&	(II, f.r.)	&	(II)		&	(III, f.r.)	&	(III)		&	(IV)		&	(V)\\
@@ -219,21 +231,23 @@ HPC, 16 cores	&	$17\pm1$	&	$22\pm6$	&	$43\pm3$	&	$81\pm9$	&	$172\pm15$		&	$467\p
 \normalsize
 \end{table}%
 
-
-
-
-\begin{figure}
+\begin{figure}[tb]
 	\input{./figures/fig1/fig1.tex}
-	\caption{Calculation time depending on the size of selected datasets for~$p=56$ \COMMENT{p= returns} cores Hadoop cluster on the private Cloud. \sout{The least squares fit reveals linear scaling.} Datasets are marked with roman numerals. \COMMENT{Rather large graph for such a simple result.} }
+	\caption{Calculation time for selected datasets (labeled with roman numerals) for the 56 cores Hadoop cluster shows a linear scaling with dataset size. }
 	\label{fig:fig1}
 \end{figure}
 
 
-\subsection{Comparing Hadoop and HPC runtime efficiency for different dataset sizes}
-\COMMENT{delete 'for different dataset sizes'} Hadoop was designed to digest huge datasets\cite{hadoop,lin2010}. One can propose then that the larger the dataset is, the more suitable Hadoop becomes compared to the HPC approach. In order to compare the ``suitability'' for different types of calculation platforms (Hadoop and HPC) each being run on a different number of cores, we constructed the following function:
+
+
+
+\subsection{Comparing Hadoop and HPC runtime efficiency}
+Hadoop was designed to digest huge datasets\cite{hadoop,lin2010}. One can propose then that the larger the dataset is, the more suitable Hadoop becomes compared to the HPC approach. In order to compare the ``suitability'' for different types of calculation platforms (Hadoop and HPC) each being run on a different number of cores, we constructed the following function:
 $$F=T_{p}\times p,$$ 
 where~$T_{p}$ is the calculation time on~$p$ cores. \COMMENT{This trivial/obvious formula doesn't deserve such special treatment.}
-Using the data from Table~\ref{table:4}, we plot the ratio $F_{Hadoop}/F_{HPC}$ \sout{, keeping in mind that the closer the ratio is to the unity, the closer Hadoop's efficiency is to that of the HPC approach}.
+
+Using the data from Table~\ref{table:4}, we plot the ratio $F_{Hadoop}/F_{HPC}$ as a function of the reciprocal dataset size. Extrapolation to zero on the~$X$-axis estimates the ratio for the hypothetical infinite dataset. As one can see, the Hadoop approach becomes more and more effective compared to the HPC scenario as the dataset size increases. 
+The parabolic extrapolation for the ratio is $1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on ``bare metal'' of modern hardware for datasets greater than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
 
 \begin{figure}
 	\input{./figures/fig2/fig2.tex}
@@ -242,8 +256,6 @@ The points are fit to a quadratic least-squares curve, which makes it possible t
 	\label{fig:fig2}
 \end{figure}
 
-The curve  in~Figure~\ref{fig:fig2}, based on Table~\ref{table:4}\sout{, is plotted for~$p=56$ cores Hadoop cluster and an HPC node ($p=16$), and} displays the ratio~$F_{Hadoop}/F_{HPC}$ as a function of the reciprocal dataset size. Extrapolation to zero on the~$X$-axis estimates the ratio for the hypothetical infinite dataset. As one can see, the Hadoop approach becomes more and more effective compared to the HPC scenario as the dataset size increases. 
-The parabolic extrapolation for the ratio is $1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on ``bare metal'' of modern hardware for datasets greater than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
 
 The simplest curve to fit the points nicely is a parabolic function, importantly not a linear one. Considering a {\it linear} scaling for the Hadoop approach for those datasets, Figure~\ref{fig:fig1}, one can conclude that HPC approach scales worse than linearly\footnote{For the linear scaling the curve of $F=T_{p}\times p$ does not depend on the dataset size, i.e. being a constant; thus the ratio of two constants would result a constant, but we observe a dependecy.}. \COMMENT{Why jump back and forth in the discussion of figures 1 and 2?} We suspect the main reason for such a behavior is the fact that for large datasets (starting from dataset~III in our case) the SNP calling routine with the Samtools becomes more memory and time demanding than the actual mapping with Bowtie.
 If lacking  RAM, the Samtools swaps to disk, creating multiple (up to hundreds) temporary files while sorting the BAM file, keeping the network load for NFS storage and time-expensive IO on a high rate.
@@ -428,10 +440,16 @@ Gulo\cite{gulo} is a custom built Lustre 2.4 system using 8 HP nodes with MDS600
 
 \item Our Hadoop test platform was deployed on a private cloud at UPPMAX using the OpenNebula~\cite{opennebula} cloud management system. Each node in this deployment was equipped with dual 4-core Intel Xeon 5420 (2.50\,GHz; 12~MB L2 cache), 16~GB RAM, one 1~TB SATA disk and Gigabit Ethernet. The cluster was set up with Cloudera Hadoop Distribution version~2.0.0-cdh4.4.0~\cite{cloudera}.
 Note that the physical hardware provided less RAM than desired. Each VM node has 7 cores, each of each can use less than 2 GB of RAM, which is little for Hadoop. We would expect much better performance with twice as much memory, as recommended.
+\end{enumerate}
+
+
+\subsection{Bash script for the preprocessing stage}
+
+\texttt {pbzip2 -dc  \${file1} | paste - - - - -d'\textbackslash t' | cut -f1,2,4 | paste - -d' ' <(pbzip2 -dc  \${file2} | paste - - - - -d'\textbackslash t' | cut -f2,4) | pbzip2 -cz > \${fileOut}}
+
 
 \COMMENT{Journal abbreviations in references are inconsistant. The journal name for ref 2 is wrong. Capitalization of refs 4, 14, 16, 18, 19, 25, 27, etc are wrong. All refs should be checked for accuracy and style consistancy. Many or all footnotes should be changed to endnotes (references).}
 
-\end{enumerate}
 
 \bibliography{text1}
 \bibliographystyle{unsrt}
