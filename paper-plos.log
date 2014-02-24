@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.9.3)  24 FEB 2014 15:26
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.9.3)  24 FEB 2014 16:11
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -384,18 +384,8 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 86.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1{/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-] [2] [3] [4]
-
-LaTeX Warning: Citation `code_repo' on page 5 undefined on input line 241.
-
-[5] [6]
-
-LaTeX Warning: Citation `code_repo' on page 7 undefined on input line 319.
-
-
-LaTeX Warning: Citation `code_repo' on page 7 undefined on input line 321.
-
-(./paper-plos.bbl [7]
+] [2] [3] [4] [5]
+[6] (./paper-plos.bbl [7]
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 50.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/base/omscmr.fd
@@ -404,7 +394,7 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 50.
  [8]
-Underfull \hbox (badness 10000) in paragraph at lines 176--180
+Underfull \hbox (badness 10000) in paragraph at lines 181--185
 []\OT1/cmr/m/n/10 Cloudera.  http://www.cloudera.com/content/cloudera/en/why-cl
 oudera/hadoop-and-big-
  []
@@ -474,7 +464,7 @@ verted-to.pdf ./figures/fig1/fig1.eps>
 (epstopdf)             \includegraphics on input line 133.
 Package epstopdf Info: Output file is already uptodate.
 
-<./figures/fig1/fig1-eps-converted-to.pdf, id=191, 426.59375pt x 284.06125pt>
+<./figures/fig1/fig1-eps-converted-to.pdf, id=196, 426.59375pt x 284.06125pt>
 File: ./figures/fig1/fig1-eps-converted-to.pdf Graphic file (type pdf)
 
 <use ./figures/fig1/fig1-eps-converted-to.pdf>
@@ -493,7 +483,7 @@ verted-to.pdf ./figures/fig2/fig2.eps>
 (epstopdf)             \includegraphics on input line 123.
 Package epstopdf Info: Output file is already uptodate.
 
-<./figures/fig2/fig2-eps-converted-to.pdf, id=192, 426.59375pt x 284.06125pt>
+<./figures/fig2/fig2-eps-converted-to.pdf, id=197, 426.59375pt x 284.06125pt>
 File: ./figures/fig2/fig2-eps-converted-to.pdf Graphic file (type pdf)
 
 <use ./figures/fig2/fig2-eps-converted-to.pdf>
@@ -501,14 +491,14 @@ Package pdftex.def Info: ./figures/fig2/fig2-eps-converted-to.pdf used on input
  line 123.
 (pdftex.def)             Requested size: 426.5927pt x 284.06053pt.
 )
-<./figures/fig5/a.png, id=193, 298.11375pt x 273.02pt>
+<./figures/fig5/a.png, id=198, 298.11375pt x 273.02pt>
 File: ./figures/fig5/a.png Graphic file (type png)
 
 <use ./figures/fig5/a.png>
 Package pdftex.def Info: ./figures/fig5/a.png used on input line 430.
 (pdftex.def)             Requested size: 182.09485pt x 166.7669pt.
 
-<./figures/fig5/c.png, id=195, 488.82625pt x 500.87125pt>
+<./figures/fig5/c.png, id=200, 488.82625pt x 500.87125pt>
 File: ./figures/fig5/c.png Graphic file (type png)
 
 <use ./figures/fig5/c.png>
@@ -531,7 +521,7 @@ verted-to.pdf ./figures/fig9/fig3.eps>
 (epstopdf)             \includegraphics on input line 112.
 Package epstopdf Info: Output file is already uptodate.
 
-<./figures/fig9/fig3-eps-converted-to.pdf, id=196, 426.59375pt x 284.06125pt>
+<./figures/fig9/fig3-eps-converted-to.pdf, id=201, 426.59375pt x 284.06125pt>
 File: ./figures/fig9/fig3-eps-converted-to.pdf Graphic file (type pdf)
 
 <use ./figures/fig9/fig3-eps-converted-to.pdf>
@@ -553,15 +543,12 @@ Package rerunfilecheck Info: File `paper-plos.out' has not changed.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 592.
  ) 
 Here is how much of TeX's memory you used:
- 7528 strings out of 493315
- 111688 string characters out of 6137905
- 230106 words of memory out of 5000000
+ 7530 strings out of 493315
+ 111711 string characters out of 6137905
+ 230138 words of memory out of 5000000
  10747 multiletter control sequences out of 15000+600000
  13135 words of font info for 51 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -584,10 +571,10 @@ texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2013/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2013/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2013/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on paper-plos.pdf (15 pages, 327859 bytes).
+Output written on paper-plos.pdf (15 pages, 327929 bytes).
 PDF statistics:
- 325 PDF objects out of 1000 (max. 8388607)
- 280 compressed objects within 3 object streams
- 85 named destinations out of 1000 (max. 500000)
+ 330 PDF objects out of 1000 (max. 8388607)
+ 285 compressed objects within 3 object streams
+ 86 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

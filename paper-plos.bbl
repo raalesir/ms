@@ -35,8 +35,8 @@ Li H, Durbin R (2009) {{Fast and accurate short read alignment with
 \bibAnnoteFile{bwa}
 
 \bibitem{Langmead:2009uq}
-Langmead B, Trapnell C, Pop M, Salzberg SL (2009) Ultrafast and
-  memory-efficient alignment of short dna sequences to the human genome.
+Langmead B, Trapnell C, Pop M, Salzberg SL (2009) {Ultrafast and
+  memory-efficient alignment of short DNA sequences to the human genome}.
 \newblock Genome Biol 10: R25.
 \bibAnnoteFile{Langmead:2009uq}
 
@@ -105,8 +105,8 @@ Sammer E (2012) {Hadoop Operations}.
 \bibAnnoteFile{Sammer:2012}
 
 \bibitem{Langmead:2009kx}
-Langmead B, Schatz MC, Lin J, Pop M, Salzberg SL (2009) Searching for snps with
-  cloud computing.
+Langmead B, Schatz MC, Lin J, Pop M, Salzberg SL (2009) {Searching for SNPs
+  with cloud computing}.
 \newblock Genome Biol 10: R134.
 \bibAnnoteFile{Langmead:2009kx}
 
@@ -123,8 +123,8 @@ Schneeberger K, Ossowski S, Lanz C, Juul T, Petersen AH, et~al. (2009)
 \bibAnnoteFile{schneeberger}
 
 \bibitem{Pireddu:2011vn}
-Pireddu L, Leo S, Zanetti G (2011) Seal: a distributed short read mapping and
-  duplicate removal tool.
+Pireddu L, Leo S, Zanetti G (2011) {SEAL: a distributed short read mapping and
+  duplicate removal tool}.
 \newblock Bioinformatics 27: 2159-60.
 \bibAnnoteFile{Pireddu:2011vn}
 
@@ -135,9 +135,14 @@ Bozdag D, Hatem A, Catalyurek UV (2010) {Exploring parallelism in short
   (IPDPSW), 2010 IEEE International Symposium on : 1--8.
 \bibAnnoteFile{Bozdag:2010cn}
 
+\bibitem{code_repo}
+Manuscript github repository.
+\newblock \urlprefix\url{https://github.com/raalesir/mr_scripts}.
+\bibAnnoteFile{code_repo}
+
 \bibitem{galaxy}
-Giardine B, Riemer C, Hardison RC, Burhans R, Elnitski L, et~al. (2005) Galaxy:
-  a platform for interactive large-scale genome analysis.
+Giardine B, Riemer C, Hardison RC, Burhans R, Elnitski L, et~al. (2005)
+  {Galaxy: a platform for interactive large-scale genome analysis}.
 \newblock Genome Res 15: 1451-5.
 \bibAnnoteFile{galaxy}
 
@@ -149,9 +154,9 @@ Schonherr S, Forer L, Weissensteiner H, Kronenberg F, Specht G, et~al. (2012)
 \bibAnnoteFile{cloudgene}
 
 \bibitem{gatk}
-McKenna A, Hanna M, Banks E, Sivachenko A, Cibulskis K, et~al. (2010) The
-  genome analysis toolkit: a mapreduce framework for analyzing next-generation
-  dna sequencing data.
+McKenna A, Hanna M, Banks E, Sivachenko A, Cibulskis K, et~al. (2010) {The
+  Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation
+  DNA sequencing data}.
 \newblock Genome Res 20: 1297-303.
 \bibAnnoteFile{gatk}
 
