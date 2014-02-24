@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: paper-plos.aux
+The style file: plos2009.bst
+Database file #1: paper-plos.bib
+Warning--I didn't find a database entry for "code_repo"
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--can't use both author and editor fields in Hadoop:Guide
+You've used 30 entries,
+            2441 wiz_defined-function locations,
+            705 strings with 9199 characters,
+and the built_in function-call counts, 17281 in all, are:
+= -- 1489
+> -- 276
+< -- 0
++ -- 144
+- -- 66
+* -- 1339
+:= -- 1948
+add.period$ -- 64
+call.type$ -- 30
+change.case$ -- 29
+chr.to.int$ -- 0
+cite$ -- 61
+duplicate$ -- 1778
+empty$ -- 1915
+format.name$ -- 80
+if$ -- 3868
+int.to.chr$ -- 0
+int.to.str$ -- 30
+missing$ -- 257
+newline$ -- 169
+num.names$ -- 18
+pop$ -- 410
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 272
+stack$ -- 0
+substring$ -- 2111
+swap$ -- 467
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 113
+width$ -- 32
+write$ -- 313
+(There were 2 warnings)

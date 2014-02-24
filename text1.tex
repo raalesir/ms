@@ -36,7 +36,7 @@ Hadoop, emerging in the last decade, is a framework that automatically distribut
 \section{Introduction}
 \label{sectionI}
 %The problem: dealing with BIG data
-Since its inception, massively parallel DNA sequencing, also referred to as Next Generation Sequencing~(NGS) technology, has been an extremely bountiful source of data giving insight into the workings of biological machinery~\cite{metzker, marx}. Decreasing sequencing costs facilitates and promotes larger and larger studies with increasingly larger data sizes, and extracting useful information from these voluminous amounts of data is transforming biology into a data-intensive discipline.  As an example of the scale of the demands, consider that a single Illumina high-throughput sequencing run produces approximately 3\,TB of raw data in 10 days~\cite{illumina}.
+Since its inception, massively parallel DNA sequencing, also referred to as Next Generation Sequencing~(NGS) technology, has been an extremely bountiful source of data giving insight into the workings of biological machinery~\cite{metzker, Marx:2013fk}. Decreasing sequencing costs facilitates and promotes larger and larger studies with increasingly larger data sizes, and extracting useful information from these voluminous amounts of data is transforming biology into a data-intensive discipline.  As an example of the scale of the demands, consider that a single Illumina high-throughput sequencing run produces approximately 3\,TB of raw data in 10 days~\cite{illumina}.
 %Indeed, the Swedish UPPMAX\footnote{\url{uppmax.uu.se}} \COMMENT{[unusual to use both footnotes and endnotes]} high-performance computing (HPC) center recently disclosed data showing that just in their sequencing context (most sequencing performed in Sweden) \COMMENT{huh?} storage is being occupied at a rate of~1\,TB/day while the analyses are using over~1 million computing core-hours per month~\cite{lampa}. 
 
 %Current practices: HPC systems
@@ -355,15 +355,15 @@ Number of nodes	&Mapping time,	&$\frac{T_{mapping}}{T_{comm}}$	&Number of nodes	
 \label{table:6}
 \end{table}%
 HDFS on the other hand maintains data locality, reducing communication and data transfer and hence lead to better scalability.
-Our Hadoopcluster has no more free nodes to continue to investigate the scaling as in plot at Figure~\ref{fig:fig3}, but we do not expect any significant deviations, since the observed behaviour is a generic for Hadoop with HDFS. \COMMENT{need ref for this!}
+Our Hadoop cluster has no more free nodes to continue to investigate the scaling as in plot at Figure~\ref{fig:fig3}, but we do not expect any significant deviations, since the observed behaviour is a generic for Hadoop with HDFS. \COMMENT{need ref for this!}
 
 
 \subsection{Usability aspects}
 \label{subsectionIV_2}
 
 A popular way to construct and execute bioinformatic pipelines on HPC resources is via the Galaxy\cite{galaxy} platform, which provides a Web-based graphical user interface~(GUI) to bioinformatic programs, simplifying the experience for the end user. 
-One of the alternatives for Hadoop is Cloudgene\cite{cloudgene}, which is a light-weight and flexible Web-based solution for both public and private clouds. We implemented our Hadoop-pipeline in Cloudgene and extended the platform with functions to import data from the central file system at UPPMAX into HDFS on the private cloud (Figure~\ref{fig:fig4}(a)).
-For our particular task in DNA sequencing, Cloudgene provides the intuitive interface making one easy to follow. Most of the data managing work is done automatically and the results can be downloaded to the client machine. The modular structure allows modification of the source code to adapt to the existing computing center’s architecture, Figure~\ref{fig:fig4}(b). For example, UPPMAX users can import their data from the sequencing platform directly to the Hadoop cluster by pressing a button and entering the credentials, being at the same time sure that their sensitive data will be held locally, reducing the amount of unnecessary risks.
+An alternative for Hadoop is Cloudgene\cite{cloudgene}, which is a light-weight and flexible Web-based solution for both public and private clouds. We implemented our Hadoop-pipeline in Cloudgene and extended the platform with functions to import data from the central file system at UPPMAX into HDFS on the private cloud (Figure~\ref{fig:fig4}).
+For our particular task in DNA sequencing, Cloudgene makes it easy to select data and parameters for its execution. Most of the data managing work is done automatically and the results can be downloaded to the client machine. The modular structure allows modification of the source code to adapt to the existing computing center architecture. For example, UPPMAX users can import their data from the sequencing platform directly to the Hadoop cluster by pressing a button and entering the credentials, being at the same time sure that their sensitive data is kept privately.
 
 \begin{figure}
  	\begin{subfigure}[b]{0.4\textwidth}
@@ -383,12 +383,12 @@ For our particular task in DNA sequencing, Cloudgene provides the intuitive inte
 	\label{fig:fig4}
 \end{figure}
 
-\section{Conclusions}
+\section{Discussions/Conclusions}
 \label{sectionV}
 
-In this report we have described two approaches for high-performance analysis of DNA sequencing data; one based on regular HPC using a batch system and one based on Hadoop. We show that Hadoop installed on a private cloud is an appealing solution both on terms of runtime performance and also in terms of usability. A key result is the data size where Hadoop is favorable to regular HPC batch systems, and we developed highly optimized pipelines for both scenarios. We found that dataset sizes larger than 100\,Gbases is where Hadoop excels over HPC, and also that Hadoop shows almost linear scalability (Figure~\ref{fig:fig1}). Extrapolation to infinite dataset size (Figure~\ref{fig:fig2}) reveals however that HPC provides the results faster, given the same amount of resources as Hadoop on a private cloud.
+In this report we have described two approaches for high-performance analysis of DNA sequencing data; one based on regular HPC using a batch system and one based on Hadoop. We show that Hadoop installed on a private cloud is an appealing solution both on terms of runtime performance and also in terms of usability. A key result is the data size where Hadoop is favorable to regular HPC batch systems, and in order to compare them we developed highly optimized pipelines for both scenarios. We found that dataset sizes larger than 100\,Gbases is where Hadoop excels over HPC, and also that Hadoop shows almost linear scalability for this problem. Extrapolation to infinite dataset size reveals however that HPC provides the results faster, given the same amount of resources as Hadoop on a private cloud.
 
-To increase the performance of the existing Hadoop software, the modification to the preprocessing stage of the Crossbow/Myrna  were suggested.  The calculation time reduction can be observed in the Table~\ref{table:preprocess}. \COMMENT{So, is Hadoop better after the modifications for infinite datasets?}
+%To increase the performance of the existing Hadoop software, the modification to the preprocessing stage of the Crossbow/Myrna  were suggested.  The calculation time reduction can be observed in the Table~\ref{table:preprocess}. \COMMENT{So, is Hadoop better after the modifications for infinite datasets?}
 %A state-of-art Bash script was created to engage multiple nodes (up to 928 cores) in the HPC approach to align the Illumina-produced short reads with almost linear speed-ups.
 
 %We concentrated ourselves on the Hadoop  in the private cloud installation, Hadoop-in-the-Cloud, orchestrated by the OpenNebula. 
@@ -396,15 +396,15 @@ To increase the performance of the existing Hadoop software, the modification to
 %The scaling graphs (Figure~\ref{fig:fig1}) confirms the known fact for almost linear scalability of Hadoop.
 %The extrapolation to the infinite dataset size (Figure~\ref{fig:fig2}) revealed, that HPC, however, provides the results faster, given the same amount of resources, than the Hadoop-in-the-Cloud. 
 
-Exploiting the embarrassingly parallel nature of the short reads mapping we used a highly optimized Bash script to compare the scaling relations between the ratio of the mapping time to the communication time as a function of the reciprocal number of nodes (Figure~\ref{fig:fig3}). 
+We modified the preprocessing stage of the Crossbow software to enable it to make use of all nodes in the Hadoop system, end used a highly optimized Bash script to compare the scaling relations between the ratio of the mapping time to the communication time as a function of the reciprocal number of nodes on an HPC system. 
 Our results show that the calculations on Hadoop with HDFS scales better than the network attached parallel storage commonly used in the HPC centers.
-In addition we show how performance of the HPC approach can be improved by redefining the queueing system's default behaviour. \COMMENT{Should maybe mention somewhere that this sort of cheating.} Finally, we demonstrate that an existing and extensible publically available web-based GUI (Cloudgene), provides an easy way to execute bioinformatics analysis on Hadoop for those who are less experienced with Linux scripting.
+In addition we show how performance of the HPC approach can be improved by redefining the queueing system's default behaviour. This is however not of practical use in an HPC center since the network bandwidth is shared among multiple users. Finally, we demonstrate that an existing and extensible publically available web-based GUI (Cloudgene) provides an easy way to execute bioinformatics analysis on Hadoop for those who are less experienced with Linux scripting.
 
 
 
 \section{Acknowledgements}
-The computations were performed on resources provided by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) under project p2013023. This work was supported by the Swedish strategic research programme eSSENCE~\url{http://essenceofescience.se/home/}.
-We thank system experts Pontus Freyhult and Peter Ankerst{\aa}l at UPPMAX for valuable discussions on effective storage and network usage. We also thank Jonas Hagberg (BILS, Stockholm, Sweden), for implementing the Cloudgene extensions to import data from UPPMAX filesystem.
+The computations were performed on resources provided by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) under project p2013023. This work was supported by the Swedish strategic research programme eSSENCE.
+We thank system experts Pontus Freyhult and Peter Ankerst{\aa}l at UPPMAX for valuable discussions on effective storage and network usage, Jonas Hagberg (BILS, Stockholm, Sweden) for implementing the Cloudgene extensions to import data from UPPMAX filesystem, as well as Wesley Schaal for proofreading.
 
 
 
@@ -446,7 +446,7 @@ Multinode short read mapping was performed on the Milou cluster\cite{milouCluste
 Gulo\cite{gulo} is a custom built Lustre 2.4 system using 8 HP nodes with MDS600 storage boxes and an additional node for metadata handling. In total, it provides roughly 1 PB of storage and is accessed with Lustre's own protocol. It supports data striping over multiple nodes and disk targets and can give a theoretical single file read performance of up to 80 Gbit per second.
 
 \item Our Hadoop test platform was deployed on a private cloud at UPPMAX using the OpenNebula~\cite{opennebula} cloud management system. Each node in this deployment was equipped with dual 4-core Intel Xeon 5420 (2.50\,GHz; 12~MB L2 cache), 16~GB RAM, one 1~TB SATA disk and Gigabit Ethernet. The cluster was set up with Cloudera Hadoop Distribution version~2.0.0-cdh4.4.0~\cite{cloudera}.
-Note that the physical hardware provided less RAM than desired. Each VM node has 7 cores, each of each can use less than 2 GB of RAM, which is little for Hadoop. We would expect much better performance with twice as much memory, as recommended.
+Note that the physical hardware provided less RAM than desired. Each VM node has 7 cores where each can use less than 2 GB of RAM, which is little for Hadoop. We expect much better performance with twice as much memory.
 \end{enumerate}
 
 
