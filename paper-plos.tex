@@ -55,6 +55,8 @@
 \pagestyle{myheadings}
 %% ** EDIT HERE **
 \newcommand{\COMMENT}[1]{{\color{red} #1 }}
+\newcommand{\COM}[1]{{\color{blue} #1 }}
+
 \graphicspath { {./figures/fig1/} {./figures/fig2/} {./figures/fig9/} {./figures/fig5/}}
 \usepackage[normalem]{ulem}
 \usepackage{amssymb}
@@ -79,7 +81,7 @@
 % Title must be 150 characters or less
 \begin{flushleft}
 {\Large
-\textbf{A quantitative assessment of the Hadoop framework for analysing massively parallel DNA sequencing data}
+\textbf{A quantitative assessment of the Hadoop \textcolor{blue}{and HPC} framework for analysing massively parallel DNA sequencing data}
 }
 % Insert Author names, affiliations and corresponding author email.
 \\
@@ -101,13 +103,13 @@ $\ast$ E-mail: alexey.siretskiy@it.uu.se
 % Please keep the abstract between 250 and 300 words
 \section*{Abstract}
 New high-throughput technologies such as massively parallel sequencing has transformed the life sciences into a data-intensive field. With increasing data volumes comes the necessity to analyse data in parallel using high-performance computing resources, but doing this effectively can be laborious and challenging. 
-Hadoop, emerging in the last decade, is a framework that automatically distributes data and computation and has been shown to scale to thousands of nodes. Herein we report a quantitative comparison of Hadoop to regular high-performance computing resources for aligning short reads and calling variants for five datasets of different sizes up to 250\,gigabases. In order to increase performance of existing software and obtain a better comparison we modified and wrote new analysis scripts. From the observered scaling relations we are able to draw conclusions about the perspectives of the approaches, leading to the conclusion that as data set sizes reach 100\,gigabases, the Hadoop-based pipelines become performance-competitive with a canonical high-performance cluster solution. As data sets in biological sequencing are sure to increase with time, Hadoop and similar frameworks are very interesting technologies that we envision will play a key role in the future of biological data analysis.
+Hadoop, emerging in the last decade, is a framework that automatically distributes data and computation and has been shown to scale to thousands of nodes. Herein we \textcolor{blue}{introduce the metrics and} report a quantitative comparison of Hadoop to regular high-performance computing resources for aligning short reads and calling variants for five datasets of different sizes up to 250\,gigabases. In order to increase performance of existing software and obtain a better comparison we modified and wrote new analysis scripts. From the observered scaling relations we are able to draw conclusions about the perspectives of the approaches, leading to the conclusion that as data set sizes reach 100\,gigabases, the Hadoop-based pipelines become performance-competitive with a canonical high-performance cluster solution. As data sets in biological sequencing are sure to increase with time, Hadoop and similar frameworks are very interesting technologies that we envision will play a key role in the future of biological data analysis.
 
 % Please keep the Author Summary between 150 and 200 words
 % Use first person. PLoS ONE authors please skip this step. 
 % Author Summary not valid for PLoS ONE submissions.   
 \section*{Author Summary}
-New experimental technologies generate vast amounts of data and require supercomputers to store and analyse. As datasets increase in volume there is a need for new computational tools and technologies that can cope with the scale of data, and in this paper we provide a detailed study comparing the performance of the Hadoop framework with traditional high-performance computing for data in biological sequencing. While there is an overhead of using Hadoop, we show that when sequencing data sets reach sizes of 100 gigabases then Hadoop outperforms traditional analysis. We also show that Hadoop scales linearly while traditional systems become network-saturated at larger data sizes. As sequencing data are bound to increase in the future, Hadoop is a very interesting framework to base future analysis on.
+New experimental technologies generate vast amounts of data and require supercomputers to store and analyse. As datasets increase in volume there is a need for new computational tools and technologies that can cope with the scale of data, and in this paper we provide a detailed study comparing the performance of the Hadoop framework with traditional high-performance computing for data in biological sequencing. While there is an overhead of using Hadoop, we show that when sequencing data sets reach sizes of 100 gigabases then Hadoop \textcolor{blue}{(worth to use perhaps. Outperforms is too strong)} outperforms traditional analysis. We also show that Hadoop scales linearly while traditional systems become network-saturated at larger data sizes. As sequencing data are bound to increase in the future, Hadoop is a very interesting framework to base future analysis on.
 
 
 
@@ -118,14 +120,14 @@ New experimental technologies generate vast amounts of data and require supercom
 
 \section*{Introduction}
 %The problem: dealing with BIG data
-Since its inception, massively parallel DNA sequencing, also referred to as Next Generation Sequencing~(NGS) technology, has been an extremely bountiful source of data giving insight into the workings of biological machinery~\cite{metzker, Marx:2013fk}. Decreasing sequencing costs facilitates and promotes larger and larger studies with increasingly larger data sizes, and extracting useful information from these voluminous amounts of data is transforming biology into a data-intensive discipline that requires a high-performance computing (HPC) infrastructure to analyse.  As an example of the scale of the demands, consider that a single Illumina high-throughput sequencing run produces approximately \COMMENT{XXXX} gigabases (Gb) corresponding to 3\,terabytes (TB) of raw data in 10 days~\cite{illumina}.
+Since its inception, massively parallel DNA sequencing, also referred to as Next Generation Sequencing~(NGS) technology, has been an extremely bountiful source of data giving insight into the workings of biological machinery~\cite{metzker, Marx:2013fk}. Decreasing sequencing costs facilitates and promotes larger and larger studies with increasingly larger data sizes, and extracting useful information from these voluminous amounts of data is transforming biology into a data-intensive discipline that requires a high-performance computing (HPC) infrastructure to analyse.  As an example of the scale of the demands, consider that a single Illumina high-throughput sequencing run produces approximately 1800\,gigabases (Gb) corresponding to 2\,terabytes (TB) of raw data in 3 days~\cite{illumina}.
 
 %Current practices: HPC systems
 A common step of NGS data analysis consists of mapping short reads to a reference sequence and then finding the genetic variations specific to the sample.
 Many of the most widespread tools for this purpuse, like BWA~\cite{bwa}, Bowtie~\cite{Langmead:2009uq} and Samtools~\cite{samtools}, are not made with distributed computing in mind. Many others do not even have the native ability to use multiple cores. 
 
 %Current practices: How to parallelize
-The most common approach to speed up NGS tools is to parallelise within a compute node (multi-core parallelisation) using shared memory parallelism~(OMP)~\cite{openmp}, but this approach is naturally limited by the number of cores per node, which does not usually exceed~16. \COMMENT{confirm this!} For the tools which do not support OMP natively, e.g. Samtools, variant calling can be parallelised by creating a separate process  for  each chromosome, or using GNU Parallel Linux utility~\cite{gnuparallel}.
+The most common approach to speed up NGS tools is to parallelise within a compute node (multi-core parallelisation) using shared memory parallelism~(OMP)~\cite{openmp}, but this approach is naturally limited by the number of cores per node, which does not usually exceed~16, see~\cite{top500}. For the tools which do not support OMP natively, e.g. Samtools, variant calling can be parallelised by creating a separate process  for  each chromosome, or using GNU Parallel Linux utility~\cite{Tange2011a}.
 Of great importance is that a multi-core approach does not improve the performance of operations that are limited by local disk or network throughputs, whereas splitting the dataset and multi-node parallelisation generally are not bound by these constraints.
 
 Message Passing Interface~(MPI)~\cite{mpi1} is a common way to implement multi-node parallelisation, but writing efficient MPI-programs for hundreds of cores is a non-trivial task since thread synchronisation (or load balancing) has to be woven into the software code and there are few existing solutions available for processing sequencing data~\cite{pmap, erne, gnumap}.
@@ -135,7 +137,7 @@ Another common way to introduce parallelisation to NGS analysis pipelines in Lin
 %Introduce Hadoop, MR, and HDFS
 %Properties of Hadoop and HDFS- data localization and programming model etc
 The Map-Reduce~(MR) programming paradigm~\cite{hadoop} offers a compelling alternative for running tasks in a {\it massively} parallel way. This paradigm, however, shifts the focus from the best performance to scalability, suited for managing huge datasets of sizes up to several terabytes~\cite{lin2010}.
-The most prevalent open source implementation of Map-Reduce is Hadoop~\cite{hadoop,Hadoop:Guide}. \COMMENT{Fix bib error (can't have both editor and author for this ref type)} 
+The most prevalent open source implementation of Map-Reduce is Hadoop~\cite{hadoop,Hadoop:Guide}. \textcolor{blue}{Please clarify, I checked the bib file and... found nothing...}\COMMENT{Fix bib error (can't have both editor and author for this ref type)} 
 The Hadoop~MR framework provides automatic distribution of computations over many nodes as well as automatic failure recovery (failure of individual jobs or computing nodes by storing multiple copies on different nodes), and automated collection of results~\cite{Hadoop:Guide}. Hadoop Distributed File System~(HDFS) is a complementary component that stores data by automatically distributing it over the entire cluster, writing data blocks onto the local disk of each node and therefore effectively moving the computation to the data and reducing network traffic. HDFS provides a storage system whose bandwidth and size scales with the number of nodes in the cluster~\cite{Sammer:2012}, which is very different from the properties of the usual HPC cluster network architecture. 
 
 %Manuscript focus: When is Hadoop currently an appealing alternative
@@ -152,20 +154,20 @@ Since Hadoop is written in Java, which is slower than the standard~HPC programmi
 
 We constructed two pipelines for identifying single-nucleotide polymorphisms (SNPs) from short read data, one based on Hadoop and the other on regular HPC with a batch processing system (hereafter referred to as HPC method) (Methods). 
 Our experiments then consisted of running the pipelines for five datasets with short reads of different sizes and measuring the wall-clock run time for each pipeline stage. 
-All experiments were repeated several times and the results averaged \COMMENT{considering the variations in table 4, why not use medians} to obtain a data point for the particular combination of data size and computational platform.
+All experiments were repeated several times and the results averaged \textcolor{blue}{to use medians I had to run much more experiments... each takes 10 hours .... not possible. } \COMMENT{considering the variations in table 4, why not use medians} to obtain a data point for the particular combination of data size and computational platform.
 For the existing Hadoop software we propose modifications, in order to benefit fully from massively parallel nature of MR computations.
 For the classical HPC DNA-seq analysis programs we developed a set of Bash scripts utilizing multiple nodes for short read alignment and exploiting the network fully, thereby speeding up calculations.
 
 
 
 \subsection*{Modified preprocessing stage}
-A native preprocessing stage in Crossbow provides great flexibility in delivering the data to the Hadoop cluster, where data can be downloaded from Amazon S3, FTP and HTTP servers over the Internet~\cite{Langmead:2009kx}. The only way to introduce parallelisations in the native preprocessing stage is to split the read files into smaller chunks and to generate a manifest file listing all these chunks. This, however, is lacking the massively parallel way of treating the data.
+A native preprocessing stage in Crossbow provides great flexibility in delivering the data to the Hadoop cluster, where data can be downloaded from Amazon S3, FTP and HTTP servers over the Internet~\cite{Langmead:2009kx}. The only way to introduce parallelisation in the native preprocessing stage is to split the read files into smaller chunks and to generate a manifest file listing all these chunks. This, however, is lacking the massively parallel way of treating the data.
 
 %\footnote{the same holds for Myrna, a cloud-based solution for differential expression analysis} 
 
 Assuming that sequencing platforms are usually in close proximity with facilities that provide both storage and computers, we considered that the data already had been downloaded to storage that Hadoop could access.
 We rewrote the Crossbow preprocessing stage scripts in a MR-manner, benefiting from its massively parallel nature.
-The requirement is that the FASTQ data are BZIP2 archived and accessible by Hadoop. For our case the storage with the data was mounted with SSHFS to one of the Hadoop nodes, from where the BZIP2'ed data were transferred to the HDFS storage.
+The requirement is that the FASTQ data are i.e. BZIP2 archived\COMMENT {there was a footnote about LZO. Why was is bad?}, (however, any splittable archive format is suitable) and accessible by Hadoop. For our case the storage with the data was mounted with SSHFS to one of the Hadoop nodes, from where the BZIP2'ed data were transferred to the HDFS.
 BZIP2 provides very good compression and is splittable, meaning that the archive can be expanded in a parallel manner. Also, BZIP2 format is natively supported by Hadoop, i.e., there is no difference in dealing with the FASTQ data or with its BZIP2 archive.
 
 %\footnote{other options like splittable LZO are also possible}
@@ -176,41 +178,45 @@ To ensure that both the forward and reverse reads of the same pair would end up 
 
 In order to compare the native preprocessor and the proposed one, the data was put on HDFS beforehand to eliminate possible network delays, e.g., while downloading data from Amazon.
 Table~\ref{table:preprocess} illustrates the benefits of our approach.
-To complete the comparison the same preprocessing was performed with a BASH script for the same data located on the HPC storage. The script (see Supplementary information) ran on a single HPC node, utilizes multiple cores, with the limiting factor being the hard disk IO performance.%, which effectively leaves with 5-7 cores of 16. \COMMENT{awkward}
-
+To complete the comparison the same preprocessing was performed with a BASH script for the same data located on the HPC storage. The script (see Supplementary information) ran on a single HPC node, utilizes multiple cores, with the limiting factor being \sout{the hard disk IO performance.}\COM{More correctly to say, that the pipe is not filled completely. i.e. the degree of achieved parallelization does not utilize all 16 cores. Perhaps not the best bash commands etc.}
+%, which effectively leaves with 5-7 cores of 16. \COMMENT{awkward}
 
 
 \subsection*{Accuracy of pipelines}
-Since our HPC and Hadoop approaches use different~SNP callers (Samtools and SOAPsnp, correspondingly) we should not expect them to deliver perfectly matching SNP lists, but still we expect them to capture and correctly identify the mutations. We tested the correctness just for the smallest dataset (I). The mutation $C\rightarrow T$ on chromosome 4 at position $16702262$\cite{schneeberger} was successfully localized by both applications.
+Since our HPC and Hadoop approaches use different~SNP callers (Samtools and SOAPsnp, correspondingly) we should not expect them to deliver perfectly matching SNP lists, but still we expect them to capture and correctly identify the mutations. We tested the correctness just for the smallest dataset~(I). The mutation $C\rightarrow T$ on chromosome 4 at position $16702262$\cite{schneeberger} was successfully localized by both applications.
 
 
 
 \subsection*{Scalability of HPC and Hadoop approaches}
-To demonstrate the scalability of the HPC approach we collected running times for dataset~I as a function of the number of cores used (Table~\ref{table:3}). \COMMENT{Consider replacing with a graph.}
-The aligning \COMMENT{mapping written in table, be consistent} process in Bowtie scales fairly well, but the SNP calling part in Samtools is a bottleneck, scaling worse than Bowtie, and consuming a progressively larger portion of the total calculation time even after parallelising analysis by chromosome.
+To demonstrate the scalability of the HPC approach we collected running times for dataset~I as a function of the number of cores used (Table~\ref{table:3}). \COMMENT{Consider replacing with a graph.} \COM{no, lets leave it as a table... with the better caption.}
+The aligning \COMMENT{mapping written in table, be consistent} process in Bowtie scales fairly well, but the SNP calling part in Samtools is a bottleneck, scaling worse than Bowtie, and consuming a progressively larger portion of the total calculation time even after parallelising analysis by chromosome  as suggested at~\cite{biostars_samtools}.
 %\footnote{\url{http://www.biostars.org/p/48781}
+\COM{here was a footnote referring to biostars site. Ok, if the footnotes are not welcome, lets then have it as a reference. That code is not trivial. Maybe we can leave the ref?}
 %\footnote{The amount of available memory, specified with the \texttt{-m} option, is of big importance for the Samtools performance. During its sorting phase the lack of RAM results in spilling to the HDD. For example for an half of  Dataset III, SNP calling takes approximately 40 minutes with 8 GB RAM, and 15 minutes with 48 GB RAM, when  the whole BAM file fits into RAM. For our tasks we used the default Samtool's settings.}.  
 For the given datasets (I--V) the timings for alignment against the corresponding genomes and SNP calling for the HPC and Hadoop approaches were collected (Table~\ref{table:4}).
 
-One of the attractive sides of using Hadoop~MR is its almost linear scalability, i.e., calculation time linearly depends on the size of the dataset\cite{Langmead:2009kx,Pireddu:2011vn}, regardless the scaling nature of the underlying program (Samtools, Bowtie, etc.).
+One of the attractive sides to run i.e. Samtools, Bowtie, etc. in the  Hadoop~MR framework is its almost linear scalability, i.e., calculation time linearly depends on the size of the dataset\cite{Langmead:2009kx,Pireddu:2011vn}, regardless the scaling nature of the underlying program.
 Figure~\ref{fig:fig1}, based on Table~\ref{table:4}, shows the calculation time as a function of the dataset size for the 56 cores Hadoop cluster and datasets I-IV.
 %To stress the linear nature of scaling, both sets of points were fit using the least squares method.
 
 
 
 \subsection*{Comparing Hadoop and HPC runtime efficiency}
-Hadoop was designed to digest huge datasets\cite{hadoop,lin2010}. One can propose then that the larger the dataset is, the more suitable Hadoop becomes compared to the HPC approach. In order to compare the ``suitability'' for different types of calculation platforms (Hadoop and HPC) each being run on a different number of cores, we constructed the following function:
-$$F=T_{p}\times p,$$ 
-where~$T_{p}$ is the calculation time on~$p$ cores. \COMMENT{This trivial/obvious formula doesn't deserve such special treatment.}
+Hadoop was designed to digest huge datasets\cite{hadoop,lin2010}. One can propose then that the larger the dataset is, the more suitable Hadoop becomes compared to the HPC approach. In order to compare the ``suitability'' for different types of calculation platforms (Hadoop and HPC) each being run on a different number of cores, we constructed the function showing the amount of used core-hours:
+$F=T_{p}\times p,$ 
+where~$T_{p}$ is the calculation time on~$p$ cores. 
 
 Using the data from Table~\ref{table:4}, we plot the ratio $F_{Hadoop}/F_{HPC}$ as a function of the reciprocal dataset size (Figure~\ref{fig:fig2}). Extrapolation to zero on the~$X$-axis estimates the ratio for the hypothetical infinite dataset. As one can see, the Hadoop approach becomes more and more effective compared to the HPC scenario as the dataset size increases. 
-The parabolic extrapolation for the ratio is $1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on ``bare metal'' of modern hardware for datasets greater than $100$\,Gb (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
+The parabolic extrapolation for our settings give the ratio as~$1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on ``bare metal'' of modern hardware for datasets greater than $100$\,Gb (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
 
 
-The simplest curve to fit the points nicely is a parabolic function, importantly not a linear one. Considering the linear scaling for the Hadoop approach for the same datasets, we conclude that HPC approach scales worse than linearly.
+The simplest curve to fit the points nicely is a parabolic function, importantly not a constant. 
+Since the Hadoop approach for the datasets reveals the linear scaling (Figure~\ref{fig:fig1}), a deviation of the ratio from the constant shows the 
+lack of scalability of the HPC approach.
+%Consider the linear scaling for the Hadoop approach for the same datasets, we conclude that HPC approach scales worse than linearly.
 %\footnote{For the linear scaling the curve of $F=T_{p}\times p$ does not depend on the dataset size, i.e. being a constant; thus the ratio of two constants would result a constant, but we observe a dependecy.}. \COMMENT{Why jump back and forth in the discussion of figures 1 and 2?} 
 We suspect the main reason for such a behavior is the fact that for large datasets (dataset~III-V in our case) the SNP calling routine with Samtools becomes more memory and time demanding than the actual mapping with Bowtie.
-If lacking RAM, Samtools implementation swaps to disk, creating multiple (up to hundreds) temporary files while sorting the BAM file, keeping the network load for NFS storage and time-expensive IO on a high rate.
+If lacking RAM, Samtools \sout{implementation} swaps to disk, creating multiple (up to hundreds) temporary files while sorting the BAM file, keeping the network load for NFS storage and time-expensive IO on a high rate.
 Table~\ref{table:5} shows the sorting runtime performance of Samtools for the dataset~IV run with different amount of RAM available on a single HPC node. The large uncertainty for small amounts of RAM we believe is due to other users' load on the cluster network. As a result, a large amount of RAM per node is needed in order to use Samtools effectively, while Hadoop accomplishes SNP calling on much more economic hardware in linear time with just 12GB RAM per virtual node.
 
  \begin{table}[hbtp]
@@ -257,7 +263,7 @@ The transition area between the two modes is based on the fact that each hard di
 Scalability can be improved by overriding the default behaviour of SLURM and allocating the nodes not from the same rack, but randomly from all available racks (``HPC random'', open squares in Figure~\ref{fig:fig3}). Allocating the nodes on random racks allows one to engage more nodes without network saturation. For our cluster we could go up to 30-35 nodes with perfect linear scaling. For the most resources used (58 nodes) the deviation from a linear speedup is~$\approx 7\%$ i.e. $5.50$ minutes against the ideal $5.14$, see Table~\ref{table:4}. The threshold number of nodes in this strategy~($\approx35$) is because of the uplink cable with the throughput of~50Gbit/sec being saturated. 
 The proposed HPC strategies aimed at getting the maximum performance from the storage resources show that while even properly adjusted and tuned, the HPC approaches suffer from the network saturation at higher number of nodes.
 HDFS on the other hand maintains data locality, reducing communication and data transfer and hence lead to better scalability.
-Our Hadoop cluster has no more free nodes to continue to investigate the scaling as in plot at Figure~\ref{fig:fig3}, but we do not expect any significant deviations, since the observed behaviour is a generic for Hadoop with HDFS. \COMMENT{need ref for this!}
+Our Hadoop cluster has no more free nodes to continue to investigate the scaling as in plot at Figure~\ref{fig:fig3}, but we do not expect any significant deviations, since the observed behaviour is a generic for Hadoop with HDFS\cite{lin2010, Hadoop:Guide}. 
 
 
 \subsection*{Usability aspects}
@@ -448,12 +454,16 @@ The points are fit to a quadratic least-squares curve, which makes it possible t
 	\small
 	\input{./figures/fig9/fig3.tex}
 	\normalsize
-	\caption{Ratios of the mapping time~$T_{mapping}$ to the communication costs~$T_{comm}$ for HPC and Hadoop clusters for Dataset IV as a function of reciprocal cluster size $1/N$. Two HPC scenarios are shown as ``HPC SLURM'' and ``HPC random'', which correspond to standard SLURM behaviour and a modified one where nodes are being allocated from random racks.
-%One  can see the differences in the Hadoop and HPC communication patterns: for Hadoop the ratio is almost constant, while for HPC cluster there are two defined regions.
+	\caption{Ratios of the mapping time~$T_{mapping}$ to the communication costs~$T_{comm}$ for HPC and Hadoop clusters for Dataset~IV as a function of reciprocal number of nodes~$1/N$. Two HPC scenarios are shown as ``HPC SLURM'' and ``HPC random'', which correspond to standard SLURM behaviour and a modified one where nodes are being allocated from random racks.
+Linear fit  to $ax+b$ was done with the least-squares method.
+The estimated values for Hadoop approach are $(a,b)\approx(0.95,2.07)$.
+One  can see two defined linear regions for the HPC approach with very different tangents for linear and non-linear scalings correspondingly.
+For  the ``HPC SLURM'' $(a,b)\approx (0.96, 3.49)$ and $(a,b)\approx (32.99, 0.60)$, and for  the ``HPC random'' $(a,b)\approx (0.88, 3.72)$ and $(a,b)\approx (98.24, 0.53)$.
+ The constant term for HPC goes below unity, i.e. for the large number of nodes the communication will take more time than actual mapping. 
 %The first one resembles to that of Hadoop, and corresponds to the case then the communication in the cluster is not a bottleneck. 
 %The second one shows the regime corresponding to the case of saturation of the network, resulting in traffic jams: data distibution time~$T_{comm}$ stops to scale 
 %linearly to the reciprocal cluster size, and becomes more of less a constant, while the mapping time continues to satisfy~$T_{mapping}\propto 1/N$.
-Linear fit  done with the least-squares method. \COMMENT{Figure legend too complex. Y-axis label inconsistant with previous figure.}}
+}
 	\label{fig:fig3}
 \end{figure}
 
@@ -487,7 +497,7 @@ BASH, this work			& 		$7.4\pm0.0$	&	$31.1\pm0.1$	&	$114.5\pm0.3$	\\
 
 \begin{table}[!ht]
 \small
-\caption{Calculation time for Dataset I executed on different number of cores on a node of HPC cluster. \COMMENT{awkward title, consider replacing with graph (and new title)}}
+\caption{Timings for Dataset I processed on different number of cores of a HPC node. \COMMENT{awkward title, consider replacing with graph (and new title)} \COM{better?}}
 \begin{center}
 \begin{tabular}{c|c|c|c|ccc}
 $N$ cores	&\multicolumn{3}{c|}{timing, minutes}&\multicolumn{3}{c}{speed-ups} \\
