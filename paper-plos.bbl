@@ -25,7 +25,7 @@ Marx V (2013) {Biology: The big challenges of big data}.
 
 \bibitem{illumina}
 {Hiseq Comparison}.
-\newblock http://www.illumina.com/systems/hiseq\_comparison.ilmn.
+\newblock \urlprefix\url{http://www.illumina.com/systems/sequencing.ilmn}.
 \bibAnnoteFile{illumina}
 
 \bibitem{bwa}
@@ -52,10 +52,15 @@ Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, et~al. (2009) {The Sequence
 \newblock \urlprefix\url{http://openmp.org/}.
 \bibAnnoteFile{openmp}
 
-\bibitem{gnuparallel}
-{GNU parallel}.
-\newblock http://www.gnu.org/software/parallel/.
-\bibAnnoteFile{gnuparallel}
+\bibitem{top500}
+List statistics.
+\newblock \urlprefix\url{http://www.top500.org/statistics/list/}.
+\bibAnnoteFile{top500}
+
+\bibitem{Tange2011a}
+Tange O (2011) Gnu parallel - the command-line power tool.
+\newblock ;login: The USENIX Magazine 36: 42-47.
+\bibAnnoteFile{Tange2011a}
 
 \bibitem{mpi1}
 {The {M}}essage {P}assing {I}nterface ({MPI}) standard.
@@ -121,6 +126,11 @@ Schneeberger K, Ossowski S, Lanz C, Juul T, Petersen AH, et~al. (2009)
   sequencing}.
 \newblock Nat Meth 6: 550--551.
 \bibAnnoteFile{schneeberger}
+
+\bibitem{biostars_samtools}
+Biostars forum.
+\newblock \urlprefix\url{http://www.biostars.org/p/48781}.
+\bibAnnoteFile{biostars_samtools}
 
 \bibitem{Pireddu:2011vn}
 Pireddu L, Leo S, Zanetti G (2011) {SEAL: a distributed short read mapping and
