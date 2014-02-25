@@ -43,10 +43,10 @@ fit f5(x) 'HPCratioRandom' every ::6  using 1:2 via a5,b5
 plot 'HPCratio'  using ($1):($2) w p  ls 1 axes x1y1  title 'HPC SLURM' , \
 'hadoopRatio'  using ($1):($2) w p  ls 2 axes x1y1 title 'Hadoop', \
 'HPCratioRandom'  using ($1):($2) w p  ls 3 axes x1y1 title 'HPC random', \
-f2(x)  w l  ls 3 title 'fit for Hadoop  $ax+b$ with $(a,b)\approx(0.95,2.07)$', \
-f1(x)  w l  ls 1 title 'fit for HPC SLURM  $ax+b$: $(a,b)\approx (0.96, 3.49)$ and $\approx (32.99, 0.60)$', \
+f2(x)  w l  ls 3 title 'linear fit for Hadoop ', \
+f1(x)  w l  ls 1 title 'linear fit for HPC SLURM', \
 f3(x)  w l  ls 2 notitle,\
-f4(x)  w l  ls 4 title 'fit for HPC random  $ax+b$: $(a,b)\approx (0.88, 3.72)$ and $\approx (98.24, 0.53)$',\
+f4(x)  w l  ls 4 title 'linear fit for HPC random', \
 f5(x) w l  ls 4 notitle
 # 'fit for HPC  $ax+b$ with $(a,b)\approx(32.99, 0.60)$'  
 #'pE_20'  using ($1):($2) w l  ls 1 axes x1y1 title '', \
