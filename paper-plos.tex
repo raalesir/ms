@@ -217,7 +217,7 @@ lack of scalability of the HPC approach.
 %Consider the linear scaling for the Hadoop approach for the same datasets, we conclude that HPC approach scales worse than linearly.
 %\footnote{For the linear scaling the curve of $F=T_{p}\times p$ does not depend on the dataset size, i.e. being a constant; thus the ratio of two constants would result a constant, but we observe a dependecy.}. \COMMENT{Why jump back and forth in the discussion of figures 1 and 2?} 
 We suspect the main reason for such a behavior is the fact that for large datasets (dataset~III-V in our case) the SNP calling routine with Samtools becomes more memory and time demanding than the actual alignment with Bowtie.
-If lacking RAM, Samtools \sout{implementation} swaps to disk, creating multiple (up to hundreds) temporary files while sorting the BAM file, keeping the network load for NFS storage and time-expensive IO on a high rate.
+If lacking RAM, Samtools  swaps to disk, creating multiple (up to hundreds) temporary files while sorting the BAM file, keeping the network load for NFS storage and time-expensive IO on a high rate.
 Table~\ref{table:5} shows the sorting runtime performance of Samtools for the dataset~IV run with different amount of RAM available on a single HPC node. The large uncertainty for small amounts of RAM we believe is due to other users' load on the cluster network. As a result, a large amount of RAM per node is needed in order to use Samtools effectively, while Hadoop accomplishes SNP calling on much more economic hardware in linear time with just 12GB RAM per virtual node.
 
 
@@ -228,7 +228,7 @@ To study this phenomena, we compared HPC and Hadoop network communication costs 
 Due to the trivially parallelizability of the alignment process~-- the read-pairs are independent of each other, and can be aligned independently~-- one could try to involve more computational resources, e.g., split the initial data into chunks to process them independently.
 Reducing the size of each data chunk reduces the aligner  job,~$T_{alignment}$, but at the same time, the more chunks almost simultaneously have to be sent over the network, potentially causing traffic jams, and therefore increasing the communication costs,~$T_{comm}$.
 
-There are several program packages for short read alignment with MPI support~\cite{pmap, gnumap}, and almost linear scaling up to 32 nodes for pair-ended reads has been reported~\cite{Bozdag:2010cn}. However, e.g., the Pmap package functions poorly for datasets larger than 20 Gbases. To circumvent this limitation we implemented a highly optimized Bash script making use of standard Unix utilities to use the HPC cluster network as efficiently as possible~\cite{code_repo}, and compared the network performance with the standard Hadoop HDFS approach. We separated the alignment time, $T_{alignment}$, and the communication time, $T_{comm}$, and plotted $T_{alignment}/T_{comm}$ as a function of the reciprocal number of nodes~$1/N$ (Figure~\ref{fig:fig3}). 
+There are several program packages for short read alignment with MPI support~\cite{pmap, gnumap}, and almost linear scaling up to 32 nodes for pair-ended reads has been reported~\cite{Bozdag:2010cn}. However, e.g., the Pmap package functions poorly for datasets larger than 20 Gbases. To circumvent this limitation we implemented a highly optimized Bash script making use of standard Unix utilities to use the HPC cluster network as efficiently as possible~\cite{code_repo_bash}, and compared the network performance with the standard Hadoop HDFS approach. We separated the alignment time, $T_{alignment}$, and the communication time, $T_{comm}$, and plotted $T_{alignment}/T_{comm}$ as a function of the reciprocal number of nodes~$1/N$ (Figure~\ref{fig:fig3}). 
 This measure is applicable to both HPC and Hadoop, however, $T_{comm}$ has a different explanation. For Hadoop, the short reads in FASTQ format have to be preprocessed (involving node communication~$T_{comm}$) to be able to run in MR-fashion, while the data locality will be automatically achieved during the data ingestion into the HDFS. 
 We rewrote the code for the preprocessing stage for Crossbow to make it suitable for MR-style parallelization.
 For the HPC approach, $T_{comm}$ involves the chunks that are sent from the sequence delivery location to the local node scratch disks where the actual alignment happens, and the sending of the aligned SAM files back to the delivery location over the network.
@@ -306,9 +306,9 @@ Acknowledging that there are different approaches and software for conducting bi
 \end{enumerate}
 
 
-In the HPC pipeline, reads were aligned with Bowtie, followed by sorting the mapped reads and~SNP calling with Samtools. The Bowtie aligner natively implements~OMP, meaning that with~8 cores on the same computer the result can be theoretically obtained 8 times faster than on a single core. Likewise, Samtools (as of version~0.1.19) also offers shared memory parallelism for several of its functions. Where available these features were used to improve the analysis speed. The exact workflow used is available from github~\cite{code_repo}.
+In the HPC pipeline, reads were aligned with Bowtie, followed by sorting the aligned reads and~SNP calling with Samtools. The Bowtie aligner natively implements~OMP, meaning that with~8 cores on the same computer the result can be theoretically obtained 8 times faster than on a single core. Likewise, Samtools (as of version~0.1.19) also offers shared memory parallelism for several of its functions. Where available these features were used to improve the analysis speed. The exact workflow used is available from github~\cite{code_repo_bash}.
 
-The equivalent Hadoop-based pipeline was implemented with Crossbow. The input data and the indexed genome reference were copied to Hadoop's storage system~(HDFS) before starting the experiments. Crossbow implements a short pipeline that pre-processes the input data, transforming it into a format suitable for the alignment stage, and then continues to use Bowtie for alignment and SoapSNP to call SNPs.  Unfortunately, Crossbow's preprocessor is not written in MR manner, and thus cannot be run in a massively parallel way. Due to this limitation, this basic step threatened to be the most time-consuming procedure in our test pipeline and bias our experiments. To overcome this bottleneck we substituted Crossbow's preprocessor with our own MR implementation (available from github~\cite{code_repo}).
+The equivalent Hadoop-based pipeline was implemented with Crossbow. The input data and the indexed genome reference were copied to Hadoop's storage system~(HDFS) before starting the experiments. Crossbow implements a short pipeline that pre-processes the input data, transforming it into a format suitable for the alignment stage, and then continues to use Bowtie for alignment and SoapSNP to call SNPs.  Unfortunately, Crossbow's preprocessor is not written in MR manner, and thus cannot be run in a massively parallel way. Due to this limitation, this basic step threatened to be the most time-consuming procedure in our test pipeline and bias our experiments. To overcome this bottleneck we substituted Crossbow's preprocessor with our own MR implementation (available from github~\cite{code_repo_mr}).
 
 
 
@@ -327,7 +327,7 @@ To run the HPC analysis pipeline we used a computational cluster at UPPMAX, whic
 %%%%%%%%%%%
 % Do NOT remove this, even if you are not including acknowledgments
 \section*{Acknowledgments}
-The computations were performed on resources provided by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) under project p2013023. This work was supported by the Swedish strategic research programme eSSENCE and COST Action BM1006 “Next Generation Sequencing Data Analysis Network”, SeqAhead.
+The computations were performed on resources provided by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) under project p2013023. This work was supported by the Swedish strategic research programme eSSENCE and COST Action BM1006 √íNext Generation Sequencing Data Analysis Network√ì, SeqAhead.
 We thank system experts Pontus Freyhult and Peter Ankerst{\aa}l at UPPMAX for valuable discussions on effective storage and network usage, Jonas Hagberg (BILS, Stockholm, Sweden) for implementing the Cloudgene extensions to import data from UPPMAX filesystem, as well as Wesley Schaal for proofreading.
 
 
@@ -380,12 +380,20 @@ Multinode short read alignment was performed on the Milou cluster\cite{milouClus
 \item Storage: 
 Gulo\cite{gulo} is a custom built Lustre 2.4 system using 8 HP nodes with MDS600 storage boxes and an additional node for metadata handling. In total, it provides roughly 1 PB of storage and is accessed with Lustre's own protocol. It supports data striping over multiple nodes and disk targets and can give a theoretical single file read performance of up to 80 Gbit per second.
 
-\item Our Hadoop test platform was deployed on a private cloud at UPPMAX using the OpenNebula~\cite{opennebula} cloud management system. Each node in this deployment was equipped with dual 4-core Intel Xeon 5420 (2.50\,GHz; 12~MB L2 cache), 16~GB RAM, one 1~TB SATA disk and Gigabit Ethernet. The cluster was set up with Cloudera Hadoop Distribution version~2.0.0-cdh4.4.0~\cite{cloudera}.
+\item Our Hadoop test platform was deployed on a private cloud at UPPMAX using the OpenNebula~\cite{opennebula} cloud management system. Each node in this deployment was equipped with dual 4-core Intel Xeon 5420 (2.50\,GHz; 12~MB L2 cache), 16~GB RAM, one 1~TB SATA disk and Gigabit Ethernet. The cluster was set up with Cloudera Hadoop Distribution version~2.0.0-cdh4.5.0~\cite{cloudera}.
 Note that the physical hardware provided less RAM than desired. Each VM node has 7 cores where each can use less than 2 GB of RAM, which is little for Hadoop. We expect much better performance with twice as much memory.
 \end{enumerate}
 
 
-\subsection*{Bash script for the preprocessing stage}
+\subsection*{Crossbow preprocessing stage as a Bash script}
+Current Bash script mimics functionality of the Crossbow's preprocessing stage, and utilizes the multicore parallelism. The script reformats the BZIP2 archived short reads files in FASTQ format to a single text file, each line containing following tab-separated fields:
+\begin{itemize}
+\item read header
+\item forward read
+\item forward read qualities
+\item reverse read
+\item reverse read qualities
+\end{itemize}
 
 \texttt {pbzip2 -dc  \${file1} | paste - - - - -d'\textbackslash t' | cut -f1,2,4 | paste - -d' ' <(pbzip2 -dc  \${file2} | paste - - - - -d'\textbackslash t' | cut -f2,4) | pbzip2 -cz > \${fileOut}}
 
@@ -501,7 +509,7 @@ BASH, this work			& 		$7.4\pm0.0$	&	$31.1\pm0.1$	&	$114.5\pm0.3$	\\
 \begin{tabular}{c|c|c|c|ccc}
 $N$ cores	&\multicolumn{3}{c|}{timing, minutes}&\multicolumn{3}{c}{speed-ups} \\
 \hline
-	& alignment 	&	SNP calling	&	total  &total & map& SNP call\\
+	& alignment 	&	SNP calling	&	total  &total & alignment& SNP call\\
 \hline
 1	&	22.75	$\pm$1.24&	26.1$\pm$0.7	&	48.9	&	 1.00	&	1.00	&	1.00\\
 2	&	11.00$\pm$0.05	&	16.9$\pm$1.3	&	27.9	&	 0.88	&	1.03	&	0.77\\
@@ -571,7 +579,7 @@ For the ``HPC random'' approach, data chunks have to be copied to the local scra
  \hline		
 
 
-Number of nodes	&Mapping time,	&$\frac{T_{alignment}}{T_{comm}}$	&Number of nodes	&Mapping time,	&$\frac{T_{alignment}}{T_{comm}}$\\
+Number of nodes	&Alignment time,	&$\frac{T_{alignment}}{T_{comm}}$	&Number of nodes	&Alignment time,	&$\frac{T_{alignment}}{T_{comm}}$\\
 (cores)					&minutes		&							&(cores)			&minutes&\\
 \hline
 4(28)	&293.5	&2.33	&4(64)	&74.4	&3.89\\
