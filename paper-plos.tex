@@ -22,10 +22,10 @@
 % cite package, to clean up citations in the main text. Do not remove.
 \usepackage{cite}
 
-\usepackage{color} 
+\usepackage{color}
 
 % Use doublespacing - comment out for single spacing
-%\usepackage{setspace} 
+%\usepackage{setspace}
 %\doublespacing
 
 
@@ -33,7 +33,7 @@
 \topmargin 0.0cm
 \oddsidemargin 0.5cm
 \evensidemargin 0.5cm
-\textwidth 16cm 
+\textwidth 16cm
 \textheight 21cm
 
 % Bold the 'Figure #' in the caption and separate it with a period
@@ -85,31 +85,33 @@
 }
 % Insert Author names, affiliations and corresponding author email.
 \\
-Alexey Siretskiy$^{1 \ast}$, 
-Luca Pireddu$^{2}$, 
+Alexey Siretskiy$^{1 \ast}$,
+Luca Pireddu$^{2}$,
 Ola Spjuth$^{3,4}$
 \\
-\bf{1} Department of Information Technology, Uppsala University, Uppsala, Sweden
-\\
-\bf{2} CRS4, Polaris, Pula, Italy
-\\
-\bf{3} Department of Pharmaceutical Biosciences, Uppsala University, Uppsala, Sweden
-\\
-\bf{4} Science for Life Laboratory, Uppsala University, Uppsala, Sweden
+{\bf 1} Department of Information Technology, Uppsala University, Uppsala, Sweden
+ \\
+{\bf 2} CRS4, Polaris, Pula, Italy
+ \\
+{\bf 3} Department of Pharmaceutical Biosciences, Uppsala University, Uppsala, Sweden
+ \\
+{\bf 4} Science for Life Laboratory, Uppsala University, Uppsala, Sweden
 \\
 $\ast$ E-mail: alexey.siretskiy@it.uu.se
 \end{flushleft}
 
 % Please keep the abstract between 250 and 300 words
 \section*{Abstract}
-New high-throughput technologies such as massively parallel sequencing has transformed the life sciences into a data-intensive field. With increasing data volumes comes the necessity to analyzee data in parallel using high-performance computing resources, but doing this effectively can be laborious and challenging. 
-Hadoop, emerging in the last decade, is a framework that automatically distributes data and computation and has been shown to scale to thousands of nodes. Herein we introduce metrics and report a quantitative comparison of Hadoop to regular high-performance computing resources for aligning short reads and calling variants for five datasets of different sizes up to 250\,gigabases. In order to increase performance of existing software and obtain a better comparison we modified and wrote new analysis scripts. From the observed scaling relations we are able to draw conclusions about the perspectives of the approaches, leading to the conclusion that as data set sizes reach 100\,gigabases, the Hadoop-based pipelines become performance-competitive with a canonical high-performance cluster solution. As data sets in biological sequencing are sure to increase with time, Hadoop and similar frameworks are very interesting technologies that we envision will play a key role in the future of biological data analysis.
+New high-throughput technologies such as massively parallel sequencing have transformed the life sciences into a data-intensive field. With increasing data volumes comes the necessity to analyze data in parallel using high-performance computing resources, but doing this effectively can be laborious and challenging.
+Hadoop, which has emerged over the last decade, is a framework that automatically distributes data and computation and has been shown to scale to thousands of nodes. Herein we introduce metrics and report a quantitative comparison of Hadoop to regular high-performance computing resources for aligning short reads and calling variants for five datasets of different sizes up to 250\,gigabases. In order to increase performance of existing software and obtain a better comparison we modified and wrote new analysis scripts. From the observed scaling relations we are able to draw conclusions about the perspectives of the approaches, leading to the conclusion that as data set sizes reach 100\,gigabases, the Hadoop-based pipelines become performance-competitive with a canonical high-performance cluster solution. As data sets in biological sequencing are sure to increase with time, Hadoop and similar frameworks are very interesting technologies that we envision will play a key role in the future of biological data analysis.
 
 % Please keep the Author Summary between 150 and 200 words
-% Use first person. PLoS ONE authors please skip this step. 
-% Author Summary not valid for PLoS ONE submissions.   
+% Use first person. PLoS ONE authors please skip this step.
+% Author Summary not valid for PLoS ONE submissions.
 \section*{Author Summary}
-New experimental technologies generate vast amounts of data and require supercomputers to store and analyze. As datasets increase in volume there is a need for new computational tools and technologies that can cope with the scale of data, and in this paper we provide a detailed study comparing the performance of the Hadoop framework with traditional high-performance computing for data in biological sequencing. While there is an overhead of using Hadoop, we show that when sequencing data sets reach sizes of 100 gigabases then Hadoop becomes attractive compared with traditional methods. We also show that Hadoop scales linearly while traditional systems become network-saturated at larger data sizes. As sequencing data are bound to increase in the future, Hadoop is a very interesting framework to base future analysis on.
+New experimental technologies in biology generate vast amounts of data that require
+high-performance computing
+to analyze and store them. Indeed, with the increase in dataset volumes there is a need for new computational tools and technologies that can cope with the scale of data. In this paper we provide a detailed study comparing the performance of the Hadoop framework with traditional high-performance computing for data in biological sequencing. While there is an overhead in using Hadoop, we show that as sequencing data sets reach sizes of 100 gigabases Hadoop becomes an attractive option compared with traditional methods. We also show that Hadoop scales linearly while traditional systems become network-saturated at larger data sizes. As sequencing data are bound to increase in the future, Hadoop is a very interesting framework on which to base future analysis.
 
 
 
@@ -120,30 +122,30 @@ New experimental technologies generate vast amounts of data and require supercom
 
 \section*{Introduction}
 %The problem: dealing with BIG data
-Since its inception, massively parallel DNA sequencing, also referred to as Next Generation Sequencing~(NGS) technology, has been an extremely bountiful source of data giving insight into the workings of biological machinery~\cite{metzker, Marx:2013fk}. Decreasing sequencing costs facilitates and promotes larger and larger studies with increasingly larger data sizes, and extracting useful information from these voluminous amounts of data is transforming biology into a data-intensive discipline that requires a high-performance computing (HPC) infrastructure to analyze.  As an example of the scale of the demands, consider that a single Illumina high-throughput sequencing run produces approximately 1800\,gigabases (Gbases) corresponding to 2\,terabytes (TB) of raw data in 3 days~\cite{illumina}.
+Since its inception, massively parallel DNA sequencing, also referred to as Next Generation Sequencing~(NGS) technology, has been an extremely bountiful source of data providing insight into the workings of biological machinery~\cite{metzker, Marx:2013fk}. Decreasing sequencing costs facilitates and promotes larger and larger studies with increasingly larger data sizes. Extracting useful information from these voluminous amounts of data is transforming biology into a data-intensive discipline requiring a high-performance computing (HPC) infrastructure to produce results.  As an example of the scale of the demands, consider that a single Illumina high-throughput sequencing run produces approximately 1800\,gigabases (Gbases) corresponding to 2\,terabytes (TB) of raw data in 3 days~\cite{illumina}.
 
 %Current practices: HPC systems
-A common step of NGS data analysis consists of alignment short reads to a reference sequence and then finding the genetic variations specific to the sample.
-Many of the most widespread tools for this purpose, like BWA~\cite{bwa}, Bowtie~\cite{Langmead:2009uq} and Samtools~\cite{samtools}, are not made with distributed computing in mind. Many others do not even have the native ability to use multiple cores. 
+A common step of NGS data analysis consists of aligning short reads to a reference sequence and then finding the genetic variations specific to the sample.
+Many of the most widespread tools for this purpose -- like BWA~\cite{bwa}, Bowtie~\cite{Langmead:2009uq} and Samtools~\cite{samtools} -- are not made with distributed computing in mind. Many others do not even have the native ability to use multiple cores.
 
 %Current practices: How to parallelize
-The most common approach to speed up NGS tools is to parallelize within a compute node (multi-core parallelization) using shared memory parallelism~(OMP)~\cite{openmp}, but this approach is naturally limited by the number of cores per node, which does not usually exceed~16, see~\cite{top500}. For the tools which do not support OMP natively, e.g. Samtools, variant calling can be parallelized by creating a separate process  for  each chromosome, or using GNU Parallel Linux utility~\cite{Tange2011a}.
-Of great importance is that a multi-core approach does not improve the performance of operations that are limited by local disk or network throughputs, whereas splitting the dataset and multi-node parallelization generally are not bound by these constraints.
+The most common approach to accelerate NGS tools is to parallelize within a compute node (multi-core parallelization) using shared memory parallelism~(OMP)~\cite{openmp}, but this approach is naturally limited by the number of cores per node, which does not usually exceed~16 (see~\cite{top500}). For the tools which do not support OMP natively, e.g. Samtools, variant calling can be parallelized by creating a separate process for each chromosome or using the GNU Parallel Linux utility~\cite{Tange2011a}.
+It is important to note that a multi-core approach does not improve the performance of operations that are limited by local disk or network throughputs, whereas splitting the dataset and using multi-node parallelization is not generally bound by those constraints.
 
-Message Passing Interface~(MPI)~\cite{mpi1} is a common way to implement multi-node parallelization, but writing efficient MPI-programs for hundreds of cores is a non-trivial task since thread synchronization (or load balancing) has to be woven into the software code and there are few existing solutions available for processing sequencing data~\cite{pmap, erne, gnumap}.
+The Message Passing Interface~(MPI)~\cite{mpi1} is a common way to implement multi-node parallelization. However, writing efficient MPI-programs for hundreds of cores is a non-trivial task since thread synchronization (or load balancing) has to be woven into the software code and there are few existing solutions available for processing sequencing data~\cite{pmap, erne, gnumap}.
 
-Another common way to introduce parallelization to NGS analysis pipelines in Linux systems is to use Bash scripting. This involves using existing utilities and cluster tools to split the data into chunks, process them on the separate nodes, and merge the results afterwards. This kind of solution benefits from both MPI-like and OMP parallelization and provides good performance, but the development requires substantial expertise in order to be efficient. Since the process is tightly coupled to the local computational cluster and network architectures, it might also not be possible to be re-used in other settings.
+Another common way to introduce parallelization into NGS analysis pipelines in Linux systems is to use Bash scripting. This involves using existing utilities and cluster tools to split the data into chunks, process them on the separate nodes, and merge the results afterwards. This kind of solution benefits from both MPI-like and OMP parallelization and provides good performance, but the development requires substantial expertise in order to be efficient. Since the process is tightly coupled to the local computational cluster and network architectures, it might also nearly impossible to re-use such developments in other settings.
 
 %Introduce Hadoop, MR, and HDFS
 %Properties of Hadoop and HDFS- data localization and programming model etc
-The Map-Reduce~(MR) programming paradigm~\cite{hadoop} offers a compelling alternative for running tasks in a {\it massively} parallel way. This paradigm, however, shifts the focus from the best performance to scalability, suited for managing huge datasets of sizes up to several terabytes~\cite{lin2010}.
+The Map-Reduce~(MR) programming paradigm~\cite{dean.2004.mapreduce} offers a compelling alternative for running tasks in a {\it massively} parallel way. This paradigm, however, shifts the focus from the best performance to scalability, suited for managing huge datasets of sizes up to several terabytes~\cite{lin2010}.
 The most prevalent open source implementation of Map-Reduce is Hadoop~\cite{hadoop,Hadoop:Guide}.
-The Hadoop~MR framework provides automatic distribution of computations over many nodes as well as automatic failure recovery (failure of individual jobs or computing nodes by storing multiple copies on different nodes), and automated collection of results~\cite{Hadoop:Guide}. Hadoop Distributed File System~(HDFS) is a complementary component that stores data by automatically distributing it over the entire cluster, writing data blocks onto the local disk of each node and therefore effectively moving the computation to the data and reducing network traffic. HDFS provides a storage system whose bandwidth and size scales with the number of nodes in the cluster~\cite{Sammer:2012}, which is very different from the properties of the usual HPC cluster network architecture. 
+The Hadoop~MR framework provides automatic distribution of computations over many nodes as well as automatic failure recovery (failure of individual jobs or computing nodes by storing multiple copies of data on different nodes), and automated collection of results~\cite{Hadoop:Guide}. Hadoop Distributed File System~(HDFS) is a complementary component that stores data by automatically distributing it over the entire cluster, writing data blocks onto the local disk of each node and therefore effectively enabling moving the computation to the data and thus reducing network traffic. HDFS provides a storage system whose bandwidth and size scales with the number of nodes in the cluster~\cite{Sammer:2012}, which is very different from the properties of the usual HPC cluster network architecture.
 
 %Manuscript focus: When is Hadoop currently an appealing alternative
 %Introduce what we did in the manuscript.
-In this manuscript we focus on the question {\it when} Hadoop is an appealing alternative to the program tools generally found in~HPC centers for DNA-seq analysis. 
-Since Hadoop is written in Java, which is slower than the standard~HPC programming languages like C or Fortran, we seek to estimate an average data size when it starts to be worthwhile to use Hadoop from a performance perspective. We also study execution times for datasets of different sizes and analyze Hadoop and HPC approaches from a scaling perspective.
+In this manuscript we focus on the question of {\it when} is Hadoop an appealing alternative to the programs for DNA-seq analysis generally found in~HPC centers.
+Since the Hadoop framework poses a significant performance overhead, we seek to estimate the average data size at which point, from a performance perspective, using it starts to pay off. We also study the analysis execution times for datasets of different sizes and evaluate Hadoop and the HPC approaches from a scaling perspective.
 
 
 %%%%%%%%%%%%
@@ -152,32 +154,45 @@ Since Hadoop is written in Java, which is slower than the standard~HPC programmi
 % Results and Discussion can be combined.
 \section*{Results}
 
-We constructed two pipelines for identifying single-nucleotide polymorphisms (SNPs) from short read data, one based on Hadoop and the other on regular HPC with a batch processing system (hereafter referred to as HPC method) (Methods). 
-Our experiments then consisted of running the pipelines for five datasets with short reads of different sizes and measuring the wall-clock run time for each pipeline stage. 
+We constructed two pipelines for identifying single-nucleotide polymorphisms (SNPs) from short read data, one based on Hadoop and the other on regular HPC with a batch processing system (hereafter referred to as the HPC method) (Methods).
+Our experiments consisted of executing the pipelines for five datasets with short reads of different sizes and measuring the wall-clock run time for each pipeline stage.
 All experiments were repeated several times and the results averaged to obtain a data point for the particular combination of data size and computational platform.
-For the existing Hadoop software we propose modifications, in order to benefit fully from massively parallel nature of MR computations.
-For the classical HPC DNA-seq analysis programs we developed a set of Bash scripts utilizing multiple nodes for short read alignment and exploiting the network fully, thereby speeding up calculations.
+Finally, we propose modifications for existing Hadoop software to better benefit fully from massively parallel nature of MR computations; we also
+developed a set of Bash scripts for the classical HPC DNA-seq analysis programs for short read alignment to use multiple nodes and fully exploit the network, thereby speeding up calculations.
 
 
 
 \subsection*{Modified preprocessing stage}
-A native preprocessing stage in Crossbow provides great flexibility in delivering the data to the Hadoop cluster, where data can be downloaded from Amazon S3, FTP and HTTP servers over the Internet~\cite{Langmead:2009kx}. The only way to introduce parallelization in the native preprocessing stage is to split the read files into smaller chunks and to generate a manifest file listing all these chunks. This, however, is lacking the massively parallel way of treating the data.
+A native preprocessing stage in Crossbow provides great flexibility in delivering the data to the Hadoop cluster, where data can be downloaded from Amazon S3, FTP and HTTP servers over the Internet~\cite{Langmead:2009kx}. However, the only way to introduce parallelization in the native preprocessing stage is to split the read files into smaller chunks and to explicitly configure Crossbow's preprocessor to download each chunk (this is done by listing them in a special \textit{manifest file}. listing all these chunks. This, however, is lacking the massively parallel way of treating the data.
 
-%\footnote{the same holds for Myrna, a cloud-based solution for differential expression analysis} 
+%\footnote{the same holds for Myrna, a cloud-based solution for differential expression analysis}
 
-Assuming that sequencing platforms are usually in close proximity with facilities that provide both storage and computers, we considered that the data already had been downloaded to storage that Hadoop could access.
-We rewrote the Crossbow preprocessing stage scripts in a MR-manner, benefiting from its massively parallel nature.
-The requirement is that the FASTQ data are i.e. BZIP2 archived (however, any splittable archive format is suitable) and accessible by Hadoop. For our case the storage with the data was mounted with SSHFS to one of the Hadoop nodes, from where the BZIP2'ed data were transferred to the HDFS.
-BZIP2 provides very good compression and is splittable, meaning that the archive can be expanded in a parallel manner. Also, BZIP2 format is natively supported by Hadoop, i.e., there is no difference in dealing with the FASTQ data or with its BZIP2 archive.
+Assuming that sequencing platforms are in close proximity of storage and
+computing facilities, we considered that the data was already stored where
+Hadoop could access it.
+We rewrote the Crossbow preprocessing stage scripts as MR programs, thus
+benefiting from its massively parallel nature.  For our tests, we required that
+the input FASTQ data be compressed with \texttt{bzip2}.
+\texttt{bzip2} provides very good compression and is splittable,
+While this is not an
+intrinsic constraint in our set up, we reasoned that it is typical to store
+sequencing data in a compressed file format; \texttt{bzip2} provides very good
+compression and its file format is splittable,
+meaning that the archive can be expanded in a parallel manner allowing Hadoop to process multiple segments simultaneously.
+In addition, the \texttt{bzip2} format is natively supported by Hadoop -- i.e. FASTQ data can be read whether it is uncompressed or \texttt{bzip2}-compressed.
+
+In our tests, the storage volume containing the input data was mounted with SSHFS to one of the Hadoop nodes, from where the \texttt{bzip2}-compressed data were transferred to the HDFS.
 
 %\footnote{other options like splittable LZO are also possible}
 
-The Hadoop streaming library offers a possibility to write code for Hadoop jobs in any programming language. Our Python scripts efficiently process short reads, produced by Illumina sequencing platform of different versions, as well as the FASTQ files converted from SRA format (NCBI Sequence Read Archive~\cite{ncbi-sra}).
-The problem of lacking the unique FASTQ header standard was solved by the rewriting the header based on a SHA-1 hash function, and the reads mates were labeled with ``.1" and ``.2" suffixes. 
+The Hadoop streaming library offers the flexibility to write Hadoop programs in any programming language. Our Python scripts efficiently process short reads, produced by Illumina sequencing platform of different versions, as well as the FASTQ files converted from SRA format (NCBI Sequence Read Archive~\cite{ncbi-sra}).
+% LP: I think this sentence could be removed since to appreciate what is being
+% described one would have to understand quite well how that program works.
+The various formats that our script reads lack a standard FASTQ record id, which needs to be interpreted properly at least to extract the correct read number.  To circumvent this problem we rewrote the id based on a SHA-1 hash function and labelling reads mates ``.1" and ``.2" suffixes.
 To ensure that both the forward and reverse reads of the same pair would end up on the same Reducer, secondary Mapper key-sorting mechanisms were involved.
 
-In order to compare the native preprocessor and the proposed one, the data was put on HDFS beforehand to eliminate possible network delays, e.g., while downloading data from Amazon.
-Table~\ref{table:preprocess} illustrates the benefits of our approach.
+In order to compare the native preprocessor and the proposed one, the data was put on HDFS beforehand to eliminate possible network delays -- e.g., while downloading data from Amazon.
+Table~\ref{table:preprocess} illustrates the benefits of our MR approach.
 To complete the comparison the same preprocessing was performed with a BASH script for the same data located on the HPC storage. The script utilizes multiple cores and was executed on a single HPC node (see Supplementary information).
 %ran on a single HPC node, utilizes multiple cores, with the limiting factor being \sout{the hard disk IO performance.}\COM{More correctly to say, that the pipe is not filled completely. i.e. the degree of achieved parallelization does not utilize all 16 cores. Perhaps not the best bash commands etc.}
 %, which effectively leaves with 5-7 cores of 16. \COMMENT{awkward}
@@ -327,9 +342,10 @@ To run the HPC analysis pipeline we used a computational cluster at UPPMAX, whic
 %%%%%%%%%%%
 % Do NOT remove this, even if you are not including acknowledgments
 \section*{Acknowledgments}
-The computations were performed on resources provided by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) under project p2013023. This work was supported by the Swedish strategic research programme eSSENCE and COST Action BM1006 ÒNext Generation Sequencing Data Analysis NetworkÓ, SeqAhead.
+The computations were performed on resources provided by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) under project p2013023. This work was supported by the Swedish strategic research programme eSSENCE and COST Action BM1006 Next Generation Sequencing Data Analysis Network, SeqAhead.
 We thank system experts Pontus Freyhult and Peter Ankerst{\aa}l at UPPMAX for valuable discussions on effective storage and network usage, Jonas Hagberg (BILS, Stockholm, Sweden) for implementing the Cloudgene extensions to import data from UPPMAX filesystem, as well as Wesley Schaal for proofreading.
-
+Part of L.P.'s activity was performed within the context of the Ph.D.\ program in
+Biomedical Engineering at the University of Cagliari, Italy.
 
 %%%%%%%%%%%
 % Bibliography
