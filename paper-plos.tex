@@ -205,19 +205,22 @@ To complete the comparison the same preprocessing was performed with a BASH scri
 
 
 \subsection*{Accuracy of pipelines}
-Since our HPC and Hadoop approaches use different~SNP callers (Samtools and SOAPsnp, correspondingly) we should not expect them to deliver perfectly matching SNP lists, but still we expect them to capture and correctly identify the mutations. We tested the correctness just for the smallest dataset~(I). The mutation $C\rightarrow T$ on chromosome 4 at position $16702262$\cite{schneeberger} was successfully localized by both applications.
+Since our HPC and Hadoop pipelines use different~SNP callers (Samtools and SOAPsnp~\cite{soapsnp}, respectively) we do not expect them to deliver perfectly matching SNP lists, but we do expect them to capture and correctly identify the
+% which mutation?
+\Fixme{mutations}.
+We only tested for correctness with the smallest dataset~(I). The mutation $C\rightarrow T$ on chromosome 4 at position $16702262$~\cite{schneeberger} was successfully localized by both variant callers.
 
 
 
 \subsection*{Scalability of HPC and Hadoop approaches}
-To demonstrate the scalability of the HPC approach we collected running times for dataset~I as a function of the number of cores used (Table~\ref{table:3}). 
-The alignment process in Bowtie scales fairly well, but the SNP calling part in Samtools is a bottleneck, scaling worse than Bowtie, and consuming a progressively larger portion of the total calculation time even after parallelizing analysis by chromosome as previously suggested~\cite{biostars_samtools}.
+\Change{To demonstrate the scalability of the HPC approach we ran the HPC pipeline using dataset~I as input. We collected the running times} as a function of the number of cores used (Table~\ref{table:3}).
+We found that the alignment process with Bowtie scales fairly well, while SNP calling with Samtools is the bottleneck of the workflow. Indeed, this latter part scales worse than Bowtie and consumes a progressively larger portion of the total calculation time as the input grows, even after parallelizing analysis by chromosome as previously suggested~\cite{biostars_samtools}.
 %\footnote{\url{http://www.biostars.org/p/48781}
 %\COM{here was a footnote referring to biostars site. Ok, if the footnotes are not welcome, lets then have it as a reference. That code is not trivial. Maybe we can leave the ref?}
-%\footnote{The amount of available memory, specified with the \texttt{-m} option, is of big importance for the Samtools performance. During its sorting phase the lack of RAM results in spilling to the HDD. For example for an half of  Dataset III, SNP calling takes approximately 40 minutes with 8 GB RAM, and 15 minutes with 48 GB RAM, when  the whole BAM file fits into RAM. For our tasks we used the default Samtool's settings.}.  
-For the given datasets (I--V) the timings for alignment against the corresponding genomes and SNP calling for the HPC and Hadoop approaches were collected (Table~\ref{table:4}).
+%\footnote{The amount of available memory, specified with the \texttt{-m} option, is of big importance for the Samtools performance. During its sorting phase the lack of RAM results in spilling to the HDD. For example for an half of  Dataset III, SNP calling takes approximately 40 minutes with 8 GB RAM, and 15 minutes with 48 GB RAM, when  the whole BAM file fits into RAM. For our tasks we used the default Samtool's settings.}.
+\Change{For both the HPC and Hadoop approaches, and using all the test datasets (I-V), we collected the time required for the combined task of mapping the reads to the corresponding reference genome and SNP calling. The results are shown in Table~\ref{table:4}.}
 
-One of the attractive sides to run i.e. Samtools, Bowtie, etc. in the  Hadoop~MR framework is its almost linear scalability, i.e., calculation time linearly depends on the size of the dataset\cite{Langmead:2009kx,Pireddu:2011vn}, regardless the scaling nature of the underlying program.
+\Change{The results confirm that one the advantages to using the Hadoop~MR} framework is its almost linear scalability -- i.e.\ the calculation time linearly depends on the size of the dataset~\cite{Langmead:2009kx,Pireddu:2011vn}. \Fixme{Deleting this since one could dream/find pathological cases that don't work: regardless the scaling nature of the underlying program.}
 Figure~\ref{fig:fig1}, based on Table~\ref{table:4}, shows the calculation time as a function of the dataset size for the 56 cores Hadoop cluster and datasets I-IV.
 %To stress the linear nature of scaling, both sets of points were fit using the least squares method.
 
@@ -323,7 +326,7 @@ Acknowledging that there are different approaches and software for conducting bi
 \subitem SNP calling: Samtools~ver.~0.1.19
 \item Hadoop approach: Crossbow
 \subitem Short read alignment: Bowtie~ver.~0.12.8
-\subitem SNP calling: SOAPsnp~1.02~\cite{soapsnp}
+\subitem SNP calling: SOAPsnp~1.02
 \end{enumerate}
 
 
