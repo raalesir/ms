@@ -28,10 +28,10 @@
 %\usepackage{setspace}
 %\doublespacing
 
-\definecolor{ChangeColor}{rgb}{0,1,0}
+\definecolor{ChangeColor}{rgb}{0.24,0.56,0.18}
 \newcommand{\Change}[1]{{\color{ChangeColor}{#1}}}
 
-\definecolor{FixmeColor}{rgb}{0,1,0}
+\definecolor{FixmeColor}{rgb}{1,0,0}
 \newcommand{\Fixme}[1]{{\color{FixmeColor}{#1}}}
 
 
@@ -220,32 +220,38 @@ We found that the alignment process with Bowtie scales fairly well, while SNP ca
 %\footnote{The amount of available memory, specified with the \texttt{-m} option, is of big importance for the Samtools performance. During its sorting phase the lack of RAM results in spilling to the HDD. For example for an half of  Dataset III, SNP calling takes approximately 40 minutes with 8 GB RAM, and 15 minutes with 48 GB RAM, when  the whole BAM file fits into RAM. For our tasks we used the default Samtool's settings.}.
 \Change{For both the HPC and Hadoop approaches, and using all the test datasets (I-V), we collected the time required for the combined task of mapping the reads to the corresponding reference genome and SNP calling. The results are shown in Table~\ref{table:4}.}
 
-\Change{The results confirm that one the advantages to using the Hadoop~MR} framework is its almost linear scalability -- i.e.\ the calculation time linearly depends on the size of the dataset~\cite{Langmead:2009kx,Pireddu:2011vn}. \Fixme{Deleting this since one could dream/find pathological cases that don't work: regardless the scaling nature of the underlying program.}
-Figure~\ref{fig:fig1}, based on Table~\ref{table:4}, shows the calculation time as a function of the dataset size for the 56 cores Hadoop cluster and datasets I-IV.
+\Change{The results confirm that one the advantages to using the Hadoop~MR} framework is its almost linear scalability -- i.e.\ the calculation time linearly depends on the size of the dataset~\cite{Langmead:2009kx,Pireddu:2011vn}. \Fixme{Deleting this since one could dream/find pathological cases that don't work: ``regardless the scaling nature of the underlying program''.}
+Figure~\ref{fig:fig1}, based on Table~\ref{table:4}, shows the calculation time as a function of the dataset size for the 56-core Hadoop cluster and datasets I-IV.
 %To stress the linear nature of scaling, both sets of points were fit using the least squares method.
 
 
 
 \subsection*{Comparing Hadoop and HPC runtime efficiency}
-Hadoop was designed to digest huge datasets\cite{hadoop,lin2010}. One can propose then that the larger the dataset is, the more suitable Hadoop becomes compared to the HPC approach. In order to compare the ``suitability'' for different types of calculation platforms (Hadoop and HPC) each being run on a different number of cores, we constructed the function showing the amount of used core-hours:
+\Change{%
+Hadoop was designed to process huge datasets\cite{hadoop,lin2010}. Therefore, one could image then that the larger the dataset the more advantageous Hadoop should become compared to the HPC approach. In order to compare the efficiency of the two processing platforms (Hadoop and HPC) as the size of the dataset varied, we looked at the number of core-hours used for same analysis:
 $F=T_{p}\times p,$ 
 where~$T_{p}$ is the calculation time on~$p$ cores. 
+}
 
-Using the data from Table~\ref{table:4}, we plot the ratio $F_{Hadoop}/F_{HPC}$ as a function of the reciprocal dataset size (Figure~\ref{fig:fig2}). Extrapolation to zero on the~$X$-axis estimates the ratio for the hypothetical infinite dataset. As one can see, the Hadoop approach becomes more and more effective compared to the HPC scenario as the dataset size increases. 
-The parabolic extrapolation for our settings give the ratio as~$1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on ``bare metal'' of modern hardware for datasets greater than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
+\Change{%
+Using the data from Table~\ref{table:4}, in Figure~\ref{fig:fig2} we plot the ratio $F_{Hadoop}/F_{HPC}$ as a function of the reciprocal dataset size. Extrapolation to zero on the~$X$-axis estimates the ratio for the hypothetical infinite dataset. It is evident from the data that the Hadoop pipeline becomes increasingly more efficient than the HPC-based pipeline as the dataset size increases. 
+The parabolic extrapolation of our data yields the value~$1.70\pm0.01$ for the ratio, meaning that Hadoop, even if running in the virtualized environment of a private cloud running on modest hardware, is competitive with the HPC approach run on ``bare metal'' of modern hardware for datasets larger than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
+}
 
 
-The simplest curve to fit the points nicely is a parabolic function, importantly not a constant. 
-Since the Hadoop approach for the datasets reveals the linear scaling (Figure~\ref{fig:fig1}), a deviation of the ratio from the constant shows the 
+\Change{%
+The simplest curve that fits the data points nicely is a parabolic function which, importantly, is not a constant. 
+Since our measurements using the Hadoop-based pipeline, summmarized in Figure~\ref{fig:fig1}, showed linear scaling properties of Hadoop in this setting, a deviation of the ratio $F_{Hadoop}/F_{HPC}$ from the constant is evidence of the 
 lack of scalability of the HPC approach.
+
 %Consider the linear scaling for the Hadoop approach for the same datasets, we conclude that HPC approach scales worse than linearly.
 %\footnote{For the linear scaling the curve of $F=T_{p}\times p$ does not depend on the dataset size, i.e. being a constant; thus the ratio of two constants would result a constant, but we observe a dependecy.}. \COMMENT{Why jump back and forth in the discussion of figures 1 and 2?} 
-We suspect the main reason for such a behavior is the fact that for large datasets (dataset~III-V in our case) the SNP calling routine with Samtools becomes more memory and time demanding than the actual alignment with Bowtie.
-If lacking RAM, Samtools  swaps to disk, creating multiple (up to hundreds) temporary files while sorting the BAM file, keeping the network load for NFS storage and time-expensive IO on a high rate.
-Table~\ref{table:5} shows the sorting runtime performance of Samtools for the dataset~IV run with different amount of RAM available on a single HPC node. The large uncertainty for small amounts of RAM we believe is due to other users' load on the cluster network. As a result, a large amount of RAM per node is needed in order to use Samtools effectively, while Hadoop accomplishes SNP calling on much more economic hardware in linear time with just 12GB RAM per virtual node.
+We suspect the main reason for such a behavior is that for large datasets (dataset~III-V, in our case) Samtools' SNP calling routine becomes more memory- and time-demanding than the alignment with Bowtie.
+Since its memory requirements scale with input size, with sufficient input data Samtools swaps data to disk, creating multiple (up to hundreds) temporary files while it sorts the BAM file -- incidentally, these files can end up on shared network-accessed file systems and thus generate large amounts of network traffic.
+Table~\ref{table:5} shows the time required by Samtools to sort dataset~IV with different amount of RAM available on a single HPC node. Though there is a large deviation when using small amounts of RAM, we believe due to other users' load on the cluster network, the trend quite clearly indicates that a relatively large amount of RAM per node is needed in order to use Samtools effectively. In contrast, in our tests Hadoop performed the SNP calling on much more economic hardware in linear time with just 12GB of RAM per \textit{virtual} node.
+}
 
-
- \subsection*{Comparing the network communication efficiency for the Hadoop and HPC approaches }
+\subsection*{Comparing the network communication efficiency for the Hadoop and HPC approaches }
 The network communication model for Hadoop has a major difference from the usual HPC cluster network architecture ($n$-tier tree) with NAS or NFS attached storages. The effective bandwidth of the Hadoop network increases with the cluster size~\cite{Sammer:2012}, opposite to that of the HPC network where cluster growth results in network saturation and performance depletion.
 To study this phenomena, we compared HPC and Hadoop network communication costs depending on the number of nodes involved for a fixed dataset size (58~Gbases, dataset~IV).
  
