@@ -11,10 +11,10 @@ set yrange [0:4]
 set nogrid #x y 
 set ytics 0,.5,4
 set key  Right right bottom  width -20
-set title "Ratios of the  short reads mapping time per node to the communication  time"
+set title "Ratios of the  short reads alingment time per node to the communication  time"
 set xlabel 'reciprocal number of nodes, $1/N$'
 #set x2label 'полная конфигурационная энергия, $U_{tot}$ для $J=1$'
-set ylabel '$T_{mapping}/T_{comm}$'
+set ylabel '$T_{alignment}/T_{comm}$'
 #set y2label '$p_{J}(U_{tot})$ для первого подансамбля $J=1$'
 set  style  line 1  lt 2   lw 2   pt 6 ps 3#pi -5
 set  style  line 2  lt 2   lw 2  pt 7 ps 2#pi -5

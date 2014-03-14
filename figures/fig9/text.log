@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  25 FEB 2014 14:08
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  14 MAR 2014 21:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -705,10 +705,10 @@ LaTeX Font Info:    Try loading font information for U+txsyc on input line 111.
 File: utxsyc.fd 2000/12/15 v3.1
 )
 Package epstopdf Info: Source file: <fig3.eps>
-(epstopdf)                    date: 2014-02-25 14:08:22
+(epstopdf)                    date: 2014-03-14 21:35:13
 (epstopdf)                    size: 19717 bytes
 (epstopdf)             Output file: <fig3-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-02-25 14:07:24
+(epstopdf)                    date: 2014-03-13 08:55:35
 (epstopdf)                    size: 6131 bytes
 (epstopdf)             Command: <repstopdf --outfile=fig3-eps-converted-to.pdf 
 fig3.eps>
@@ -717,7 +717,7 @@ runsystem(repstopdf --outfile=fig3-eps-converted-to.pdf fig3.eps)...executed sa
 fely (allowed).
 
 Package epstopdf Info: Result file: <fig3-eps-converted-to.pdf>
-(epstopdf)                    date: 2014-02-25 14:08:23
+(epstopdf)                    date: 2014-03-14 21:35:14
 (epstopdf)                    size: 6131 bytes.
 
 <fig3-eps-converted-to.pdf, id=1, 426.59375pt x 284.06125pt>
@@ -753,7 +753,7 @@ xlive/2012/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/local/texlive/
 2012/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/20
 12/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2012/texmf-d
 ist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on text.pdf (1 page, 36594 bytes).
+Output written on text.pdf (1 page, 37018 bytes).
 PDF statistics:
  29 PDF objects out of 1000 (max. 8388607)
  20 compressed objects within 1 object stream
