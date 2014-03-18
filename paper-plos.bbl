@@ -116,28 +116,33 @@ Sammer E (2012) {Hadoop Operations}.
 \newblock O'Reilly Media, Inc., 1st edition.
 \bibAnnoteFile{Sammer:2012}
 
-\bibitem{gatk}
-McKenna A, Hanna M, Banks E, Sivachenko A, Cibulskis K, et~al. (2010) {The
-  Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation
-  DNA sequencing data}.
-\newblock Genome Res 20: 1297-303.
-\bibAnnoteFile{gatk}
+\bibitem{Li:2013fk}
+Li Y, Chen W, Liu EY, Zhou YH (2013) {Single Nucleotide Polymorphism (SNP)
+  Detection and Genotype Calling from Massively Parallel Sequencing (MPS)
+  Data}.
+\newblock Stat Biosci 5: 3-25.
+\bibAnnoteFile{Li:2013fk}
 
 \bibitem{code_repo_bash}
 Manuscript github repository {II}.
 \newblock \urlprefix\url{https://github.com/raalesir/HPC_bash_align}.
 \bibAnnoteFile{code_repo_bash}
 
-\bibitem{code_repo_mr}
-Manuscript github repository {I}.
-\newblock \urlprefix\url{https://github.com/raalesir/mr_python}.
-\bibAnnoteFile{code_repo_mr}
-
 \bibitem{Langmead:2009kx}
 Langmead B, Schatz MC, Lin J, Pop M, Salzberg SL (2009) {Searching for SNPs
   with cloud computing}.
 \newblock Genome Biol 10: R134.
 \bibAnnoteFile{Langmead:2009kx}
+
+\bibitem{soapsnp}
+{Short {O}}ligonucleotide {A}nalysis {P}ackage.
+\newblock http://soap.genomics.org.cn/soapsnp.html.
+\bibAnnoteFile{soapsnp}
+
+\bibitem{code_repo_mr}
+Manuscript github repository {I}.
+\newblock \urlprefix\url{https://github.com/raalesir/mr_python}.
+\bibAnnoteFile{code_repo_mr}
 
 \bibitem{ncbi-sra}
 {The NCBI Sequence Read Archive}.
@@ -161,11 +166,6 @@ Lampa S, Dahl{\"o} M, Olason P, Hagberg J, Spjuth O (2013) {Lessons learned
 \newblock
   http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html.
 \bibAnnoteFile{cloudera}
-
-\bibitem{soapsnp}
-{Short {O}}ligonucleotide {A}nalysis {P}ackage.
-\newblock http://soap.genomics.org.cn/soapsnp.html.
-\bibAnnoteFile{soapsnp}
 
 \bibitem{schneeberger}
 Schneeberger K, Ossowski S, Lanz C, Juul T, Petersen AH, et~al. (2009)
@@ -197,6 +197,12 @@ Giardine B, Riemer C, Hardison RC, Burhans R, Elnitski L, et~al. (2005)
   {Galaxy: a platform for interactive large-scale genome analysis}.
 \newblock Genome Res 15: 1451-5.
 \bibAnnoteFile{galaxy}
+
+\bibitem{Afgan:2010uq}
+Afgan E, Baker D, Coraor N, Chapman B, Nekrutenko A, et~al. (2010) Galaxy
+  cloudman: delivering cloud compute clusters.
+\newblock BMC Bioinformatics 11 Suppl 12: S4.
+\bibAnnoteFile{Afgan:2010uq}
 
 \bibitem{cloudgene}
 Schonherr S, Forer L, Weissensteiner H, Kronenberg F, Specht G, et~al. (2012)

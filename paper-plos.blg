@@ -1,22 +1,49 @@
-This is 8-bit Big BibTeX version 0.99d
-Implementation:  C for Unix
-Release version: 3.71 (31 May 2005)
-
-The 8-bit codepage and sorting file: 88591lat.csf
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: paper-plos.aux
 The style file: plos2009.bst
-Reallocated glb_str_ptr (elt_size=8) to 10 items from 0.
-Reallocated global_strs (elt_size=20001) to 10 items from 0.
-Reallocated glb_str_end (elt_size=8) to 10 items from 0.
 Database file #1: paper-plos.bib
-Reallocated singl_function (elt_size=8) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
 Warning--empty pages in dean.2004.mapreduce
-
-Here's how much of BibTeX's memory you used:
- Cites:                35 out of 750
- Fields:             1003 out of 5000
- Hash table:        35118 out of 35307
- Strings:             724 out of 35307
- Free string pool:   9720 out of 65000
- Wizard functions:   2441 out of 3000
+You've used 36 entries,
+            2441 wiz_defined-function locations,
+            733 strings with 9827 characters,
+and the built_in function-call counts, 19474 in all, are:
+= -- 1654
+> -- 307
+< -- 0
++ -- 161
+- -- 73
+* -- 1486
+:= -- 2180
+add.period$ -- 76
+call.type$ -- 36
+change.case$ -- 37
+chr.to.int$ -- 0
+cite$ -- 73
+duplicate$ -- 2017
+empty$ -- 2175
+format.name$ -- 89
+if$ -- 4358
+int.to.chr$ -- 0
+int.to.str$ -- 36
+missing$ -- 300
+newline$ -- 199
+num.names$ -- 21
+pop$ -- 496
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 335
+stack$ -- 0
+substring$ -- 2292
+swap$ -- 537
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 127
+width$ -- 38
+write$ -- 369
 (There was 1 warning)
