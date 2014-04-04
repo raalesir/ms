@@ -272,7 +272,7 @@ All experiments were repeated at least three times,
 and the results averaged to obtain a data point for the
 particular combination of data size and computational platform.
 
-\subsection*{Accuracy of Pipelines}
+\subsection*{Accuracy of pipelines}
 Since our HPC and Hadoop pipelines use different~SNP callers (Samtools and
 SOAPsnp) we could not expect them to deliver perfectly
 matching SNP lists. Instead, we verified the accuracy of the test pipelines by
@@ -281,7 +281,8 @@ chromosome 4 at position $16702262$~\cite{schneeberger} in Dataset I.
 
 
 
-\subsection*{Performance evaluation of MR-based preprocessing stage}
+\subsection*{Efficiency of preprocessing stage}
+%\subsection*{Performance evaluation of MR-based preprocessing stage}
 
 To quantify the processing time saved by adopting the MR approach for
 preprocessing the read data, we ran an
@@ -317,7 +318,7 @@ Bash approach.
 %not utilize all 16 cores. Perhaps not the best bash commands etc.} , which
 %effectively leaves with 5-7 cores of 16. \COMMENT{awkward}
 
-\subsection*{Scalability of HPC and Hadoop approaches}
+\subsection*{Scalability}
 Given the wide range in genome dataset sizes processed in practice -- e.g.
 exomes and whole-genome sequencing at various depths -- it is
 important to understand the scaling characteristics of the Hadoop and HPC processing
