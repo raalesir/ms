@@ -187,7 +187,7 @@ two platforms.
 \end{enumerate}
 
 
-In the HPC pipeline, reads were aligned with Bowtie~\cite{Langmead:2009uq}, followed by sorting the aligned reads and~SNP calling with Samtools~\cite{samtools}. The Bowtie aligner natively implements~OMP -- therefore, using 8 cores on the same computer will theoretically produce a result 8 times faster than using a single core. Likewise, Samtools (as of version~0.1.19) also offers shared memory parallelism for several of its functions. Where available these features were used to improve the analysis speed. The exact workflow used is available from GitHub~\cite{code_repo_bash}.
+In the HPC pipeline, reads were aligned with Bowtie~\cite{Langmead:2009uq}, followed by sorting the aligned reads and~SNP calling with Samtools~\cite{samtools}. The Bowtie aligner natively implements~OMP -- therefore, using 8 cores on the same computer will theoretically produce a result 8 times faster than using a single core. Likewise, Samtools (as of version~0.1.19) also offers shared memory parallelism for several of its functions. Where available these features were used to improve the analysis speed. The exact workflow used is available from Github~\cite{code_repo_bash}.
 
 
 The equivalent Hadoop-based pipeline was implemented with Crossbow~\cite{Langmead:2009kx}. The input
@@ -195,7 +195,7 @@ data and the indexed genome reference were copied to Hadoop's storage
 system~(HDFS) before starting the experiments.  Specifically, the storage volume
 containing the input data was mounted with SSHFS to one of the Hadoop nodes,
 from where the \texttt{bzip2}-compressed data were transferred to the HDFS.
-Crossbow implements a short pipeline that pre-processes the input data, transforming it into a format suitable for the alignment stage, and then continues to use Bowtie for alignment and SoapSNP~\cite{soapsnp} to call SNPs.  Unfortunately, unlike Crossbow's main program, its preprocessor does not scale well to large datasets (it is not implemented as a MR program). Due to this limitation, this basic step threatened to be the most time-consuming procedure in our test pipeline and bias our experiments. To overcome this bottleneck we substituted Crossbow's preprocessor with our own MR implementation (available from GitHub~\cite{code_repo_mr}). Our implementation is described in Section~{\it MapReduce-based Data Preprocessor}.
+Crossbow implements a short pipeline that pre-processes the input data, transforming it into a format suitable for the alignment stage, and then continues to use Bowtie for alignment and SoapSNP~\cite{soapsnp} to call SNPs.  Unfortunately, unlike Crossbow's main program, its preprocessor does not scale well to large datasets (it is not implemented as a MR program). Due to this limitation, this basic step threatened to be the most time-consuming procedure in our test pipeline and bias our experiments. To overcome this bottleneck we substituted Crossbow's preprocessor with our own MR implementation (available from Github~\cite{code_repo_mr}). Our implementation is described in Section~{\it MapReduce-based Data Preprocessor}.
 
 
 \subsection*{Datasets}
