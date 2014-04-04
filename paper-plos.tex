@@ -318,8 +318,8 @@ Bash approach.
 %effectively leaves with 5-7 cores of 16. \COMMENT{awkward}
 
 \subsection*{Scalability of HPC and Hadoop approaches}
-Given the wide range in genome dataset sizes processed in practice -- e.g.,
-exomes, targeted sequencing, whole-genome sequencing at various depths -- it is
+Given the wide range in genome dataset sizes processed in practice -- e.g.
+exomes and whole-genome sequencing at various depths -- it is
 important to understand the scaling characteristics of the Hadoop and HPC processing
 platforms with respect to input size. For each platform, we
 measured the time required to execute their respective variant calling
@@ -357,14 +357,13 @@ chromosome as previously suggested~\cite{biostars_samtools}.
 %15 minutes with 48 GB RAM, when  the whole BAM file fits into RAM. For our
 %tasks we used the default Samtool's settings.}.
 
-\subsection*{Comparing the efficiency of Hadoop and HPC}
-\Fixme{New heading propsal: Efficiency of calculations}
+\subsection*{Efficiency of calculations}
 
 Since Hadoop was designed to digest huge datasets\cite{hadoop,lin2010} we hypothesize that the larger the biological sequence dataset is, the more suitable Hadoop becomes compared to the HPC approach. In order to compare the 'suitability' for the Hadoop and HPC platforms run on different number of cores, we construct the function showing the amount of used core-hours:
 $F=T_{p}\times p,$ where~$T_{p}$ is the calculation time on~$p$ cores. 
 
 Using the data from Table~\ref{table:pipleline-timings}, we plot the ratio $F_{Hadoop}/F_{HPC}$ as a function of the reciprocal dataset size (Figure~\ref{fig:fig2}). Extrapolation to zero on the~$X$-axis estimates the ratio for the hypothetical infinite dataset. We note that the Hadoop approach becomes more and more effective compared to the HPC scenario as the dataset size increases. 
-The parabolic extrapolation for our settings give the ratio as~$1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on ``bare metal'' of modern hardware for datasets larger than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
+The parabolic extrapolation for our settings give the ratio as~$1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on 'bare metal' of modern hardware for datasets larger than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
 
 
 The simplest curve to fit the points nicely is a parabolic function, importantly not a constant. 
@@ -392,8 +391,7 @@ hardware in linear time with just 12GB of RAM per virtual node.
 %infinite dataset and yields the value~$1.70\pm0.01$, we can say that Hadoop, even if running in the virtualized environment of a private cloud running on modest hardware, is competitive with the HPC approach run on ``bare metal'' of modern hardware for datasets larger than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
 
 
-\subsection*{Comparing the efficiency of network communication with the Hadoop and HPC approaches}
-\Fixme{New heading propsal: Efficiency of network communication}
+\subsection*{Efficiency of network communication}
 
 The network communication model for Hadoop has a major difference from the usual HPC cluster network architecture ($n$-tier tree) with NAS or NFS attached storages. The effective bandwidth of the Hadoop network increases with the cluster size~\cite{Sammer:2012}, opposite to that of the HPC network where cluster growth results in network saturation and performance degradation.
 To study this phenomenon, we compared HPC and Hadoop network communication costs
@@ -431,7 +429,7 @@ the delivery location over the network.
 and unable to pass more data in a time unit, while the alignment time is still proportional to the chunk size:~$T_{comm}\approx\mbox{const}, T_{alignment}\propto D\propto 1/N \rightarrow T_{alignment}/T_{comm}\propto 1/N$, i.e., a linear dependency in the selected coordinates, which can be observed in the plot. 
 The transition area between the two modes is based on the fact that each hard disk drive on the local node can write the data at a speed of about 1Gbit/sec. Ten nodes will consume the data with the rate of~10Gbit/sec, which is the limiting speed for the standard 10Gbit Ethernet cable connecting the cluster's rack with the switch. The nodes are being allocated on the same rack, which is the default SLURM behavior.
 
-Scalability can be improved by overriding the default behavior of SLURM and allocating the nodes not from the same rack, but randomly from all available racks (``HPC random'', open squares in Figure~\ref{fig:fig3}). Allocating the nodes on random racks allows for engaging more nodes without network saturation. For our cluster we could go up to 30-35 nodes with perfect linear scaling. For the most resources used (58 nodes) the deviation from a linear speedup is~$\approx 7\%$ i.e. $5.50$ minutes against the ideal $5.14$, see Table~\ref{table:pipleline-timings}. The threshold number of nodes in this strategy~($\approx35$) is because of the uplink cable with the throughput of~50Gbit/sec being saturated. 
+Scalability can be improved by overriding the default behavior of SLURM and allocating the nodes not from the same rack, but randomly from all available racks (``HPC random'', open squares in Figure~\ref{fig:fig3}). Allocating the nodes on random racks allows for engaging more nodes without network saturation. For our cluster we could go up to 30-35 nodes with perfect linear scaling. For the most resources used (58 nodes) the deviation from a linear speedup is~$\approx 7\%$ i.e. $5.50$ minutes against the ideal $5.14$, see Table~\ref{table:timings-algn}. The threshold number of nodes in this strategy~($\approx35$) is because of the uplink cable with the throughput of~50Gbit/sec being saturated. 
 The proposed HPC strategies aimed at getting the maximum performance from the storage resources show that while even properly adjusted and tuned, the HPC approaches suffer from the network saturation at higher number of nodes.
 HDFS on the other hand maintains data locality, reducing communication and data transfer and hence lead to better scalability.
 Our Hadoop cluster has no more free nodes to continue to investigate the scaling as in plot at Figure~\ref{fig:fig3}, but we do not expect any significant deviations, since the observed behavior is a generic for Hadoop with HDFS\cite{lin2010, Hadoop:Guide}. 
@@ -701,7 +699,7 @@ Dataset &	Organism &	Size in Gbases\\
 \begin{tabular}{l|c|c|c}
 Dataset			&		II (7 Gbases )	& III (30 Gbases)	& IV (100 Gbases)\\
 \hline
-Crossbow native			&		$60.6\pm0.7$	& $299.0\pm2.3$	&	$673\pm1.0$	\\
+Crossbow native			&		$60.6\pm0.7$	& $299.0\pm2.3$	&	$673.0\pm1.0$	\\
 Hadoop, this work			&		$7.0\pm0.0$	&	$20.7\pm0.4$&		$52.4\pm0.1$\\
 Bash, this work			& 		$7.4\pm0.0$	&	$31.1\pm0.1$	&	$114.5\pm0.3$	\\
 \end{tabular}
@@ -794,7 +792,7 @@ timing, minutes	&	$208\pm50$	&	$172\pm13$		&	$136\pm12$		& 	$87\pm11$			\\
 
 \begin{table}[!ht]
 \caption{Timings  for alignment and the ratio~$T_{alignment}/T_{comm}$ for HPC and Hadoop clusters for Dataset IV.
-For the ``HPC random'' approach, data chunks have to be copied to the local scratch disks first and the alignments (SAM files) copied back while Hadoop keeps all the data inside HDFS and hence does not need data staging. Hadoop however needs to preprocess reads before the actual alignment stage in order to be able to operate in MR manner resulting in what we term ``communication costs''. Note that each HPC node has 16 cores, while each Hadoop node has 7 (one core is dedicated to run the virtual machine).\Fixme{This table is not referenced in text. Since we have a figure, do we really need the table? What extra does it add? }}
+For the ``HPC random'' approach, data chunks have to be copied to the local scratch disks first and the alignments (SAM files) copied back while Hadoop keeps all the data inside HDFS and hence does not need data staging. Hadoop however needs to preprocess reads before the actual alignment stage in order to be able to operate in MR manner resulting in what we term ``communication costs''. Note that each HPC node has 16 cores, while each Hadoop node has 7 (one core is dedicated to run the virtual machine).}
 \begin{center}
 \begin{tabular}{c|c|c|c|c|c}
  \multicolumn{3}{c|}{Hadoop} & \multicolumn{3}{c}{HPC random} \\
@@ -821,7 +819,7 @@ Number of nodes	&Alignment time,	&$\frac{T_{alignment}}{T_{comm}}$	&Number of no
 
 \end{tabular}
 \end{center}
-\label{table:}
+\label{table:timings-algn}
 \end{table}%
 
 \end{document}
