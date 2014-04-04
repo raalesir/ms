@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+
+\usepackage[parfill]{parskip}
+
+%\usepackage[small,compact]{titlesec}
+
+\usepackage[swedish]{babel} 
+\usepackage[T1]{fontenc} 
+\usepackage[applemac]{inputenc} 
+\usepackage{soul}
+
+%Margins
+\usepackage{anysize}	% \marginsize{left}{right}{top}{bottom}
+\marginsize{3.2cm}{3.2cm}{2.1cm}{2.5cm}
+
+%Remove page numbering
+\pagenumbering{gobble}
+
+
+\begin{document}
+
+
+\title{A quantitative assessment of the Hadoop framework for analysing massively parallel DNA sequencing data}
+\author{Cover Letter}
+\date{}
+\maketitle
+
+Dear editors,\\
+
+We hereby submit our manuscript entitled \textit{'A quantitative assessment of the Hadoop framework for analysing massively parallel DNA sequencing data'}. Hadoop is becoming increasingly popular for parallelising data analysis in a variety of disciplines. While some challenges and results on Hadoop for analysing sequencing data have been reported~\cite{Marx:2013fk,gatk}, a more comprehensible assessment of this new framework is not available. In our manuscript we present the first quantitative comparison between Hadoop and traditional methods with high-performance computing resources for DNA sequence analysis in the form of short read alignment followed by variant calling. In order to make a fair comparison, we needed to define metrics and implement comparable protocols and pipelines, but also investigate user interfaces required to deliver these technologies as services for the computational biology community.
+
+The authors have a long experience in providing high-performance e-infrastructure for biological sequence analysis, some of which was recently reported~\cite{lampa,Pireddu:2011vn}. Founded on the challenges we see in our current e-infrastructures we were motivated to investigate the benefits and drawbacks of the Hadoop framework and, more specifically, deduce at what problem sizes it becomes advantageous with respect to the current e-infrastructure best practices. As high-performance computing nowadays is used on wide scale in the computational biology community, we think that our paper would be of wide interest to the readers of PLoS Computational Biology as it can greatly affect how future large scale studies may be analyzed.
+ 
+Sincerely,
+ 
+Ola Spjuth and co-authors
+
+\scriptsize
+\bibliography{paper-plos}
+\bibliographystyle{ola}
+
+ 
+
+\end{document}

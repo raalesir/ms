@@ -1,0 +1,26 @@
+\begin{thebibliography}{1}
+
+\bibitem{Marx:2013fk}
+Marx V.
+\newblock {Biology: The big challenges of big data}.
+\newblock \emph{Nature}, 498(7453):255--60, 2013.
+
+\bibitem{gatk}
+McKenna A, Hanna M, et~al.
+\newblock {The Genome Analysis Toolkit: a MapReduce framework for analyzing
+  next-generation DNA sequencing data}.
+\newblock \emph{Genome Res}, 20(9):1297--303, 2010.
+
+\bibitem{lampa}
+Lampa S, Dahl{\"o} M, et~al.
+\newblock {Lessons learned from implementing a national infrastructure in
+  Sweden for storage and analysis of next-generation sequencing data}.
+\newblock \emph{GigaScience}, 2(1):9, 2013.
+\newblock ISSN 2047-217X.
+
+\bibitem{Pireddu:2011vn}
+Pireddu L, Leo S, et~al.
+\newblock {SEAL: a distributed short read mapping and duplicate removal tool}.
+\newblock \emph{Bioinformatics}, 27(15):2159--60, 2011.
+
+\end{thebibliography}
