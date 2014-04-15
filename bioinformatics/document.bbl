@@ -1,0 +1,136 @@
+\begin{thebibliography}{}
+
+\bibitem[Afgan {\em et~al.}(2010)Afgan, Baker, Coraor, Chapman, Nekrutenko, and
+  Taylor]{Afgan:2010uq}
+Afgan, E., Baker, D., Coraor, N., Chapman, B., Nekrutenko, A., and Taylor, J.
+  (2010).
+\newblock Galaxy cloudman: delivering cloud compute clusters.
+\newblock {\em BMC Bioinformatics\/}, {\bf 11 Suppl 12}, S4.
+
+\bibitem[Bozdag {\em et~al.}(2010)Bozdag, Hatem, and Catalyurek]{Bozdag:2010cn}
+Bozdag, D., Hatem, A., and Catalyurek, U.~V. (2010).
+\newblock {Exploring parallelism in short sequence mapping using
+  Burrows-Wheeler Transform}.
+\newblock {\em Parallel {\&} Distributed Processing, Workshops and Phd Forum
+  (IPDPSW), 2010 IEEE International Symposium on\/}, pages 1--8.
+
+\bibitem[Clement {\em et~al.}(2010)Clement, Snell, Clement, Hollenhorst,
+  Purwar, Graves, Cairns, and Johnson]{gnumap}
+Clement, N.~L., Snell, Q., Clement, M.~J., Hollenhorst, P.~C., Purwar, J.,
+  Graves, B.~J., Cairns, B.~R., and Johnson, W.~E. (2010).
+\newblock {The GNUMAP algorithm: unbiased probabilistic mapping of
+  oligonucleotides from next-generation sequencing}.
+\newblock {\em Bioinformatics\/}, {\bf 26}(1), 38--45.
+
+\bibitem[Dean and Ghemawat(2004a)Dean and Ghemawat]{dean.2004.mapreduce}
+Dean, J. and Ghemawat, S. (2004a).
+\newblock {MapReduce}: simplified data processing on large clusters.
+\newblock In {\em OSDI '04: 6th Symposium on Operating Systems Design and
+  Implementation\/}.
+
+\bibitem[Dean and Ghemawat(2004b)Dean and Ghemawat]{hadoop}
+Dean, J. and Ghemawat, S. (2004b).
+\newblock {MapReduce: Simplified data processing on large clusters}.
+\newblock {\em Sixth Symposium on Operating System Design and Implementation:
+  2004; San Francisco, CA\/}.
+
+\bibitem[Giardine {\em et~al.}(2005)Giardine, Riemer, Hardison, Burhans,
+  Elnitski, Shah, Zhang, Blankenberg, Albert, Taylor, Miller, Kent, and
+  Nekrutenko]{galaxy}
+Giardine, B., Riemer, C., Hardison, R.~C., Burhans, R., Elnitski, L., Shah, P.,
+  Zhang, Y., Blankenberg, D., Albert, I., Taylor, J., Miller, W., Kent, W.~J.,
+  and Nekrutenko, A. (2005).
+\newblock {Galaxy: a platform for interactive large-scale genome analysis}.
+\newblock {\em Genome Res\/}, {\bf 15}(10), 1451--5.
+
+\bibitem[Lampa {\em et~al.}(2013)Lampa, Dahl{\"o}, Olason, Hagberg, and
+  Spjuth]{lampa}
+Lampa, S., Dahl{\"o}, M., Olason, P., Hagberg, J., and Spjuth, O. (2013).
+\newblock {Lessons learned from implementing a national infrastructure in
+  Sweden for storage and analysis of next-generation sequencing data}.
+\newblock {\em GigaScience\/}, {\bf 2}(1), 9.
+
+\bibitem[Langmead {\em et~al.}(2009a)Langmead, Schatz, Lin, Pop, and
+  Salzberg]{Langmead:2009kx}
+Langmead, B., Schatz, M.~C., Lin, J., Pop, M., and Salzberg, S.~L. (2009a).
+\newblock {Searching for SNPs with cloud computing}.
+\newblock {\em Genome Biol\/}, {\bf 10}(11), R134.
+
+\bibitem[Langmead {\em et~al.}(2009b)Langmead, Trapnell, Pop, and
+  Salzberg]{Langmead:2009uq}
+Langmead, B., Trapnell, C., Pop, M., and Salzberg, S.~L. (2009b).
+\newblock {Ultrafast and memory-efficient alignment of short DNA sequences to
+  the human genome}.
+\newblock {\em Genome Biol\/}, {\bf 10}(3), R25.
+
+\bibitem[Li and Durbin(2009)Li and Durbin]{bwa}
+Li, H. and Durbin, R. (2009).
+\newblock {{Fast and accurate short read alignment with Burrows-Wheeler
+  transform}}.
+\newblock {\em Bioinformatics\/}, {\bf 25}(14), 1754--1760.
+
+\bibitem[Li {\em et~al.}(2009)Li, Handsaker, Wysoker, Fennell, Ruan, Homer,
+  Marth, Abecasis, and Durbin]{samtools}
+Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth,
+  G., Abecasis, G., and Durbin, R. (2009).
+\newblock {The Sequence Alignment/Map format and SAMtools}.
+\newblock {\em Bioinformatics\/}, {\bf 25}(16), 2078--2079.
+
+\bibitem[Li {\em et~al.}(2013)Li, Chen, Liu, and Zhou]{Li:2013fk}
+Li, Y., Chen, W., Liu, E.~Y., and Zhou, Y.-H. (2013).
+\newblock {Single Nucleotide Polymorphism (SNP) Detection and Genotype Calling
+  from Massively Parallel Sequencing (MPS) Data}.
+\newblock {\em Stat Biosci\/}, {\bf 5}(1), 3--25.
+
+\bibitem[Lin and Dyer(2010)Lin and Dyer]{lin2010}
+Lin, J. and Dyer, C. (2010).
+\newblock {\em {Data-Intensive Text Processing with MapReduce}\/}.
+\newblock Morgan and Claypool Publishers.
+
+\bibitem[Marx(2013)Marx]{Marx:2013fk}
+Marx, V. (2013).
+\newblock {Biology: The big challenges of big data}.
+\newblock {\em Nature\/}, {\bf 498}(7453), 255--60.
+
+\bibitem[Metzker(2010)Metzker]{metzker}
+Metzker, M.~L. (2010).
+\newblock {Sequencing technologies -- the next generation}.
+\newblock {\em Nat Rev Genet\/}, {\bf 11}(1), 31--46.
+
+\bibitem[Pireddu {\em et~al.}(2011)Pireddu, Leo, and Zanetti]{Pireddu:2011vn}
+Pireddu, L., Leo, S., and Zanetti, G. (2011).
+\newblock {SEAL: a distributed short read mapping and duplicate removal tool}.
+\newblock {\em Bioinformatics\/}, {\bf 27}(15), 2159--60.
+
+\bibitem[Sammer(2012)Sammer]{Sammer:2012}
+Sammer, E. (2012).
+\newblock {\em {Hadoop Operations}\/}.
+\newblock O'Reilly Media, Inc., 1st edition.
+
+\bibitem[Schneeberger {\em et~al.}(2009)Schneeberger, Ossowski, Lanz, Juul,
+  Petersen, Nielsen, Jorgensen, Weigel, and Andersen]{schneeberger}
+Schneeberger, K., Ossowski, S., Lanz, C., Juul, T., Petersen, A.~H., Nielsen,
+  K.~L., Jorgensen, J.-E., Weigel, D., and Andersen, S.~U. (2009).
+\newblock {SHOREmap: simultaneous mapping and mutation identification by deep
+  sequencing}.
+\newblock {\em Nat Meth\/}, {\bf 6}(8), 550--551.
+
+\bibitem[Schonherr {\em et~al.}(2012)Schonherr, Forer, Weissensteiner,
+  Kronenberg, Specht, and Kloss-Brandstatter]{cloudgene}
+Schonherr, S., Forer, L., Weissensteiner, H., Kronenberg, F., Specht, G., and
+  Kloss-Brandstatter, A. (2012).
+\newblock {{C}loudgene: a graphical execution platform for {M}ap{R}educe
+  programs on private and public clouds}.
+\newblock {\em BMC Bioinformatics\/}, {\bf 13}, 200.
+
+\bibitem[Tange(2011)Tange]{Tange2011a}
+Tange, O. (2011).
+\newblock Gnu parallel - the command-line power tool.
+\newblock {\em ;login: The USENIX Magazine\/}, {\bf 36}(1), 42--47.
+
+\bibitem[White(2009)White]{Hadoop:Guide}
+White, T. (2009).
+\newblock {\em {Hadoop: The Definitive Guide}\/}.
+\newblock O'Reilly, first edition edition.
+
+\end{thebibliography}

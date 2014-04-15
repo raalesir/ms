@@ -1,0 +1,38 @@
+# plotting data for grand canonical ensemble
+# the datafile is GC.data
+set terminal epslatex size 8cm,6cm
+set output 'fig1.eps'
+#set ytics nomirror
+#set y2tics
+#set x2tics
+#set xtics 1,1
+set grid x y 
+set key  left Left  #width -5
+#set title "Figure 1"
+set xlabel 'dataset size, Gbases'
+#set x2label 'полная конфигурационная энергия, $U_{tot}$ для $J=1$'
+set ylabel 'calculation time, minutes'
+#set y2label '$p_{J}(U_{tot})$ для первого подансамбля $J=1$'
+set  style  line 1  lt 1   lw 2   pt 6 ps 3#pi -5
+set  style  line 2  lt 2   lw 2  pt 6 ps 2#pi -5
+set  style  line 3  lt 1  lw 2  #pt 4  ps 3#pi -5
+set  style  line 4  lt 2   lw 2  #pt 4 ps 2 #pi -5
+
+#set xrange [8:20]
+#set logscale y
+
+# line to fit
+#f1(x) = a1*x+b1  
+#fit f1(x) 'shared' using 1:2 via a1, b1
+
+f2(x) = a2*x+b2
+fit f2(x) 'ssh' using 1:2 via a2, b2
+
+#plot 'shared'  using ($1):($2) w p  ls 1 axes x1y1  title 'Shared TM' ,\
+
+plot 'ssh'  using ($1):($2):($3) w yerrorbars  ls 1 axes x1y1 title 'Hadoop',\
+'ssh'  using ($1+0.005):($2+20):4  w labels notitle,\
+a2*x+b2 w l ls 3 title 'Linear fit for the Hadoop data' \
+
+#a2*x+b2 w l ls 3 title 'Linear fit for the SSH TM data' \
+

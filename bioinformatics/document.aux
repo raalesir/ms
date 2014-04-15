@@ -1,0 +1,88 @@
+\relax 
+\citation{metzker}
+\citation{Marx:2013fk}
+\citation{bwa}
+\citation{Langmead:2009uq}
+\citation{samtools}
+\citation{Tange2011a}
+\citation{gnumap}
+\citation{dean.2004.mapreduce}
+\citation{lin2010}
+\citation{hadoop}
+\citation{Hadoop:Guide}
+\citation{Hadoop:Guide}
+\citation{Sammer:2012}
+\newlabel{^_1}{{}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
+\citation{Li:2013fk}
+\citation{Langmead:2009uq}
+\citation{samtools}
+\citation{Langmead:2009kx}
+\citation{Langmead:2009kx}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Datasets used in the comparison. \relax }}{2}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{table:datasets}{{1}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{2}}
+\newlabel{sec:preprocessor}{{2}{2}}
+\citation{lampa}
+\citation{schneeberger}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Time (in minutes) employed to preprocess Datasets II, III, and IV by Crossbow's native read preprocessor and our MR preprocessor on a 56-core Hadoop cluster, and by the custom multi-core Bash script on a single 16-core HPC node. \relax }}{3}}
+\newlabel{table:preprocess}{{2}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{3}}
+\newlabel{fig:fig1}{{1a}{3}}
+\newlabel{sub@fig:fig1}{{a}{3}}
+\newlabel{fig:fig2}{{1b}{3}}
+\newlabel{sub@fig:fig2}{{b}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  \textbf  {(a)} Runtime for the Hadoop-based pipeline on the 56-core Hadoop cluster with increasing input dataset size. Each test dataset (labelled with Roman numerals) was used. The image clearly highlights the linear scaling characteristics of the Hadoop-based approach.  \textbf  {(b)} The ratio of the\nobreakspace  {}$F_{Hadoop}/F_{HPC}$ as a function of a reciprocal dataset size in Gbases. The pipelines were run on a 56-core Hadoop cluster and a 16-core HPC node, respectively. The points are fit to a quadratic least-squares curve, which makes it possible to predict {\it  infinite} dataset size. Datasets are labeled with Roman numerals. \relax }}{3}}
+\citation{Langmead:2009kx}
+\citation{Pireddu:2011vn}
+\citation{hadoop}
+\citation{lin2010}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Time (in minutes) for processing different dataset sizes on the HPC and Hadoop deployments with their respective pipelines. Datasets are labelled by Roman numerals, (``f.r.'' stands for ``forward reads''). The large variance for the HPC deployment is due to Samtools BAM sorting, which is I/O and memory intensive; the data spillage to the file system makes it very susceptible to the load of the entire shared HPC cluster. \relax }}{4}}
+\newlabel{table:pipleline-timings}{{3}{4}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Timings for Dataset I processed on different number of cores of a HPC node.\relax }}{4}}
+\newlabel{table:timings-hpc}{{4}{4}}
+\citation{Sammer:2012}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Time (in minutes) required by Samtools to sort Dataset IV (BAM file containing 58 Gbases). The measurements are done on a single HPC node with $p=16$ cores. Averaging is done over 5 independent simulations. The amount of available RAM reported is for all 16 cores. \relax }}{5}}
+\newlabel{table:samtools-sort}{{5}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Ratios of alignment time\nobreakspace  {}$T_{alignment}$ to communication costs\nobreakspace  {}$T_{comm}$ for the HPC and Hadoop clusters as a function of reciprocal number of nodes\nobreakspace  {}$1/N$. All runs used Dataset\nobreakspace  {}IV as input. Two HPC scenarios are shown as ``HPC SLURM'' and ``HPC random'', which correspond to standard SLURM behavior and a modified one that allocates nodes from random racks. Linear fit to $ax+b$ was done with the least-squares method. The estimated coefficients for the Hadoop-based approach are $(a,b)\approx (0.95,2.07)$. One can see two defined linear regions for the HPC approach with very different tangents for linear and non-linear scalings correspondingly. For the ``HPC SLURM'' $(a,b)\approx (0.96, 3.49)$ and $(a,b)\approx (32.99, 0.60)$, and for the ``HPC random'' $(a,b)\approx (0.88, 3.72)$ and $(a,b)\approx (98.24, 0.53)$. The constant term for HPC goes below unity -- i.e.\ for a large number of nodes more time will be spent on communication than the actual alignment. \relax }}{5}}
+\newlabel{fig:fig3}{{2}{5}}
+\citation{gnumap}
+\citation{Bozdag:2010cn}
+\citation{Langmead:2009uq}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Timings for alignment and the ratio\nobreakspace  {}$T_{alignment}/T_{comm}$ for HPC and Hadoop clusters for Dataset IV. For the ``HPC random'' approach, data chunks have to be copied to the local scratch disks first and the alignments (SAM files) copied back while Hadoop keeps all the data inside HDFS and hence does not need data staging. Hadoop however needs to preprocess reads before the actual alignment stage in order to be able to operate in MR manner resulting in what we term ``communication costs''. Note that each HPC node has 16 cores, while each Hadoop node has 7 (one core is dedicated to run the virtual machine).\relax }}{6}}
+\newlabel{table:timings-algn}{{6}{6}}
+\citation{lin2010}
+\citation{Hadoop:Guide}
+\citation{galaxy}
+\citation{Afgan:2010uq}
+\citation{cloudgene}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces An example of a job setup view with the graphical Hadoop front-end Cloudgene, providing a smooth user experience even for novice users. \textbf  {a)} Pipeline selection -- in our case containing the Crossbow pipeline. \textbf  {b)} The UPPMAX-adapted functionality to browsing and import data from the user's home folder in the shared file system. \relax }}{7}}
+\newlabel{fig:fig4}{{3}{7}}
+\newlabel{subsectionIV_2}{{3}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{7}}
+\bibstyle{natbib}
+\bibdata{paper}
+\bibcite{Afgan:2010uq}{{1}{2010}{{Afgan {\em  et~al.}}}{{Afgan, Baker, Coraor, Chapman, Nekrutenko, and Taylor}}}
+\bibcite{Bozdag:2010cn}{{2}{2010}{{Bozdag {\em  et~al.}}}{{Bozdag, Hatem, and Catalyurek}}}
+\bibcite{gnumap}{{3}{2010}{{Clement {\em  et~al.}}}{{Clement, Snell, Clement, Hollenhorst, Purwar, Graves, Cairns, and Johnson}}}
+\bibcite{dean.2004.mapreduce}{{4}{2004a}{{Dean and Ghemawat}}{{Dean and Ghemawat}}}
+\bibcite{hadoop}{{5}{2004b}{{Dean and Ghemawat}}{{Dean and Ghemawat}}}
+\bibcite{galaxy}{{6}{2005}{{Giardine {\em  et~al.}}}{{Giardine, Riemer, Hardison, Burhans, Elnitski, Shah, Zhang, Blankenberg, Albert, Taylor, Miller, Kent, and Nekrutenko}}}
+\bibcite{lampa}{{7}{2013}{{Lampa {\em  et~al.}}}{{Lampa, Dahl{\"o}, Olason, Hagberg, and Spjuth}}}
+\bibcite{Langmead:2009kx}{{8}{2009a}{{Langmead {\em  et~al.}}}{{Langmead, Schatz, Lin, Pop, and Salzberg}}}
+\bibcite{Langmead:2009uq}{{9}{2009b}{{Langmead {\em  et~al.}}}{{Langmead, Trapnell, Pop, and Salzberg}}}
+\bibcite{bwa}{{10}{2009}{{Li and Durbin}}{{Li and Durbin}}}
+\bibcite{samtools}{{11}{2009}{{Li {\em  et~al.}}}{{Li, Handsaker, Wysoker, Fennell, Ruan, Homer, Marth, Abecasis, and Durbin}}}
+\bibcite{Li:2013fk}{{12}{2013}{{Li {\em  et~al.}}}{{Li, Chen, Liu, and Zhou}}}
+\bibcite{lin2010}{{13}{2010}{{Lin and Dyer}}{{Lin and Dyer}}}
+\bibcite{Marx:2013fk}{{14}{2013}{{Marx}}{{Marx}}}
+\bibcite{metzker}{{15}{2010}{{Metzker}}{{Metzker}}}
+\bibcite{Pireddu:2011vn}{{16}{2011}{{Pireddu {\em  et~al.}}}{{Pireddu, Leo, and Zanetti}}}
+\bibcite{Sammer:2012}{{17}{2012}{{Sammer}}{{Sammer}}}
+\bibcite{schneeberger}{{18}{2009}{{Schneeberger {\em  et~al.}}}{{Schneeberger, Ossowski, Lanz, Juul, Petersen, Nielsen, Jorgensen, Weigel, and Andersen}}}
+\bibcite{cloudgene}{{19}{2012}{{Schonherr {\em  et~al.}}}{{Schonherr, Forer, Weissensteiner, Kronenberg, Specht, and Kloss-Brandstatter}}}
+\bibcite{Tange2011a}{{20}{2011}{{Tange}}{{Tange}}}
+\bibcite{Hadoop:Guide}{{21}{2009}{{White}}{{White}}}
+\global\@namedef{@lastpage@}{8}
+\@writefile{toc}{\contentsline {paragraph}{Funding\text  {\rm  :}}{8}}
