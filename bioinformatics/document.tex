@@ -9,7 +9,7 @@
 \firstpage{1}
 
 \title[Hadoop for analyzing DNA sequence data]{A quantitative assessment of the Hadoop framework for analyzing massively parallel DNA sequencing data}
-\author[Alexey Siretskiy]{Corresponding Author\,$^1$\footnote{to whom correspondence should be addressed}, Luca Pireddu\,$^{2}$ and Ola Spjuth\,$^{3,4}$}
+\author[Alexey Siretskiy]{Alexey Siretskiy\,$^1$\footnote{to whom correspondence should be addressed}, Luca Pireddu\,$^{2}$, Tore Sundqvist\,$^1$ and Ola Spjuth\,$^{3,4}$}
 \address{$^{1}$Department of Information Technology, Uppsala University, Uppsala, Sweden\\
 $^{2}$CRS4, Polaris, Pula, Italy\\
 $^{3}$Department of Pharmaceutical Biosciences, Uppsala University, Uppsala, Sweden\\
@@ -143,7 +143,7 @@ two platforms.
 	a 16-core HPC node, respectively.
 	The points are fit to a quadratic least-squares curve, which makes it possible
 	to predict {\it infinite} dataset size. Datasets are labeled with Roman
-	numerals.
+	numerals; f.r. stands for "forward reads".
 		}
 \end{figure*}
 
@@ -166,7 +166,7 @@ a synthetic dataset~(IV) of {\it A.thaliana} -- the well-known model plant --
 and a dataset (V) of two {\it H.sapiens} individuals
 (Table~\ref{table:datasets}). Datasets I-III and V are composed of Illumina
 HiSeq sequencing data. Additional information about the source of the datasets is
-provided in the Supplementary Material section.
+provided in the Supplementary Data.
 
 All data was standardized to FASTQ format and compressed. The
 \texttt{bzip2} compression codec was selected as it provides very good compression
@@ -238,7 +238,7 @@ On the other hand, the Hadoop test platform was deployed on a private cloud at
 UPPMAX using the OpenNebula (http://opennebula.org) cloud manager. The cluster was
 configured with Cloudera Hadoop distribution version~2.0.0-mr1-cdh4.5.0 (http://www.cloudera.com/content/\\cloudera/en/why-cloudera/hadoop-and-big-data.html).
 For the fully detailed hardware configuration of the two computational resources
-please see the Supplementary Material section.
+please see the Supplementary Data.
 
 
 \end{methods}
@@ -325,7 +325,7 @@ experiment comparing the new preprocessor described in
 Section~{\it MapReduce-based Data Preprocessor} to the original preprocessor furnished with
 Crossbow. To further validate our strategy, we also compared the performance of
 our MapReduce approach to a different parallelization strategy based on a custom Bash script
-that uses all processing cores available on a single computing node to accelerate the operation (see Supplementary Material for details of the implementation). This program read its
+that uses all processing cores available on a single computing node to accelerate the operation (see Supplementary Data for details of the implementation). This program read its
 input directly from conventional HPC storage, rather than HDFS\@.  The experiment
 was run on Datasets II, III, and IV\@.  The Hadoop cluster used was configured
 with 56 cores (7 slave nodes) while the Bash approach ran on a single node
@@ -449,11 +449,11 @@ chromosome as previously suggested (http://www.biostars.org/p/48781).
 
 \subsection*{Efficiency of calculations}
 
-Since Hadoop was designed to digest huge datasets\citep{hadoop,lin2010} we hypothesize that the larger the biological sequence dataset is, the more suitable Hadoop becomes compared to the HPC approach. In order to compare the 'suitability' for the Hadoop and HPC platforms run on different number of cores, we construct the function showing the amount of used core-hours:
+Since Hadoop was designed to digest huge datasets \citep{hadoop,lin2010} we hypothesize that the larger the biological sequence dataset is, the more suitable Hadoop becomes compared to the HPC approach. In order to compare the 'suitability' for the Hadoop and HPC platforms run on different number of cores, we construct the function showing the amount of used core-hours:
 $F=T_{p}\times p,$ where~$T_{p}$ is the calculation time on~$p$ cores. 
 
 Using the data from Table~\ref{table:pipleline-timings}, we plot the ratio $F_{Hadoop}/F_{HPC}$ as a function of the reciprocal dataset size (Figure~\ref{fig:fig2}). Extrapolation to zero on the~$X$-axis estimates the ratio for the hypothetical infinite dataset. We note that the Hadoop approach becomes more and more effective compared to the HPC scenario as the dataset size increases. 
-The parabolic extrapolation for our settings give the ratio as~$1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on 'bare metal' of modern hardware for datasets larger than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
+The parabolic extrapolation for our settings give the ratio as~$1.70\pm0.01$, meaning that Hadoop running even in the virtualized environment of a private cloud assembled on moderate hardware, is competitive with the HPC approach run on "bare metal" of modern hardware for datasets larger than $100$\,Gbases (dataset~IV), which is typical for human genome sequencing with a sequencing depth of about~$30x$.
 
 
 The simplest curve to fit the points nicely is a parabolic function, importantly not a constant. 
@@ -599,7 +599,7 @@ A popular way to define and run bioinformatics pipelines on HPC and cloud resour
 is via the Galaxy\citep{galaxy,Afgan:2010uq} platform, which provides a Web-based graphical
 user interface~(GUI) to bioinformatic programs, simplifying the experience for
 the end user.
-A similar project is Cloudgene\citep{cloudgene}, which provides a GUI to help lower the learning curve
+A similar project is Cloudgene \citep{cloudgene}, which provides a GUI to help lower the learning curve
 for Hadoop adopters and is specifically targeted at users in the life
 sciences. It consists of a light-weight and flexible Web-based solution for both
 public and private clouds. We implemented our Hadoop-pipeline in Cloudgene and
@@ -650,11 +650,10 @@ Hadoop has so far seen relatively low adoption in bioinformatics. This is likely
 
 
 \section*{Acknowledgement}
-We thank system experts Pontus Freyhult, Tore Sundqvist, and Peter Ankerst{\aa}l at UPPMAX for valuable discussions on effective storage and network usage. We also thank Jonas Hagberg (BILS, Stockholm, Sweden) for implementing the Cloudgene extensions to import data from UPPMAX filesystem, as well as Wesley Schaal for proofreading.
+We thank system experts Pontus Freyhult, and Peter Ankerst{\aa}l at UPPMAX for valuable discussions on effective storage and network usage. We also thank Jonas Hagberg (BILS, Stockholm, Sweden) for implementing the Cloudgene extensions to import data from UPPMAX filesystem, as well as Wesley Schaal for proofreading.
 
 
-\paragraph{Funding\textcolon} Text Text Text Text Text Text  Text Text.
-This work was supported by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) [p2013023]; the Swedish strategic research programme eSSENCE; and COST Action BM1006 Next Generation Sequencing Data Analysis Network SeqAhead. Part of L.P.'s activity was performed within the context of the Ph.D.\ program in Biomedical Engineering at the University of Cagliari, Italy.\\
+\paragraph{Funding\textcolon} This work was supported by SNIC through Uppsala Multidisciplinary Center for Advanced Computational Science (SNIC-UPPMAX) [p2013023]; the Swedish strategic research programme eSSENCE; and COST Action BM1006 Next Generation Sequencing Data Analysis Network SeqAhead. Part of L.P.'s activity was performed within the context of the Ph.D.\ program in Biomedical Engineering at the University of Cagliari, Italy.\\
 
 
 

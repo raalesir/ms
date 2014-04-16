@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.9.3)  15 APR 2014 23:59
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.9.3)  16 APR 2014 23:20
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -686,12 +686,27 @@ Overfull \hbox (261.0pt too wide) has occurred while \output is active
 Overfull \vbox (1.0pt too high) has occurred while \output is active []
 
  [7 <./figures/fig5/a.png> <./figures/fig5/c.png>]
-Underfull \hbox (badness 2990) in paragraph at lines 656--658
-\OT1/ptm/m/n/9 Action BM1006 Next Generation Sequencing Data Analysis
+Underfull \hbox (badness 1596) in paragraph at lines 656--657
+\OT1/ptm/m/n/9 Multidisciplinary Center for Advanced Computational Science
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 656--658
+Underfull \hbox (badness 1527) in paragraph at lines 656--657
+\OT1/ptm/m/n/9 (SNIC-UPPMAX) [p2013023]; the Swedish strategic research
+ []
+
+
+Overfull \hbox (0.3126pt too wide) in paragraph at lines 656--657
+\OT1/ptm/m/n/9 programme eSSENCE; and COST Action BM1006 Next Generation
+ []
+
+
+Underfull \hbox (badness 1484) in paragraph at lines 656--657
+\OT1/ptm/m/n/9 Sequencing Data Analysis Network SeqAhead. Part of L.P.'s
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 656--657
 
  []
 
@@ -707,59 +722,30 @@ Underfull \hbox (badness 1412) in paragraph at lines 19--24
 )
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+Extra height:11.51544pt when 476.37894pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:29.51544pt when 487.51544pt
+Extra height:11.51544pt when 477.37894pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+Extra height:11.51544pt when 478.37894pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:29.51544pt when 488.51544pt
+Extra height:11.51544pt when 479.37894pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.51544pt when 489.51544pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.51544pt when 490.51544pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.51544pt when 491.51544pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.51544pt when 492.51544pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.51544pt when 493.51544pt
-Extra height:0.0pt when 494.51544pt
-(2)Left:494.51544pt Right:482.03088pt Output:494.51544pt
+Extra height:0.0pt when 480.37894pt
+(2)Left:480.37894pt Right:481.75787pt Output:480.37894pt
+(2)Left:481.75787pt Right:472.75787pt Output:481.75787pt
 - LAST -
 Extra skip:0.0pt
-Left:494.51544pt
-Right:482.03088pt
-Output:494.51544pt
+Left:481.75787pt
+Right:472.75787pt
+Output:481.75787pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -785,7 +771,7 @@ LaTeX Font Warning: Size substitutions with differences
 Here is how much of TeX's memory you used:
  4490 strings out of 493315
  63502 string characters out of 6137905
- 150293 words of memory out of 5000000
+ 149295 words of memory out of 5000000
  7804 multiletter control sequences out of 15000+600000
  52785 words of font info for 107 fonts, out of 8000000 for 9000
  961 hyphenation exceptions out of 8191
@@ -808,7 +794,7 @@ tic/uhvr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/helvetic/uhv
 ro8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><
 /usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local
 /texlive/2013/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on document.pdf (8 pages, 449228 bytes).
+Output written on document.pdf (8 pages, 449282 bytes).
 PDF statistics:
  114 PDF objects out of 1000 (max. 8388607)
  78 compressed objects within 1 object stream
