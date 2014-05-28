@@ -1,0 +1,36 @@
+----------------------------------------
+Reviewer: 1
+
+Comments to the Author
+The authors designed an experiment to test the performance of Hadoop-based aligner, crossbow, for short sequence alignment. The wall-time, scalability and computing efficiency metrics were reported. Based on the results from their specific Hadoop configuration the authors concluded that Hadoop based solution becomes more appealing when data sets get larger (>100GB). 
+
+General Comments:
+
+Despite that this work is targeting a very interesting problem, in my opinion it is rather preliminary. Short read alignment problem is just one of many existing bioinformatics problems, do the readers expect the conclusions similarly apply to other problems? The results were obtained from a single Hadoop implementation, this work may benefit from testing results from several distinct Hadoop implementations.  Also Hadoop does have its own limitations, and this was not adequately discussed.
+
+Reviewer: 2
+
+Comments to the Author
+The authors present evidence as to when a Hadoop-based approach becomes more effective than (that is, becomes "an appealing alternative" to) current standard HPC parallelization. They do so in the context of in a common and important bioinformatics problem: alignment of NGS short reads to a reference genome, and then searching for SNPs.
+
+They performed their testing using open source software, as well as using custom programs that they have made available on Github, and whose locations are given.
+
+I believe the authors have conducted valid tests, and have made a quite credible case for their conclusions. Of course, the tests were conducted on different hardware, using different software, for only one type of workflow. However, the limitations are clearly stated, so readers can draw their own conclusions.
+
+Also, in general, I find the paper to be well-written and up to journal standards. However, I would like to see some clarifications in the paper in these aspects:
+
+1) The authors conduct two tests. The first compares the Hadoop approach across a cluster to multi-core HPC on one node, and the mapping and SNP dicovery results are reported out in terms of wall clock time and a comparison of core-hours required on the different data sets. The second compares the Hadoop approach against a parallelized Bash script running on multiple nodes, for only alignment (not adding SNP searches), for examining efficiency of network communication and how such relates to scalability.
+
+The reader discovers the switch in hardware and workflow only in details of each section. I consider this a drawback to readability. It would be good to have a short paragraph at the start saying: two types of test, here's why, here's what we will get from each test.
+
+2) The Hadoop hardware the authors had available had only 2 GB RAM per core. The authors note that this is a limitation on the effectiveness of the Hadoop approach - they expect "much better performance with twice of much memory". Well - yes, indeed. Unfortunately, I can only find this note in the Supplement. This information needs to be also stated clearly in the main article. Readers should be aware that in a properly provisioned Hadoop cluster, the break-even input data size might be even smaller (even more in Hadoop's favor).
+
+3) In the second test (on efficiency of network communication), it is not quite clear to me as to of what T-communication time T-comm consists. I think the authors mean that T-comm in the Hadoop approach is the time for preprocessing the data, while in the standard HPC approach (using their optimized Bash script) T-comm is the time for sending the data chunks to the local node scratch disk, and then sending the aligned SAM files back to the delivery location. But - I am not sure, and a reader should not have to guess. This needs to be made explicit. Also: I can find no info  as to *how* T-comm is measured. I would like hear how the authors separate out the T-comm time from T-alignment time.
+
+4) Re figure 1(b): I understand that the authors are graphing the ratio of core-hours needed in Hadoop over core-hours needed in HPC, versus the inverse size of the input data set. So in order to show the advantage of Hadoop use, the ratio should be as small as possible, and we see that as the inverse data set size approaches zero in the figure. The figure is informative, once you work through it. However, it took me a couple minutes to wrap my head around the figure, and so I want to ask: is there a simpler way to present this, in terms of, say, an x-axis that simply uses increasing data set size rather than the more complicated inverse data set size? I know the authors were doing least squares fitting to a curve, but just want them to think about it.
+
+5) p. 3 - In the "accuracy of pipelines" the authors state their criterion for accuracy. However, they never *explicitly* say that the criterion has been met - the reader has to infer it. Can we get a sentence simply stating: "Both pipelines were able to make the correct identification."
+
+6) p.4 - in the first sentence on the page, we get "To further validate our strategy, we also compared ...". I think this is somewhat misleading. What is about to be described is not "furthering" the main comparison - it *is* the main comparison. The only process done previous is preprocessing set in the MR (Hadoop) approach, which tells you nothing in isolation. So - I think this should be reworded.
+----------------------------------------
+
